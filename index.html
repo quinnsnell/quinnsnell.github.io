@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quinn Snell</title>
+<meta name="description" content="Teaching and research tools from Quinn Snell, Computer Science, Brigham Young University.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground:   #F5F6F8;
+    --surface:  #FFFFFF;
+    --sub:      #ECEFF3;
+    --ink:      #13171D;
+    --ink-mid:  #495462;
+    --ink-soft: #717E8D;
+    --line:     #D8DEE6;
+    --line-soft:#E6EAF0;
+    --accent:   #002E5D;
+    --accent-lift:#17487E;
+    --gold:     #7A5E12;
+    --shadow: 0 1px 2px rgba(19,23,29,.04), 0 10px 28px -16px rgba(19,23,29,.16);
+
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --sans:  "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:   #0E1217;
+      --surface:  #151A21;
+      --sub:      #1C222B;
+      --ink:      #E8ECF2;
+      --ink-mid:  #AEB9C7;
+      --ink-soft: #85919F;
+      --line:     #283039;
+      --line-soft:#1F262F;
+      --accent:   #8FB4DD;
+      --accent-lift:#B0CBEA;
+      --gold:     #D1B45F;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:   #0E1217;
+    --surface:  #151A21;
+    --sub:      #1C222B;
+    --ink:      #E8ECF2;
+    --ink-mid:  #AEB9C7;
+    --ink-soft: #85919F;
+    --line:     #283039;
+    --line-soft:#1F262F;
+    --accent:   #8FB4DD;
+    --accent-lift:#B0CBEA;
+    --gold:     #D1B45F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 16.5px/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 760px; margin: 0 auto; padding: 0 24px 100px; }
+
+  header { padding: 76px 0 0; }
+  .kicker {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+  }
+  h1 {
+    font: 600 clamp(40px, 7vw, 58px)/1.04 var(--serif);
+    letter-spacing: -.02em;
+    margin: 0 0 20px;
+  }
+  .bio {
+    font: 400 19.5px/1.6 var(--serif);
+    color: var(--ink-mid);
+    max-width: 56ch;
+    margin: 0;
+  }
+  .rule { height: 1px; background: var(--line); margin: 48px 0 0; border: 0; }
+
+  h2.sec {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 42px 0 18px;
+  }
+
+  .cards { display: grid; gap: 16px; }
+  .card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 26px 28px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--shadow);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card:hover { transform: none; }
+  }
+
+  .card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    margin-bottom: 10px;
+  }
+  .card h3 {
+    font: 600 23px/1.25 var(--serif);
+    letter-spacing: -.01em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .card:hover h3 { color: var(--accent-lift); }
+  .audience {
+    font: 500 10px/1 var(--mono);
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    padding: 4px 7px;
+    white-space: nowrap;
+  }
+  .card p { margin: 0 0 14px; color: var(--ink-mid); font-size: 15.5px; max-width: 60ch; }
+  .card .path {
+    font: 400 12.5px/1 var(--mono);
+    color: var(--ink-soft);
+  }
+  .card:hover .path { color: var(--accent); }
+
+  .elsewhere {
+    border-top: 1px solid var(--line);
+    margin-top: 46px;
+    padding-top: 26px;
+  }
+  .elsewhere p { color: var(--ink-mid); font-size: 15.5px; max-width: 62ch; margin: 0 0 12px; }
+  .elsewhere a { color: var(--accent); text-underline-offset: 2px; }
+  .elsewhere a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .elsewhere ul { margin: 0; padding-left: 20px; color: var(--ink-mid); font-size: 15px; }
+  .elsewhere li { margin-bottom: 7px; }
+  code {
+    font: 400 .86em/1.4 var(--mono);
+    background: var(--sub);
+    padding: .12em .36em;
+    border-radius: 3px;
+  }
+
+  footer {
+    margin-top: 54px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font: 400 13px/1.6 var(--mono);
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+  }
+  footer a { color: var(--ink-soft); }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <p class="kicker">Computer Science · Brigham Young University</p>
+    <h1>Quinn Snell</h1>
+    <p class="bio">Teaching infrastructure and research tools, mostly built because
+      the thing I needed did not exist yet. Documentation for each lives here.</p>
+  </header>
+
+  <hr class="rule">
+
+  <h2 class="sec">Projects</h2>
+
+  <div class="cards">
+
+    <a class="card" href="./ml-capstone-platform/">
+      <div class="card-top">
+        <h3>ML Capstone Platform</h3>
+        <span class="audience">CS 482 · students &amp; instructors</span>
+      </div>
+      <p>A self-hosted classroom cluster: one shared LLM endpoint, GPU-backed
+        speech-to-text, and a push-to-deploy pipeline where tests gate the deploy.
+        Student setup guides, the first-deploy lab, the admin runbook, and
+        symptom-first troubleshooting.</p>
+      <span class="path">quinnsnell.github.io/ml-capstone-platform/</span>
+    </a>
+
+    <a class="card" href="./virtual-patient-clinic/">
+      <div class="card-top">
+        <h3>Virtual Patient Clinic</h3>
+        <span class="audience">School of Medicine faculty</span>
+      </div>
+      <p>A voice-based standardized-patient simulator for the BYU School of Medicine
+        pilot. One-page introduction for faculty: what it does, how a session runs,
+        and what the pilot is trying to find out.</p>
+      <span class="path">quinnsnell.github.io/virtual-patient-clinic/</span>
+    </a>
+
+    <a class="card" href="./CanvasSchedulePlugin/">
+      <div class="card-top">
+        <h3>Canvas Schedule Planner</h3>
+        <span class="audience">Canvas instructors</span>
+      </div>
+      <p>A semester planner for Canvas LMS with one row per class meeting. Drag an
+        assignment to a different day and its Canvas due date follows; add rich-text
+        reading notes and material links per meeting; group days into named modules.
+        The row-per-meeting layout Canvas itself does not offer.</p>
+      <span class="path">quinnsnell.github.io/CanvasSchedulePlugin/</span>
+    </a>
+
+  </div>
+
+  <div class="elsewhere">
+    <h2 class="sec">Also on GitHub</h2>
+    <p>Repositories without their own documentation site:</p>
+    <ul>
+      <li><a href="https://github.com/quinnsnell/mlops"><code>mlops</code></a> — course material</li>
+      <li><a href="https://github.com/quinnsnell/coolify"><code>coolify</code></a> — fork carrying a
+        patch for a team-scoped API token bug</li>
+      <li><a href="https://github.com/quinnsnell/PNA"><code>PNA</code></a> — earlier research code</li>
+    </ul>
+  </div>
+
+  <footer>
+    <span><a href="https://github.com/quinnsnell">github.com/quinnsnell</a></span>
+    <span><a href="mailto:snell@cs.byu.edu">snell@cs.byu.edu</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
+
