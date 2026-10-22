@@ -6587,6 +6587,19 @@ summer pass.</p>
 no restart. A single wildcard still matches one label only: <code>www.&lt;repo&gt;.…</code> is
 not covered and never will be.</p>
 <hr />
+<h2 id="label-the-new-group-repos"><a class="header" href="#label-the-new-group-repos">Label the new group repos</a></h2>
+<p>Each group project repo carries the topic <code>capstone-team</code>, which is how
+<code>scripts/map-projects/</code> finds them and how anyone else can list them without
+the roster:</p>
+<pre><code class="language-bash">gh repo list byu-ml-capstone --topic capstone-team
+gh repo edit byu-ml-capstone/&lt;repo&gt; --add-topic capstone-team
+</code></pre>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Tag each new group repo when the teams are formed. Unlabelled repos fall
+back to a guess from collaborator counts, which works but is a guess, and
+a practice repo that gains a second collaborator joins the list.</li>
+</ul>
 <h2 id="the-repository-is-private-and-the-docs-publish-themselves"><a class="header" href="#the-repository-is-private-and-the-docs-publish-themselves">The repository is private, and the docs publish themselves</a></h2>
 <p><code>ml-capstone-platform</code> is <strong>private and stays private</strong>: its history carried
 student roster data, and keeping it private means the published site no longer
