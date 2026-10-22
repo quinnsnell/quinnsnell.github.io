@@ -1,0 +1,628 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Administrator Guide - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html" class="active"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/admin-guide.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="classroom-ai-cluster--administrator-guide"><a class="header" href="#classroom-ai-cluster--administrator-guide">Classroom AI Cluster — Administrator Guide</a></h1>
+<p>This is the <strong>server-side</strong> setup guide. It covers building, running, and maintaining the three-machine inference cluster. Students get their own document — hand out <a href="student-guide.html"><code>student-guide.md</code></a> for the client-side setup (Continue, opencode, or GitHub Copilot BYOK) and the Coolify deploy lab. The front-end host also runs Coolify for student app deployments — see <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a>.</p>
+<p>The cluster is a load-balanced, fault-tolerant AI inference deployment across two GPU inference machines (each with 2× NVIDIA RTX Pro 6000 Blackwell GPUs, 96 GB VRAM per card) and a front-end host with 4× NVIDIA A6000 GPUs that runs Coolify (student PaaS) and LiteLLM. It uses <strong>vLLM</strong> for native FP8 inference and a single <strong>LiteLLM</strong> proxy on the front-end host for cross-engine load balancing and failover, without requiring any network-admin permissions (no VIP, no shared DNS, no L4 load balancer). TLJH (JupyterHub) is deployed separately on <code>castor</code>, <code>pollux</code>, and <code>vega</code> for classes that need notebooks — it is NOT on rigel.</p>
+<p>Because each GPU card has 96 GB of VRAM, workloads are split:</p>
+<ul>
+<li><strong>Chat</strong> runs on <strong>GPU 0</strong> of each GPU machine using a large coder model.</li>
+<li><strong>Inline autocomplete</strong> runs on <strong>GPU 1</strong> of each GPU machine using a smaller FIM-native model. Autocomplete is latency-critical and small; running it against the big chat model wastes latency and throughput.</li>
+</ul>
+<p>Redundancy is layered:</p>
+<ul>
+<li><strong>Centralized load balancing.</strong> A single LiteLLM proxy on the front-end host (rigel.cs.byu.edu) lists both GPU machines' chat engines as one pool, so chat requests fan out across castor and pollux automatically with no client-side coordination. The FIM pool has only pollux in it as of 2026-10-19, castor's 4090 having been reallocated.</li>
+<li><strong>Engine-level failover — chat only.</strong> If a chat engine crashes, or a whole GPU host goes offline, LiteLLM routes to the surviving chat engine transparently and students see nothing worse than a slightly slower first response. <strong>Autocomplete has no such protection</strong> while pollux is the only FIM host: if its FIM engine stops, ghost-text stops for everyone until it is back. Chat keeps working.</li>
+<li><strong>Single client-facing endpoint.</strong> Every student's editor points at <code>http://ml-capstone.cs.byu.edu:4000/v1</code> regardless of role. No Group A / Group B split anymore — load balancing is done server-side.</li>
+<li><strong>Speech-to-text shares that endpoint.</strong> <code>classroom-transcribe</code> is a Whisper <code>large-v3</code> service running on rigel's own GPU 0, not on castor/pollux, registered as a LiteLLM model like any other. Install and lifecycle: Coolify runbook §6b, via <code>scripts/install-whisper-service.sh</code>. It is independent of the GPU hosts — a castor/pollux outage does not affect transcription, and vice versa.</li>
+</ul>
+<p>The one failure mode that's now class-wide is a <strong>front-end host outage</strong>: if rigel.cs.byu.edu is down, every student loses proxy access. Recovery is a manual client-config edit pointing directly at a raw vLLM engine on castor or pollux — see §4 and the recovery section in the Student Guide.</p>
+<hr />
+<h2 id="1-system-architecture--traffic-flow"><a class="header" href="#1-system-architecture--traffic-flow">1. System Architecture &amp; Traffic Flow</a></h2>
+<pre><code>+-----------------------------------------------------------------------------------+
+|                                STUDENT WORKSTATIONS                               |
+|                                                                                   |
+|     [ VS Code + Continue / opencode / Copilot BYOK ]                              |
+|                          |                                                        |
+|                          | chat + autocomplete                                    |
+|                          | (single endpoint for the whole class)                  |
+|                          v                                                        |
++--------------------------+--------------------------------------------------------+
+                           |
+                           v
+        +------------------+-------------------+
+        |   FRONT-END HOST (rigel.cs.byu.edu)   |
+        |   4× NVIDIA A6000 GPUs                |
+        |                                       |
+        |  +-------------------------------+    |
+        |  | LiteLLM Proxy (Port 4000)     |    |
+        |  |   classroom-chat pool:        |    |
+        |  |     castor :8000 + pollux :8000|    |
+        |  |   classroom-autocomplete pool:|    |
+        |  |     pollux :8010  (only)      |    |
+        |  +---------------+---------------+    |
+        |  + Coolify (student app deploys, GPUs)|
+        +------------------+--------------------+
+                           |
+         chat fans out to both hosts; FIM -&gt; pollux
+              +-----------+-----------+
+              |                       |
+              v                       v
++---------------------------------------+   +---------------------------------------+
+|          CASTOR (castor.cs.byu.edu)        |   |          POLLUX (pollux.cs.byu.edu)        |
+|                                       |   |                                       |
+|  +-------------+     +-------------+  |   |  +-------------+     +-------------+  |
+|  | vLLM :8000  |     | vLLM :8010  |  |   |  | vLLM :8000  |     | vLLM :8010  |  |
+|  | Chat model  |     | FIM model   |  |   |  | Chat model  |     | FIM model   |  |
+|  | GPU 0 (96G) |     | GPU 1 (96G) |  |   |  | GPU 0 (96G) |     | GPU 1 (96G) |  |
+|  | Qwen3-Coder |     | Qwen2.5-    |  |   |  | Qwen3-Coder |     | Qwen2.5-    |  |
+|  | -Next-FP8   |     | Coder-7B    |  |   |  | -Next-FP8   |     | Coder-7B    |  |
+|  +-------------+     +-------------+  |   |  +-------------+     +-------------+  |
++---------------------------------------+   +---------------------------------------+
+</code></pre>
+<p>No tensor parallelism — each model owns its GPU. This removes the per-layer all-reduce overhead of TP=2 and lets each workload scale KV cache independently. The specific model names in the diagram (<code>Qwen3-Coder-Next-FP8</code>, <code>Qwen2.5-Coder-7B</code>) reflect the default <code>qwen3-coder</code> install profile; the architecture is model-agnostic — see §2 for how to pick a different profile.</p>
+<hr />
+<h2 id="2-server-setup--gpu-hosts-castor-and-pollux"><a class="header" href="#2-server-setup--gpu-hosts-castor-and-pollux">2. Server Setup — GPU Hosts (castor and pollux)</a></h2>
+<p>The GPU hosts run only vLLM. The LiteLLM proxy lives on the front-end host and is documented separately in <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a> §5.</p>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<p>Before running the install script, each GPU machine needs:</p>
+<ul>
+<li>
+<p>Ubuntu 22.04 or newer (24.04 recommended).</p>
+</li>
+<li>
+<p>A working NVIDIA driver (<code>nvidia-smi</code> returns without error).</p>
+</li>
+<li>
+<p><strong>CUDA Toolkit 13.0 installed at <code>/usr/local/cuda</code></strong> (matches torch 2.11's build). Without this, vLLM's vendored DeepGEMM can't locate CUDA at import time and the FP8 chat engine crashes at first inference. Install via:</p>
+<pre><code class="language-bash">cd /tmp
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt update
+sudo apt install -y cuda-toolkit-13-0
+</code></pre>
+<p>The installer preflights for <code>/usr/local/cuda*</code> and refuses to run without it.</p>
+</li>
+<li>
+<p>At least two GPUs visible to the OS. The installer auto-detects and pins each engine to a card by UUID.</p>
+</li>
+<li>
+<p>LAN reachability from the <strong>front-end host (rigel.cs.byu.edu)</strong> on TCP <strong>8000</strong> (chat) and <strong>8010</strong> (FIM). The front-end's LiteLLM connects out to these ports directly. Students never talk to the GPU hosts directly.</p>
+</li>
+<li>
+<p>The two scripts shipped with this guide (<code>install-qwen-cluster.sh</code> and <code>uninstall-qwen-cluster.sh</code>) copied to each host.</p>
+</li>
+</ul>
+<h3 id="choosing-a-model"><a class="header" href="#choosing-a-model">Choosing a model</a></h3>
+<p>The installer ships with named <strong>profiles</strong> for tested chat + autocomplete combinations. List them:</p>
+<pre><code class="language-bash">./install-qwen-cluster.sh --list-profiles
+</code></pre>
+<p>Currently included:</p>
+<div class="table-wrapper"><table><thead><tr><th>Profile</th><th>Chat model</th><th>Autocomplete model</th><th>Notes</th></tr></thead><tbody>
+<tr><td><code>qwen3-coder</code></td><td><code>Qwen/Qwen3-Coder-Next-FP8</code></td><td><code>Qwen/Qwen2.5-Coder-7B</code></td><td>Default. Recommended coder-focused setup.</td></tr>
+<tr><td><code>qwen3-coder-30b</code></td><td><code>Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8</code></td><td><code>Qwen/Qwen2.5-Coder-7B</code></td><td>Fallback if <code>Next</code> isn't in your vLLM release yet.</td></tr>
+<tr><td><code>glm-45-air</code></td><td><code>zai-org/GLM-4.5-Air-FP8</code></td><td><code>Qwen/Qwen2.5-Coder-7B</code></td><td>GLM chat, Qwen FIM (GLM lacks FIM training).</td></tr>
+</tbody></table>
+</div>
+<p>You can also pass any Hugging Face repo id directly with <code>--chat-model</code> / <code>--fim-model</code>, plus per-engine vLLM flags via <code>--chat-extra-args</code> and <code>--fim-extra-args</code>. See <code>--help</code> for the full option list.</p>
+<p><strong>Add a new profile</strong> by editing <code>install-qwen-cluster.sh</code> — add the name to <code>KNOWN_PROFILES</code>, then add matching branches to <code>_apply_profile</code> (model + args + max-len) and <code>_profile_desc</code> (short description).</p>
+<h3 id="install"><a class="header" href="#install">Install</a></h3>
+<p>The GPU-host install is handled by <code>install-qwen-cluster.sh</code>. It installs vLLM under <code>/opt/qwen-cluster</code>, pre-downloads the chosen models, writes two systemd units, and enables them as daemons that autostart on boot. The script is idempotent — re-running it (including with a different <code>--profile</code>) is safe and is the intended way to swap the running model. The front-end LiteLLM proxy lives on rigel and is documented in <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a> §5; the GPU hosts run only vLLM.</p>
+<p>The installer auto-detects the two largest GPUs by VRAM and pins each vLLM engine to one by GPU UUID (via <code>CUDA_DEVICE_ORDER=PCI_BUS_ID</code> + <code>CUDA_VISIBLE_DEVICES=&lt;uuid&gt;</code>). Chat lands on the biggest card, FIM on the second — so castor's heterogeneous Blackwell + RTX 4090 layout and pollux's homogeneous 2× Blackwell layout both work with the same command. FIM's <code>--max-model-len</code> also auto-scales to the FIM card's VRAM (8k at &lt;30 GB, 16k at &lt;50 GB, 32k otherwise) so a small card doesn't OOM at KV-cache-hungry defaults.</p>
+<p><strong>On each GPU machine:</strong></p>
+<ol>
+<li>
+<p>Copy <code>install-qwen-cluster.sh</code> to the box (<code>scp</code>, USB, whatever).</p>
+</li>
+<li>
+<p>Run it as root:</p>
+<pre><code class="language-bash"># Default profile (qwen3-coder):
+sudo ./install-qwen-cluster.sh
+
+# Explicit profile:
+sudo ./install-qwen-cluster.sh --profile glm-45-air
+
+# Custom model not covered by a profile:
+sudo ./install-qwen-cluster.sh \
+    --chat-model deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct \
+    --chat-extra-args "--trust-remote-code"
+</code></pre>
+<p>The startup summary prints which physical GPU each engine will use — eyeball it before it commits.</p>
+</li>
+</ol>
+<p>Each GPU machine ends up with two units:</p>
+<div class="table-wrapper"><table><thead><tr><th>Unit</th><th>What it runs</th><th>Port</th><th>GPU (pinned by UUID)</th></tr></thead><tbody>
+<tr><td><code>qwen-chat.service</code></td><td>vLLM serving the chosen chat model</td><td>8000</td><td>Largest-VRAM card on the host</td></tr>
+<tr><td><code>qwen-autocomplete.service</code></td><td>vLLM serving the chosen FIM model</td><td>8010</td><td>Second-largest-VRAM card</td></tr>
+</tbody></table>
+</div>
+<p>The unit names stay <code>qwen-*</code> regardless of profile (they predate the multi-model support and are the systemd handle for the cluster).</p>
+<p><strong>Verify</strong> once each GPU machine finishes downloading and warming up (watch with <code>journalctl -u qwen-chat -f</code>):</p>
+<pre><code class="language-bash"># From the front-end host (rigel.cs.byu.edu), or any workstation with LAN access:
+curl http://castor.cs.byu.edu:8000/v1/models   # castor chat
+# castor's FIM engine is intentionally stopped (4090 reallocated 2026-10-19):
+# curl http://castor.cs.byu.edu:8010/v1/models  # castor FIM — not running
+curl http://pollux.cs.byu.edu:8000/v1/models   # pollux chat
+curl http://pollux.cs.byu.edu:8010/v1/models   # pollux FIM
+
+# The front-end LiteLLM (installed per Coolify runbook §5) is the student-facing endpoint:
+curl http://ml-capstone.cs.byu.edu:4000/v1/models   # classroom-chat + classroom-autocomplete + classroom-transcribe
+</code></pre>
+<p><strong>Full-stack verification.</strong> A repeatable smoke test ships in the repo — run it from your laptop over VPN whenever you want to confirm the cluster is healthy:</p>
+<pre><code class="language-bash">./smoke-test-cluster.sh                       # LLM + Coolify UI + sentiment app (default deploy URL)
+./smoke-test-cluster.sh -p 8100               # sentiment app at http://rigel.cs.byu.edu:8100 (host-port bypass, no DNS needed)
+./smoke-test-cluster.sh --local               # sentiment app on localhost:8000 (for local docker run)
+./smoke-test-cluster.sh --no-sentiment        # skip the sentiment section entirely
+</code></pre>
+<p>It runs a full pass: LiteLLM chat + FIM (with the actual prompt and model output printed so you can eyeball quality), direct-to-vLLM on both GPU hosts, a tool-calling probe against the proxy <strong>and each GPU host individually</strong>, Coolify UI reachability, and — if enabled — three sentiment classifications against the reference <code>sentiment-test-app/</code>. Every check runs even if earlier ones fail; exit code is non-zero on any failure.</p>
+<p>The per-host FIM check only runs for hosts in <code>FIM_HOSTS</code> (default <code>pollux.cs.byu.edu</code>), so castor's stopped FIM engine is reported as a skip rather than a failure. If you put castor back in the autocomplete pool, run with <code>FIM_HOSTS="castor.cs.byu.edu pollux.cs.byu.edu"</code>.</p>
+<p>The tool-calling probes are per-host on purpose. LiteLLM round-robins, so a proxy-only check passes roughly half the time when exactly one engine is misconfigured — which is the shape this failure actually takes.</p>
+<p>The reference <code>sentiment-test-app/</code> (see its <code>README.md</code>) is a small FastAPI service that calls LiteLLM for sentiment classification. It's the canonical "test Coolify deploy" workload — build the Docker image via <code>docker build</code>, run locally, deploy to Coolify with a host-port mapping, or eventually via GitHub App push-to-deploy.</p>
+<p>Manage the vLLM daemons with the usual <code>systemctl</code> verbs:</p>
+<pre><code class="language-bash">sudo systemctl status  qwen-chat qwen-autocomplete
+sudo systemctl restart qwen-chat qwen-autocomplete
+</code></pre>
+<h3 id="swapping-to-a-different-model"><a class="header" href="#swapping-to-a-different-model">Swapping to a different model</a></h3>
+<p>Because the front-end LiteLLM exposes stable aliases (<code>classroom-chat</code>, <code>classroom-autocomplete</code>), students' client configs keep working across model changes. Swapping the underlying model is a two-step process:</p>
+<ol>
+<li>
+<p><strong>On both GPU hosts</strong>, re-run the installer with a different <code>--profile</code> (or <code>--chat-model</code> etc.):</p>
+<pre><code class="language-bash">sudo ./install-qwen-cluster.sh --profile glm-45-air &lt;peer-ip&gt;
+</code></pre>
+<p>The installer is idempotent — it downloads the new model (if not already cached), rewrites <code>/opt/qwen-cluster/config.yaml</code> and the systemd units with the new model + args, and <code>systemctl restart</code>s the services. The old model's weights stay in <code>/opt/qwen-cluster/hf-cache</code> (disk cost only) so switching back is a fast re-run.</p>
+</li>
+<li>
+<p><strong>On the front-end host</strong>, update <code>/etc/litellm/config.yaml</code> so its <code>model:</code> field references the new HF model id vLLM is now serving, and restart the container:</p>
+<pre><code class="language-bash">sudo docker restart litellm
+</code></pre>
+<p>If you skip step 2, the front-end LiteLLM will still route requests, but with the wrong model name in its upstream call — vLLM will 404 because it no longer serves the old model id.</p>
+</li>
+</ol>
+<h3 id="gpu-host-update-policy"><a class="header" href="#gpu-host-update-policy">GPU host update policy</a></h3>
+<p><code>castor</code> and <code>pollux</code> run the same OS and the same package set, but they have <strong>different motherboards and different GPU configurations</strong>, so each needs its own NVIDIA driver. Do not try to make the driver versions match — per-host divergence is correct here. What must be true is that each host stays on the combination known to work for <em>its</em> hardware.</p>
+<p><strong>The failure mode is silent and delayed.</strong> An unattended update bumps the NVIDIA userspace libraries or stages a new kernel. Everything keeps running on the already-loaded module, so nothing looks wrong — the smoke test stays green. The damage only appears at the next reboot, possibly months later, when the host comes up with no usable GPU and both vLLM engines fail to start. Both GPU hosts reached that state undetected in September 2026.</p>
+<p><strong>Freeze each host once, while it is healthy:</strong></p>
+<pre><code class="language-bash">sudo ./scripts/pin-gpu-host.sh --freeze
+</code></pre>
+<p>That records the running kernel, the loaded module version, and the GPU models to <code>/etc/qwen-cluster/pinned-state.conf</code>, holds the kernel metapackages and every installed <code>nvidia-*</code> / <code>libnvidia-*</code> package, and blacklists them from unattended-upgrades.</p>
+<p><strong>Verify any time</strong> (read-only, exits non-zero on drift, safe for cron):</p>
+<pre><code class="language-bash">sudo ./scripts/pin-gpu-host.sh
+</code></pre>
+<p>It checks that nvidia-smi actually works, that the live kernel and driver still match the pin, that <strong>every installed kernel has a DKMS module built</strong> — the check that catches a reboot bomb while it is still harmless — that the holds and blacklist survive, that dpkg is in a clean state, and that both engines are active.</p>
+<p><strong>When you do want to upgrade a driver or kernel</strong>, treat it as a scheduled operation, never an incidental one:</p>
+<ol>
+<li>Confirm the <em>other</em> host is healthy — LiteLLM pools both, so one can be down without taking the class offline. Never work on both in the same window.</li>
+<li><code>sudo apt-mark unhold</code> the packages you intend to move on the host being upgraded.</li>
+<li>Upgrade, then confirm <code>dkms status</code> shows a module built for the kernel that would boot.</li>
+<li>Reboot, verify <code>nvidia-smi</code>, verify both engines start.</li>
+<li><code>sudo ./scripts/pin-gpu-host.sh --freeze</code> to record the new known-good state.</li>
+<li>Only then move to the other host.</li>
+</ol>
+<p>If a host ever boots into a kernel with no module, recover by selecting the previous kernel in GRUB's <em>Advanced options for Ubuntu</em> — don't try to rebuild drivers from a console with the class waiting.</p>
+<h3 id="recorded-host-state-and-the-september-2026-incident"><a class="header" href="#recorded-host-state-and-the-september-2026-incident">Recorded host state, and the September 2026 incident</a></h3>
+<p>Each host's pinned combination lives on the host itself at <code>/etc/qwen-cluster/pinned-state.conf</code> (<code>pin-gpu-host.sh --show</code>). Recorded here as well so the intended state survives a host being rebuilt:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>castor</th><th>pollux</th></tr></thead><tbody>
+<tr><td>Kernel</td><td><code>7.0.0-31-generic</code></td><td><code>6.17.0-23-generic</code></td></tr>
+<tr><td>NVIDIA driver</td><td>580.173.02</td><td>590.48.01</td></tr>
+<tr><td>GPUs</td><td>2× RTX PRO 6000 Blackwell</td><td>2× RTX PRO 6000 Blackwell Max-Q</td></tr>
+<tr><td>Pinned</td><td>2026-09-18</td><td>2026-09-18</td></tr>
+</tbody></table>
+</div>
+<p><strong>These are not supposed to match.</strong> Different motherboards and GPU configurations mean each host needs its own driver. Never "fix" the divergence.</p>
+<p><strong>What happened.</strong> A student-facing opencode session failed with a vLLM tool-choice error. Chasing it surfaced three unrelated problems that had all been silently true for some time:</p>
+<ol>
+<li><strong>Tool calling was never enabled</strong> on the Qwen chat engines — the <code>glm-45-air</code> profile set the flags, the <code>qwen3-coder</code> profiles didn't. Plain chat and FIM worked, so nothing looked wrong.</li>
+<li><strong>castor's driver was already broken</strong> — <code>nvidia-smi</code> reported a driver/library version mismatch. The engines kept serving off the loaded module, so the outage was invisible until someone tried to restart something. A reboot fixed it.</li>
+<li><strong>pollux had a staged kernel with no NVIDIA module</strong> (<code>7.0.0-31-generic</code>, which its 590 driver cannot build against). It was one reboot away from coming up with no GPUs. That kernel was removed; pollux stays on 6.17 until a 590-branch release supports 7.0. castor demonstrates the kernel itself is fine — the incompatibility is driver-branch-specific.</li>
+</ol>
+<p><strong>What it changed.</strong> <code>pin-gpu-host.sh</code> now exists and both hosts are frozen against unattended updates. The installer no longer aborts on an unrelated broken dpkg state, and no longer exits silently when <code>nvidia-smi</code> is broken — that silent exit is what made this take a day instead of an hour.</p>
+<p><strong>What closed the loop.</strong> <code>smoke-test-cluster.sh</code> now posts a real <code>tools</code> request to the proxy and to each GPU engine directly (17 checks, up from 14). A recurrence fails the smoke test instead of waiting for a student to hit it.</p>
+<h3 id="tool-calling-must-be-enabled-for-agentic-clients"><a class="header" href="#tool-calling-must-be-enabled-for-agentic-clients">Tool calling must be enabled for agentic clients</a></h3>
+<p>opencode, Continue's agent mode, and Copilot CLI all send a <code>tools</code> array with <code>tool_choice: "auto"</code> on every request. vLLM rejects those unless the chat engine was launched with <strong>both</strong> <code>--enable-auto-tool-choice</code> and a <code>--tool-call-parser</code>, and LiteLLM surfaces the rejection to the student as:</p>
+<pre><code>litellm.BadRequestError: OpenAIException - "auto" tool choice requires
+--enable-auto-tool-choice and --tool-call-parser to be set.
+</code></pre>
+<p>Every profile in <code>install-qwen-cluster.sh</code> therefore carries the right parser in <code>CHAT_EXTRA_ARGS</code>: <code>qwen3_xml</code> for the Qwen3-Coder profiles, <code>glm45</code> for GLM-4.5-Air. <strong>If you add a profile or pass <code>--chat-model</code> by hand, you must supply the parser matching that model family</strong> — otherwise plain chat works, autocomplete works, the 14-check smoke test passes, and only agentic clients break. That asymmetry makes this easy to ship broken.</p>
+<p>Parser names are vLLM-version-specific. Check what a given build accepts with:</p>
+<pre><code class="language-bash">/opt/qwen-cluster/venv/bin/python -m vllm.entrypoints.openai.api_server --help | grep -A20 'tool-call-parser'
+</code></pre>
+<p>Note the FIM engine needs none of this — <code>classroom-autocomplete</code> is a base completion model and never receives tools.</p>
+<h3 id="rolling-back-a-bad-install"><a class="header" href="#rolling-back-a-bad-install">Rolling back a bad install</a></h3>
+<p>If something goes wrong and you want a clean slate, run <code>uninstall-qwen-cluster.sh</code> on the affected machine. It stops the services, removes their unit files, deletes <code>/opt/qwen-cluster</code>, removes the <code>qwen</code> user, and drops the ufw rules — reversing everything the installer did.</p>
+<pre><code class="language-bash">sudo ./uninstall-qwen-cluster.sh                # interactive; asks to confirm
+sudo ./uninstall-qwen-cluster.sh -y             # non-interactive
+sudo ./uninstall-qwen-cluster.sh --keep-models  # preserve /opt/qwen-cluster/hf-cache
+</code></pre>
+<p>The <code>--keep-models</code> flag is worth knowing about: the chat model download alone is many GB, so preserving the HF cache between install attempts saves a lot of time when iterating on config issues.</p>
+<hr />
+<h2 id="3-term-start-provisioning"><a class="header" href="#3-term-start-provisioning">3. Term-start provisioning</a></h2>
+<p>Getting a class onto the platform is five steps in a fixed order, with one unavoidable human wait in the middle. <code>scripts/term-start.sh</code> runs the sequence and enforces the order; <a href="onboarding.html"><code>onboarding.md</code></a> is the longer-form checklist with per-script detail.</p>
+<pre><code>1. roster    canvas-roster.py build      Canvas + survey  -&gt;  roster CSV
+2. invite    invite-to-org.sh            GitHub org invitations
+-  GATE      students must ACCEPT those invitations        (days, not minutes)
+3. teams     provision-gh-teams.sh       GitHub Teams + membership
+4. coolify   provision-teams.sh          Coolify teams/users/server  (on the Coolify host)
+5. verify    verify-provisioning.sh      read-only check of all of it
+</code></pre>
+<h3 id="the-whole-thing-end-to-end"><a class="header" href="#the-whole-thing-end-to-end">The whole thing, end to end</a></h3>
+<p>First time only — create <code>.env</code> in the repo root (gitignored) with <code>CANVAS_HOST</code>, <code>CANVAS_COURSE</code> and <code>CANVAS_TOKEN</code>. The token comes from Canvas under <strong>Account → Settings → Approved Integrations → + New Access Token</strong>; it carries your full instructor privileges, so give it an expiry.</p>
+<pre><code class="language-bash"># --- before class ---------------------------------------------------------
+./scripts/canvas-roster.py create-quiz --draft     # review it, publish in Canvas
+
+# --- in class -------------------------------------------------------------
+./scripts/canvas-roster.py status                  # who has answered
+./scripts/term-start.sh --term 2026-fall           # preview: changes nothing
+./scripts/term-start.sh --term 2026-fall --observer you@cs.byu.edu --apply
+
+# --- students accept the GitHub invitation --------------------------------
+./scripts/term-start.sh --only gate                # who is still outstanding
+
+# --- once they have accepted ----------------------------------------------
+./scripts/term-start.sh --term 2026-fall --observer you@cs.byu.edu --from teams --apply
+
+# --- as stragglers appear, repeat over the WHOLE class --------------------
+./scripts/term-start.sh --term 2026-fall --observer you@cs.byu.edu --apply
+</code></pre>
+<p>Everything above is safe to re-run. Use the same <code>--term</code> each time.</p>
+<h3 id="where-the-roster-comes-from"><a class="header" href="#where-the-roster-comes-from">Where the roster comes from</a></h3>
+<p>Canvas knows every student's name and email. It does <strong>not</strong> know their GitHub username, and every downstream script depends on that field. <code>scripts/canvas-roster.py</code> bridges the gap with a Canvas survey:</p>
+<pre><code class="language-bash">./scripts/canvas-roster.py create-quiz --draft   # review, then publish in Canvas
+./scripts/canvas-roster.py status                # chase list + reported VPN problems
+./scripts/canvas-roster.py build --term 2026-fall --verify-github
+</code></pre>
+<p>Credentials come from a gitignored <code>.env</code> (<code>CANVAS_HOST</code>, <code>CANVAS_COURSE</code>, <code>CANVAS_TOKEN</code>). The survey asks for the GitHub username, the email on the GitHub account (Coolify matches OAuth logins against it), and whether the CS VPN actually works — that last one surfaces the entitlement gap in week one instead of mid-lab.</p>
+<p><code>build</code> normalises pasted profile URLs and <code>@handles</code>, verifies usernames resolve, and lists anyone without a usable response as skipped rather than guessing. Re-running it is always safe.</p>
+<p><code>team_name</code> defaults to <strong><code>&lt;Full Name&gt;'s Sandbox</code></strong> — full name, not first name. In a class of 30 a shared first name is near-certain, and "Alice's Sandbox" is ambiguous anyway when you are scanning 30 teams in the Coolify UI. Two students with identical full names are still disambiguated by GitHub username. Override with <code>--team-template</code>; <code>{name}</code>, <code>{first}</code> and <code>{github}</code> are available.</p>
+<h3 id="running-the-sequence"><a class="header" href="#running-the-sequence">Running the sequence</a></h3>
+<pre><code class="language-bash">./scripts/term-start.sh                      # preview everything, change nothing
+./scripts/term-start.sh --apply              # execute
+./scripts/term-start.sh --from teams --apply # resume after the acceptance gate
+./scripts/term-start.sh --only gate          # who hasn't accepted their invite
+./scripts/term-start.sh --only coolify --apply
+</code></pre>
+<p><strong>Pass <code>--observer &lt;your-email&gt;</code> on any run that provisions Coolify.</strong> It makes you an admin of every team, so all of them appear in your own Coolify team switcher and you can look at a student's setup directly. Without it, helping someone means adding yourself to their team in the database by hand, walking the UI, and removing the row again. It defaults to <code>$OPERATOR_EMAIL</code>, and phase 4 warns when neither is set — for a class of 30 that should be a deliberate choice, not a discovery.</p>
+<p><strong>Preview is the default</strong>, matching every underlying script: without <code>--apply</code> each phase runs its own dry run. Every phase is independently idempotent, so re-running after fixing a problem is always safe — that is what makes the gate cheap to respect.</p>
+<h3 id="why-it-is-not-one-fire-and-forget-run"><a class="header" href="#why-it-is-not-one-fire-and-forget-run">Why it is not one fire-and-forget run</a></h3>
+<p><strong>Phase 3 cannot add a student to a GitHub Team until they have accepted the org invitation from phase 2.</strong> That wait is measured in days. So the realistic shape of a term start is:</p>
+<ol>
+<li>Run phases 1–2, then tell students to accept the invite (syllabus deadline helps).</li>
+<li>Wait, checking in with <code>--only gate</code> (below).</li>
+<li>Once everyone is in, <code>--from teams --apply</code> finishes the job.</li>
+</ol>
+<p><strong>Who has and hasn't accepted:</strong></p>
+<pre><code class="language-bash">./scripts/term-start.sh --only gate
+</code></pre>
+<p>Read-only, changes nothing, and answers exactly that question:</p>
+<pre><code>1 of 2 accepted
+1 of 2 students have NOT accepted their invitation:
+  octocat — no invitation found (bad username?)
+</code></pre>
+<p>It distinguishes two failures that need different responses. <em>"Invited, not yet accepted"</em> means chase the student. <em>"No invitation found"</em> means the invite never landed — nearly always a mistyped GitHub username in the roster, which is worth fixing at the source (<code>canvas-roster.py build --verify-github</code>) rather than by hand.</p>
+<p>Exit code is 0 when everyone has accepted and 2 when anyone is outstanding, so it also works as a scripted precondition. The same check runs automatically before phases 3 and 4; <code>--only gate</code> just lets you ask without running anything else.</p>
+<p>For the same information outside this tooling: GitHub's org page under <strong>People → Pending invitations</strong>, or <code>gh api /orgs/byu-ml-capstone/invitations</code>.</p>
+<p>The gate <strong>exits non-zero (code 2) rather than continuing</strong>, so a half-accepted roster fails loudly instead of quietly provisioning a subset of the class and leaving you to discover the gap later. <code>--skip-gate</code> provisions everyone who <em>has</em> accepted; re-running afterwards fills in the rest.</p>
+<h3 id="adding-students-later-the-normal-case"><a class="header" href="#adding-students-later-the-normal-case">Adding students later (the normal case)</a></h3>
+<p>Students miss the first class. The whole sequence is built to be re-run over the <strong>entire</strong> class list as stragglers trickle in — never a separate "just the new people" path, which is how rosters drift apart.</p>
+<p>A realistic two-day term start:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>Day 1 (in class)</th><th>Day 2 (absentees take the survey)</th></tr></thead><tbody>
+<tr><td>Roster</td><td><code>build</code> → 3 students</td><td><code>build</code> → 5 students, 3 carried over unchanged</td></tr>
+<tr><td>Invites</td><td><code>--only invite --apply</code></td><td>same command; day-1 students report <code>EXISTS-active</code></td></tr>
+<tr><td>Gate</td><td>all 3 accept in class</td><td>blocks on the 2 new ones until they accept</td></tr>
+<tr><td>Teams + Coolify</td><td><code>--from teams --apply</code></td><td>same command; existing rows plan as <code>EXISTS</code></td></tr>
+</tbody></table>
+</div>
+<p>Every stage is a no-op for anyone already provisioned:</p>
+<ul>
+<li><strong><code>canvas-roster.py build</code></strong> rebuilds from Canvas plus all survey responses to date, and <strong>never renames an already-issued <code>team_name</code></strong>. That matters: <code>team_name</code> is a live GitHub team slug and a live Coolify team name, so renaming one would orphan the real team and create a duplicate on the next run. Students carried over keep exactly what they had; only newcomers get disambiguated. The run prints <code>N carried over unchanged, M newly added</code>.</li>
+<li><strong><code>invite-to-org.sh</code></strong> reports <code>EXISTS-active</code> or <code>EXISTS-pending</code> and re-invites nobody.</li>
+<li><strong><code>provision-gh-teams.sh</code></strong> reuses existing teams and skips members already in them.</li>
+<li><strong><code>provision-teams.sh</code></strong> plans each row as <code>CREATE</code> or <code>EXISTS</code>, and its SQL is <code>NOT EXISTS</code>-guarded regardless.</li>
+<li><strong>The one row that is <em>not</em> <code>NOT EXISTS</code>-guarded is <code>users</code>.</strong> It is an upsert
+that rewrites <code>password</code> on conflict, so a run against a roster of students
+who already exist will reset all of their Coolify passwords to whatever
+<code>--class-password</code> resolves to. Pass <strong><code>--keep-passwords</code></strong> whenever the point
+of the run is to add existing students to new teams (the group phase) — it
+turns that clause into <code>DO NOTHING</code>. <code>--apply</code> refuses to run with the
+built-in placeholder password at all, because this repository is public and
+Coolify accepts email+password login for existing accounts. See
+<em>Term-start onboarding → Step 3d</em>.</li>
+<li><strong><code>verify-provisioning.sh</code></strong> is read-only.</li>
+</ul>
+<p>Two things to watch:</p>
+<ol>
+<li><strong>Use the same <code>--term</code> every time.</strong> <code>build</code> writes <code>roster-&lt;term&gt;.csv</code> and reads the previous copy at that same path to preserve team names. A different <code>--term</code> starts a fresh file with no history, and the stickiness is lost.</li>
+<li><strong>The gate blocks phases 3–4 for the whole roster</strong>, so on day 2 you cannot finish until the newcomers accept. That is usually right — just wait. If you want to provision the ones who <em>have</em> accepted and catch the rest tomorrow, <code>--skip-gate</code> does that, and the re-run fills the gaps.</li>
+</ol>
+<h3 id="where-do-i-run-all-this"><a class="header" href="#where-do-i-run-all-this">Where do I run all this?</a></h3>
+<p>You do <strong>not</strong> have to do everything on rigel. The roster only needs to be on the Coolify host for phases 4–5, and <code>term-start.sh</code> copies it there for you.</p>
+<p>Two setups work:</p>
+<p><strong>From your laptop (recommended).</strong> Phases 1–3 are Canvas and <code>gh</code> work that runs anywhere. Phases 4–5 need <code>docker exec</code> against <code>coolify-db</code>, so they are driven over ssh: the roster is <code>scp</code>'d up automatically and the scripts run on the Coolify host. You need:</p>
+<ul>
+<li><code>.env</code> with the Canvas credentials</li>
+<li><code>gh</code> authenticated as an org Owner</li>
+<li>passwordless ssh to the Coolify host, with a <code>~/ml-capstone-platform</code> clone there</li>
+<li><code>gh</code> <strong>also</strong> authenticated on the Coolify host, because phase 5 checks GitHub membership <em>and</em> the Coolify database in one pass</li>
+</ul>
+<p><strong>Entirely on the Coolify host.</strong> Then everything is local and no ssh is involved, but that host needs the Canvas token in <code>.env</code> and <code>gh</code> authenticated as an org Owner. Both approaches are equally supported; the script probes for <code>coolify-db</code> and picks the right path either way.</p>
+<p>Phases 4 and 5 always resolve to the <em>same</em> machine. Provisioning over ssh and then verifying locally would check a machine that has no Coolify on it — the script will not do that.</p>
+<h3 id="the-two-things-that-need-a-different-machine-or-a-human"><a class="header" href="#the-two-things-that-need-a-different-machine-or-a-human">The two things that need a different machine or a human</a></h3>
+<ul>
+<li>
+<p><strong>Phase 4 must run on the Coolify host.</strong> <code>provision-teams.sh</code> writes directly to Coolify's Postgres through <code>docker exec</code>, so it only works on the machine running the <code>coolify-db</code> container.</p>
+<p><code>term-start.sh</code> decides where it is by <strong>probing for that container</strong>, not by checking the hostname — Coolify lives on rigel today and may not forever. If the probe finds <code>coolify-db</code> locally it provisions in place. If not, it requires <code>--coolify-host</code> (or <code>$COOLIFY_HOST</code>), and runs the <em>same probe over ssh</em> before touching anything: a host that is merely reachable under the expected name, but isn't actually running Coolify, is refused rather than provisioned against. Moving Coolify means passing a new <code>--coolify-host</code>; nothing else changes.</p>
+<p>If Docker is present locally but unusable, it says so and names the fix (<code>usermod -aG docker</code>) instead of silently falling through to the remote path.</p>
+<p>It always runs <code>--check-schema</code> before applying — a Coolify auto-upgrade that renamed a column would otherwise produce silently broken INSERTs.</p>
+</li>
+<li>
+<p><strong>Students provision their own Applications.</strong> The instructor never creates Applications or Deploy Webhooks; that is Part B of <a href="student-guide.html"><code>student-guide.md</code></a>.</p>
+</li>
+</ul>
+<h3 id="things-students-will-ask-about-that-are-not-obvious"><a class="header" href="#things-students-will-ask-about-that-are-not-obvious">Things students will ask about that are not obvious</a></h3>
+<p>Found while running the whole pipeline end to end against a real student repo:</p>
+<ul>
+<li><strong>Each team has its own Coolify server record.</strong> They are all named <code>ml-capstone</code> and all point at rigel, but each team's row has a different UUID. There is no shared value, so the Terraform bonus lab makes <code>coolify_server_uuid</code> a required input with a lookup command rather than shipping a default that is right for exactly one student.</li>
+<li><strong>API-token permissions are gated by role in the <em>active</em> team, and are mutually exclusive.</strong> <code>ApiTokenPolicy</code> grants <code>root</code>, <code>write</code> and <code>deploy</code> to <code>isAdmin() || isOwner()</code>, evaluated against whichever team is currently selected. <code>provision-teams.sh</code> gives each student <code>admin</code> on their own team, so <strong><code>root</code> is available to them</strong> — it means root of that team, not of the instance. The catch is in the Livewire component: selecting <code>deploy</code> collapses the selection to <code>['deploy']</code> alone, so <code>write</code> and <code>deploy</code> cannot be held together. Terraform needs both, which makes <code>root</code> the only workable choice. A student seeing everything greyed out except <code>read</code> is looking at a team they are only a <code>member</code> of — the fix is to switch to their own team, not to change permissions.</li>
+<li><strong>Saving a domain does not re-route a running container.</strong> Traefik routes on labels baked in at container start. A domain set after the first deploy needs a Redeploy before the URL works; setting it beforehand avoids the problem.</li>
+<li><strong>rigel's web ports answer from the wider BYU network</strong> as of 2026-10-21 — 443 and 80, nothing else. Measured from <code>vpn.byu.edu</code>: <code>:443</code> and <code>:80</code> open, <code>:22</code>, <code>:4000</code>, <code>:8000</code> and <code>:6001</code> filtered. Because the split is by port rather than by hostname, this covers deployed apps <em>and</em> the Coolify admin UI, which Traefik also serves on 443; what it does not cover is Coolify's realtime/terminal ports, so from that VPN the UI loads while live deploy logs stay empty. LiteLLM and <code>ssh</code> remain CS-VPN-only. This is why Docker's address pool had to move off <code>10.0.0.0/8</code>: container networks overlapped the client addresses handed out by the wider network, and a client inside one of those ranges had its replies routed into a container bridge instead of back out. See the Coolify runbook §5a.</li>
+<li><strong>Student apps serve HTTPS</strong> as of 2026-10-08, via a DigiCert wildcard for <code>*.ml-capstone.cs.byu.edu</code> (valid to 2027-04-24) installed at <code>/traefik/certs/</code> and declared in <code>/traefik/dynamic/ml-capstone-wildcard.yaml</code>. Traefik terminates; nothing at the CS edge is involved for student hostnames, which resolve to rigel over the VPN. Setting an Application's domain to <code>https://</code> makes Coolify emit the https routers and an http→https redirect. A <code>www.</code> hostname is two labels deep and is <strong>not</strong> covered — it falls back to Traefik's self-signed cert and is the only source of certificate warnings here.</li>
+<li><strong>"Use this template" with <em>Include all branches</em> produces unrelated branch histories,</strong> which makes <code>staging</code> → <code>main</code> pull requests impossible. Students now create <code>staging</code> from <code>main</code> themselves.</li>
+</ul>
+<h3 id="ferpa"><a class="header" href="#ferpa">FERPA</a></h3>
+<p>Roster CSVs contain real student emails and GitHub usernames. <code>.gitignore</code> covers <code>roster-*.csv</code> (with <code>roster-example.csv</code> deliberately exempt so the format stays discoverable) and <code>.env</code>. Keep rosters on rigel and <code>scp</code> as needed; never commit one.</p>
+<hr />
+<h2 id="4-architectural-advantages--emergency-procedures"><a class="header" href="#4-architectural-advantages--emergency-procedures">4. Architectural Advantages &amp; Emergency Procedures</a></h2>
+<ul>
+<li><strong>Right-sized model per workload.</strong> A small FIM model on GPU 1 gives sub-100 ms ghost-text suggestions; the big chat model on GPU 0 keeps its throughput for the requests that actually need it.</li>
+<li><strong>No tensor-parallel overhead.</strong> Each model owns its GPU, so there's no per-layer all-reduce between cards. Both engines run at TP=1.</li>
+<li><strong>Prefix caching.</strong> <code>--enable-prefix-caching</code> retains reusable prefix KV state (shared system prompt, common assignment scaffolding) in GPU memory. When many students run the model against the same file, repeated evaluations drop to milliseconds.</li>
+<li><strong>Continuous batching.</strong> vLLM dynamically batches independent student requests, so dozens of concurrent completions run without serializing.</li>
+<li><strong>Centralized failover.</strong> A single vLLM engine crash — or a whole GPU host going offline — is invisible to students: the front-end LiteLLM has both hosts' engines in its pool and routes around the dead one automatically. No client-side reconfiguration needed. The engine restarts under systemd; LiteLLM's health checks pick it back up.</li>
+<li><strong>Front-end host failure (the new class-wide outage mode).</strong> If rigel.cs.byu.edu goes down, every student loses <code>classroom-chat</code> and <code>classroom-autocomplete</code> at once. Recovery is a manual client-config edit pointing directly at one GPU host's raw vLLM engine — bypassing LiteLLM entirely. This means students also need to change the <em>model name</em> from the LiteLLM alias to the underlying HF id (e.g. <code>Qwen/Qwen3-Coder-Next-FP8</code>). Provide the fallback snippet below so they know what to paste.</li>
+</ul>
+<h3 id="emergency-student-fallback--front-end-host-is-down"><a class="header" href="#emergency-student-fallback--front-end-host-is-down">Emergency student fallback — front-end host is down</a></h3>
+<p>Direct-to-vLLM endpoints (no failover, no load balancing, but works if the front-end is dead):</p>
+<ul>
+<li>Chat: <code>http://castor.cs.byu.edu:8000/v1</code> or <code>http://pollux.cs.byu.edu:8000/v1</code> — model name <code>Qwen/Qwen3-Coder-Next-FP8</code> (or whatever profile is currently installed)</li>
+<li>Autocomplete: <code>http://pollux.cs.byu.edu:8010/v1</code> — model name <code>Qwen/Qwen2.5-Coder-7B</code>. (castor's <code>:8010</code> is not running; its 4090 was reallocated 2026-10-19)</li>
+</ul>
+<p>Client edits by tool:</p>
+<ul>
+<li><strong>Continue:</strong> <code>config.json</code> — change both <code>apiBase</code> values and both <code>model</code> values.</li>
+<li><strong>opencode:</strong> <code>~/.config/opencode/opencode.json</code> — change <code>baseURL</code> and the model id under <code>models</code>.</li>
+<li><strong>Copilot Chat:</strong> VS Code settings → <code>github.copilot.chat.customOAIModels</code> — change base URL and model id.</li>
+<li><strong>Copilot CLI:</strong> <code>export COPILOT_PROVIDER_BASE_URL=http://castor.cs.byu.edu:8000/v1 COPILOT_MODEL=Qwen/Qwen3-Coder-Next-FP8</code>, then restart.</li>
+</ul>
+<p>Once the front-end host is back up, students revert to <code>http://ml-capstone.cs.byu.edu:4000/v1</code> with the LiteLLM aliases — nothing else to reconfigure.</p>
+<h3 id="optional-next-step-speculative-decoding"><a class="header" href="#optional-next-step-speculative-decoding">Optional next step: speculative decoding</a></h3>
+<p>For any chat model that leaves substantial free VRAM on GPU 0 (Qwen3-Coder-Next-FP8 and GLM-4.5-Air-FP8 both do), you can enable vLLM speculative decoding by pairing the chat model (target) with a small draft model (e.g. <code>Qwen/Qwen2.5-Coder-1.5B</code>) on the same GPU. Big latency wins for chat, no extra hardware. Wire it up by adding the <code>--speculative-model</code> flags to <code>--chat-extra-args</code> when reinstalling. Do this once the base setup is stable.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="architecture/reference-architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="onboarding.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="architecture/reference-architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="onboarding.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

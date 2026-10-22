@@ -1,0 +1,537 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Annual Maintenance - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html" class="active"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/annual-maintenance.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="annual-maintenance--getting-the-platform-ready-for-the-next-cohort"><a class="header" href="#annual-maintenance--getting-the-platform-ready-for-the-next-cohort">Annual Maintenance — getting the platform ready for the next cohort</a></h1>
+<p>Written at the end of the 2026 fall term, while the reasons were still fresh.</p>
+<p>This is the list of things that have to happen between one cohort finishing and
+the next one starting, in the order they have to happen. It exists because most
+of these are invisible until they break in week one, when thirty people are
+waiting and there is no time to work out <em>why</em> a decision was made the way it
+was.</p>
+<p>Each item says what to do, <strong>why</strong>, and <strong>how to know it worked</strong>. Where we
+deliberately chose not to do something, the reason is recorded — a deferred
+decision with no rationale gets rediscovered from scratch every year.</p>
+<hr />
+<h2 id="0-the-one-with-a-real-deadline"><a class="header" href="#0-the-one-with-a-real-deadline">0. The one with a real deadline</a></h2>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th></tr></thead><tbody>
+<tr><td><strong>Wildcard certificate expires</strong></td><td><strong>2027-04-24 23:59 GMT</strong></td></tr>
+<tr><td>Covers</td><td><code>*.ml-capstone.cs.byu.edu</code> and the apex</td></tr>
+<tr><td>Lives at</td><td><code>/traefik/certs/</code> on rigel, declared in <code>/traefik/dynamic/ml-capstone-wildcard.yaml</code></td></tr>
+<tr><td>Issued</td><td>2026-10-08 by CS IT (DigiCert), via ticket</td></tr>
+</tbody></table>
+</div>
+<p><strong>This expires in the middle of spring, not during the summer window.</strong> Every
+student app URL goes to a browser certificate warning the day it lapses, and
+the admin UI with it. CS IT issues these on a ticket with lead time, so the
+request goes in <strong>February or March 2027</strong> — do not let this one wait for the
+summer pass.</p>
+<p>Verify after replacement:</p>
+<pre><code class="language-bash">echo | openssl s_client -connect ml-capstone.cs.byu.edu:443 \
+  -servername anything.ml-capstone.cs.byu.edu 2&gt;/dev/null \
+  | openssl x509 -noout -subject -dates
+</code></pre>
+<p>Traefik's file provider watches that directory, so installing a new pair needs
+no restart. A single wildcard still matches one label only: <code>www.&lt;repo&gt;.…</code> is
+not covered and never will be.</p>
+<hr />
+<h2 id="1-summer-software-updates"><a class="header" href="#1-summer-software-updates">1. Summer: software updates</a></h2>
+<p>Do these in order. Each one can invalidate the testing you did on the previous
+one, which is the whole reason this is a sequence and not a list.</p>
+<h3 id="11-coolify-437--current"><a class="header" href="#11-coolify-437--current">1.1 Coolify: 4.3.7 → current</a></h3>
+<p>We run <strong>4.3.7</strong>. As of 2026-10-21 upstream had <strong>v4.4.7</strong> out, plus a
+<strong>v4.3.24</strong> on our own minor line. Take 4.3.24 first if you want to decouple
+"patch the line we know" from "move a minor version."</p>
+<p><strong>✅ Done early — rigel moved to 4.3.24 on 2026-10-21</strong>, not for this reason
+but because PHP2Shell forced it (see §1.2). Use
+<a href="scripts/upgrade-coolify.sh"><code>scripts/upgrade-coolify.sh</code></a> for any further
+bump: it pins the version, backs up Postgres first, and refuses to proceed on a
+partial dump.</p>
+<p><strong>The local <code>#11449</code> patch is retired.</strong> It was reapplied after every upgrade
+from August 2026; upstream ships the fix as of 4.3.24. Confirmed two ways
+rather than assumed: the patch marker is in the stock image, and the call was
+retested with a genuinely team-scoped token (<code>Quinn's Team</code>, id 10) against the
+system-wide GitHub App — <strong>HTTP 201</strong> where it used to be 404.
+<code>scripts/repatch-coolify.sh</code> is deleted.</p>
+<p>Next Coolify bump is therefore 4.3.24 → whatever is current. <strong>4.4.7</strong> was out
+on 2026-10-21.</p>
+<p><strong>Also re-check after upgrading</strong>, because all three are things we measured
+against 4.3.7 and documented as fact:</p>
+<ul>
+<li><code>ports_exposes</code> is forced to <code>80</code> for <code>dockercompose</code> apps, making the UI's
+Port field inert. Our entire <code>:PORT</code>-in-the-domain convention rests on this.</li>
+<li>The domain API contract (§3.1 below).</li>
+<li><code>docker_compose_domains</code> accepts a port and range-checks it.</li>
+</ul>
+<h3 id="12-pin-the-floating-tags"><a class="header" href="#12-pin-the-floating-tags">1.2 Pin the floating tags</a></h3>
+<p>Two images are pulled by a moving tag, which means the platform can change
+under us on any redeploy with no commit to point at:</p>
+<div class="table-wrapper"><table><thead><tr><th>Where</th><th>Tag now</th><th>Action</th></tr></thead><tbody>
+<tr><td><code>coolify-runbook.md</code> §6</td><td><del><code>litellm:main-stable</code></del> → <strong><code>litellm:v1.92.2</code></strong></td><td>✅ pinned 2026-10-21</td></tr>
+<tr><td><code>scripts/install-whisper-service.sh</code></td><td><code>ghcr.io/speaches-ai/speaches:latest-cuda</code></td><td><strong>still floating</strong> — pin to a digest or tag</td></tr>
+</tbody></table>
+</div>
+<p>An unpinned tag is a time bomb with no commit history, and the LiteLLM half of
+this stopped being hypothetical on 2026-10-21: <code>main-stable</code> had left us on
+1.92.0, inside the affected range of
+<a href="https://github.com/advisories/GHSA-3cv6-jpf6-8222">CVE-2026-84377</a>, while a
+supply-chain compromise of litellm 1.107.0 on PyPI the same day made pulling an
+unpinned image an actively bad idea. Pinned to <code>v1.92.2</code> in response. Speaches
+is still floating — do that one in the summer pass.</p>
+<p><strong>Bumping LiteLLM from here</strong>: as of 2026-10-21 the latest release was 1.106.2,
+fourteen minor versions ahead. Worth taking during the summer window rather than
+mid-term, and check the advisory database for the target version before
+pinning it.</p>
+<h3 id="13-other-pinned-versions-to-review"><a class="header" href="#13-other-pinned-versions-to-review">1.3 Other pinned versions to review</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Thing</th><th>Pinned at</th><th>Note</th></tr></thead><tbody>
+<tr><td>Traefik</td><td><code>v3.6</code> (bundled with Coolify)</td><td>moves with Coolify</td></tr>
+<tr><td>Postgres in the student template</td><td><code>postgres:16-alpine</code></td><td>bump deliberately; students' schemas are created by their app, so a major bump is low-risk but should be tested</td></tr>
+<tr><td>mdBook (docs workflow)</td><td><code>v0.4.40</code></td><td><code>.github/workflows/docs.yml</code>; only x86_64 linux binaries are fetched</td></tr>
+<tr><td><code>integrations/github</code> provider</td><td><code>~&gt; 6.0</code></td><td>fine, floats within 6.x</td></tr>
+<tr><td><code>bindtech-xyz/coolify</code> provider</td><td><code>~&gt; 0.1.0</code></td><td>see §3.2 — do <strong>not</strong> bump reflexively</td></tr>
+</tbody></table>
+</div>
+<h3 id="14-gpu-inventory-changed-this-year--write-down-what-you-actually-have"><a class="header" href="#14-gpu-inventory-changed-this-year--write-down-what-you-actually-have">1.4 GPU inventory changed this year — write down what you actually have</a></h3>
+<p><code>castor</code>'s RTX 4090 was reallocated to other research on 2026-10-19 and its FIM
+engine stopped, so <code>classroom-autocomplete</code> runs on <strong>pollux only</strong> and has no
+failover. Decide before the term starts:</p>
+<ul>
+<li>restore a second FIM host, or</li>
+<li>accept that a pollux reboot stops ghost-text class-wide (chat survives), and
+keep saying so in <code>troubleshooting.md</code>.</li>
+</ul>
+<p>Confirm the real hardware rather than trusting last year's table in
+<code>README.md</code>:</p>
+<pre><code class="language-bash">for h in castor pollux; do ssh $h.cs.byu.edu nvidia-smi \
+  --query-gpu=index,name,memory.total --format=csv,noheader; done
+</code></pre>
+<h3 id="15-dockers-address-pool-check-it-after-every-update-and-set-it-on-any-reinstall"><a class="header" href="#15-dockers-address-pool-check-it-after-every-update-and-set-it-on-any-reinstall">1.5 Docker's address pool: check it after every update, and set it on any reinstall</a></h3>
+<p>Rigel's Docker networks must stay out of 10.x. If they don't, BYU campus and
+<code>vpn.byu.edu</code> users whose address falls inside a container network time out on
+every app, with no error anywhere (<a href="coolify-runbook.html#5a-dockers-address-pool-must-stay-out-of-10x">runbook §5a</a>).
+This was found on 2026-10-21, and fixed by moving the pool to <code>172.20.0.0/14</code>
+and <code>docker0</code> to <code>172.24.0.1/24</code>.</p>
+<p>Confirmed working from <code>vpn.byu.edu</code> on 2026-10-21, after the move: the clinic
+hostname and a Coolify-deployed app both load. That is the check that matters —
+applying the pool change proves nothing on its own, because the symptom only
+appears for a client whose address collides with a container network, and from
+the CS VPN everything looks fine either way.</p>
+<p>Docker and Coolify upgrades keep the setting, but an OS reinstall or a new
+server doesn't. So after the summer updates, and after anything bigger:</p>
+<pre><code class="language-bash">ip -4 route | grep '^10\.0\.'      # must print nothing
+jq '."default-address-pools", .bip' /etc/docker/daemon.json
+</code></pre>
+<ul>
+<li><strong>If a reinstall is part of the summer:</strong> install Coolify with the pool given explicitly (<a href="coolify-runbook.html#5-install-coolify">runbook §5</a>), set <code>bip</code>, and rebuild the Whisper container (§6b) so it binds to the new <code>docker0</code> address.</li>
+<li><strong>Worth asking OIT once a year:</strong> whether BYU has started using any part of <code>172.16.0.0/12</code>. If it ever does, the same failure comes back from the other side.</li>
+</ul>
+<p><strong>Rollback copies left on rigel by the move</strong>, with the dates they stop being
+useful. These outlived the move's own checklist, which is why they are recorded
+here rather than in a file that gets deleted:</p>
+<div class="table-wrapper"><table><thead><tr><th>Path on rigel</th><th>Keep until</th><th>Why</th></tr></thead><tbody>
+<tr><td><code>/etc/docker/daemon.json.pre-172</code></td><td><strong>indefinitely</strong></td><td>166 bytes, and the one-step undo for the pool change: <code>cp</code> it back and restart Docker rather than hand-editing JSON during an incident. The <em>information</em> is in §5a either way; what the file saves you is typing it correctly under pressure. No reason to ever delete it</td></tr>
+<tr><td><code>~/archive/2026-10-21-docker-network-move/</code></td><td><strong>2026-11-04</strong></td><td>the move's log and its before-snapshot. This is the one with real diagnostic value and a real reason to wait: breakage from a network move surfaces <em>late</em>, when someone finally opens an app nobody had touched</td></tr>
+<tr><td><del><code>/etc/litellm/config.yaml.bak-20261021-164126</code></del></td><td><em>deleted</em></td><td>predated the Whisper entry, so restoring it would have <em>removed</em> transcription — never a thing you would want. §6b documents the entry it was missing, so it carried no information that is not in git</td></tr>
+</tbody></table>
+</div>
+<p>One LiteLLM backup is deliberately <strong>not</strong> kept:
+<code>config.yaml.bak-20261021-124800</code> still contains the castor autocomplete entry
+that was removed on 2026-10-19. Restoring it would put a dead backend back in
+the pool, so it was deleted rather than archived.</p>
+<hr />
+<h2 id="2-summer-re-test-the-processes-end-to-end"><a class="header" href="#2-summer-re-test-the-processes-end-to-end">2. Summer: re-test the processes end to end</a></h2>
+<p>The scripts are idempotent and were all exercised this year, but they were
+exercised against <em>this</em> Canvas, <em>this</em> Coolify, and <em>this</em> GitHub. Re-run them
+in preview mode against a throwaway cohort before trusting them in week one.</p>
+<pre><code class="language-bash">./scripts/term-start.sh                      # previews all five phases
+./scripts/smoke-test-cluster.sh              # 16 checks across the cluster
+./scripts/verify-provisioning.sh             # read-only state check
+python3 scripts/student-debug.py             # progress table
+</code></pre>
+<p>Specific things to re-verify:</p>
+<ul>
+<li><strong>Canvas API shape.</strong> <code>canvas-roster.py</code> joins the roster to the GitHub
+survey on <code>canvas_user_id</code>. It reads <code>login_id</code> and <code>email</code> off the student
+record and survey answers off a quiz. Any of that can move.</li>
+<li><strong>The survey itself.</strong> Quiz title <code>Class Cluster Setup</code>, three questions.
+<code>find_quiz</code> matches on title, so renaming it breaks the roster build.</li>
+<li><strong><code>FIM_HOSTS</code></strong> in <code>smoke-test-cluster.sh</code> defaults to pollux only. If castor
+rejoins the autocomplete pool, set it back to both or the check silently
+skips.</li>
+<li><strong>The class password.</strong> Rotate at term start: <code>./scripts/set-class-password.sh --generate</code>. Students need it only for Coolify's delete confirmations.</li>
+</ul>
+<blockquote>
+<p><strong>Join on <code>netid</code>, never on names.</strong> 15 of 28 names differed between Canvas
+and the GitHub survey this year, and token overlap mismatches <em>silently</em>.
+Every roster join in this repo goes through <code>canvas_user_id</code> or an exact
+email, and any new one must too.</p>
+</blockquote>
+<hr />
+<h2 id="3-decisions-we-deferred-with-the-reasoning"><a class="header" href="#3-decisions-we-deferred-with-the-reasoning">3. Decisions we deferred, with the reasoning</a></h2>
+<p>These are not bugs. They are places where we chose the cheaper option on
+purpose and wrote down why, so next year is a decision rather than an
+excavation.</p>
+<h3 id="31-the-manual-domain-step-in-the-lab"><a class="header" href="#31-the-manual-domain-step-in-the-lab">3.1 The manual domain step in the lab</a></h3>
+<p>Students paste their domain into Coolify by hand, once per Application. We
+measured exactly why it cannot be automated today
+(<code>terraform/probe/domain-patch-probe.sh</code> reproduces all of it):</p>
+<div class="table-wrapper"><table><thead><tr><th>API call</th><th>Works?</th><th>Condition</th></tr></thead><tbody>
+<tr><td><strong>Create</strong> an app with <code>docker_compose_domains</code></td><td>yes</td><td>none — and the port is preserved verbatim</td></tr>
+<tr><td><strong>Update</strong> one with <code>docker_compose_domains</code></td><td>yes</td><td><strong>only after</strong> <code>docker_compose_raw</code> is populated, which happens at the first deploy</td></tr>
+<tr><td><strong>Update</strong> supplying <code>docker_compose_raw</code> yourself</td><td><strong>no</strong></td><td><code>"This field is not allowed."</code> despite appearing in the API's own allowlist</td></tr>
+</tbody></table>
+</div>
+<p>The provider creates the Application, and at that instant <code>docker_compose_raw</code>
+is empty — so the domain cannot be attached yet. <strong>Automating it means
+<code>apply → deploy → set domains → redeploy</code></strong>, with waits on two async deploys.</p>
+<p>That is buildable and this is the window to build it, because it would also put
+the <code>:PORT</code> on the domain automatically and close the 502 failure class for
+every future student. It was not done mid-term because a half-working escape
+hatch in the repo thirty people learn from is worse than one honest manual step.</p>
+<p><strong>Lesson worth keeping in the lab either way:</strong> an allowlist is not a contract.
+<code>docker_compose_raw</code> is listed as updatable and is still rejected at request
+time. The only way to know what an API accepts is to call it.</p>
+<h3 id="32-the-terraform-provider-may-be-abandoned"><a class="header" href="#32-the-terraform-provider-may-be-abandoned">3.2 The Terraform provider may be abandoned</a></h3>
+<p><code>bindtech-xyz/coolify</code> is pinned at <code>~&gt; 0.1.0</code> (lockfile: 0.1.2). Latest is
+<strong>0.3.0</strong>, and its <code>coolify_application</code> schema is <strong>attribute-for-attribute
+identical</strong> to ours — so upgrading buys nothing for our use case and carries
+nonzero risk against live student state. That is why the pin is narrow.</p>
+<p>The reason to look again is the project's health: <strong>1 star, 0 open issues, 0
+PRs, no commits since 2026-08-23.</strong> Nobody has even filed a request for
+<code>docker_compose_domains</code>. Options, in increasing cost:</p>
+<ol>
+<li>Stay pinned and automate around it with <code>local-exec</code> (§3.1).</li>
+<li>File the upstream issue. Costs nothing; expect nothing.</li>
+<li>Fork and add <code>docker_compose_domains</code> — the API supports it, so this is a
+provider-side change only.</li>
+<li>Drop the provider and drive Coolify's API directly from Terraform via
+<code>restapi</code>/<code>local-exec</code>. Loses clean state management for the main resources;
+probably not worth it for a teaching repo.</li>
+</ol>
+<h3 id="33-litellm-has-no-authentication--decided-and-the-answer-is-no"><a class="header" href="#33-litellm-has-no-authentication--decided-and-the-answer-is-no">3.3 LiteLLM has no authentication — decided, and the answer is no</a></h3>
+<p><strong>Decision taken 2026-10-21: we are not adding keys.</strong> Recorded here with the
+reasoning so it does not get re-litigated every year.</p>
+<p>Anyone on the CS VPN can use <code>classroom-chat</code>, <code>classroom-autocomplete</code>, and
+<code>classroom-transcribe</code> with no key — <code>curl</code> with no <code>Authorization</code> header
+returns 200, and <code>/ui/</code>, <code>/sso/key/generate</code> and <code>/model/info</code> answer 200 too.
+The exposure is real: it is why
+<a href="https://github.com/advisories/GHSA-3cv6-jpf6-8222">CVE-2026-84377</a>, scoped by
+its own advisory to "any authenticated proxy user", applied to us as
+effectively unauthenticated.</p>
+<p><strong>Why we are still not doing it.</strong> The cost lands entirely on thirty students
+configuring a secret in three different editors, and week one does not need
+that friction. What makes it tolerable rather than reckless:</p>
+<ul>
+<li>the endpoint is VPN-only, so the population is the CS department, not the
+internet;</li>
+<li>every <code>api_key</code> in the config is the <code>sk-noauth</code> placeholder, so there are no
+provider credentials to steal — the usual prize behind an LLM gateway is
+simply absent;</li>
+<li>version currency is the real control, and we now pin it. Patching 1.92.0 →
+1.92.2 closed that CVE in minutes.</li>
+</ul>
+<p><strong>The zero-friction version was investigated and does not work today.</strong>
+<code>GenerateKeyRequest</code> accepts a chosen <code>key</code> value, so in principle you could
+set an unpublished <code>LITELLM_MASTER_KEY</code> and mint a virtual key whose literal
+value is <code>sk-noauth</code> — every student's existing config would keep working
+untouched while the admin surface closed behind the master key. The blocker is
+that virtual keys need Postgres: LiteLLM has no <code>DATABASE_URL</code>, and
+<code>/key/generate</code> returns <em>"DB not connected"</em>. Standing that up is a new
+database to run and back up.</p>
+<p><strong>Revisit if any of these change:</strong> the endpoint stops being VPN-only; real
+provider keys (OpenAI, Anthropic) enter the config, which changes the prize
+entirely; or LiteLLM gains a database for another reason, at which point the
+zero-friction path above becomes nearly free.</p>
+<h3 id="34-whisper-service-details"><a class="header" href="#34-whisper-service-details">3.4 Whisper service details</a></h3>
+<p>Running: <code>speaches</code> (faster-whisper/CTranslate2) on rigel GPU 0, serving
+<code>Systran/faster-whisper-large-v3</code>, registered as <code>classroom-transcribe</code>.
+Installed and lifecycled by <code>scripts/install-whisper-service.sh</code>
+(<code>--check</code> / <code>--rollback</code>). See runbook §6b.</p>
+<ul>
+<li><strong>Model choice.</strong> <code>large-v3-turbo</code> is roughly 4× faster at close to the same
+English quality. Swap by downloading it and repointing the alias; the
+student-facing name does not change.</li>
+<li><strong>Unused endpoints.</strong> The image also serves TTS (<code>/v1/audio/speech</code>),
+<code>/v1/realtime</code>, and a Gradio UI. Harmless today because the container binds
+the docker bridge only, but decide whether to keep them reachable.</li>
+<li><strong>Not in <code>term-start.sh</code>.</strong> It is a persistent service rather than per-cohort
+provisioning, so it was left out. Add it to the summer rebuild checklist
+rather than term start.</li>
+</ul>
+<h3 id="35-group-phase-domains-are-still-manual"><a class="header" href="#35-group-phase-domains-are-still-manual">3.5 Group-phase domains are still manual</a></h3>
+<p>Sixteen group-project domains were set by hand this year. If §3.1 gets built,
+this problem disappears for groups too. If not, a DB-write helper in the style
+of <code>provision-teams.sh</code> would do it — Coolify's <code>applications.docker_compose_domains</code>
+is plain JSON.</p>
+<hr />
+<h2 id="4-changes-this-cohort-forced-that-the-next-one-inherits-clean"><a class="header" href="#4-changes-this-cohort-forced-that-the-next-one-inherits-clean">4. Changes this cohort forced, that the next one inherits clean</a></h2>
+<p>Context for why the docs look the way they do. None of these need action — they
+are already done, and the next cohort starts on the far side of them.</p>
+<ul>
+<li><strong>Service renaming.</strong> <code>hello</code> → <code>frontend</code>, <code>time</code> → <code>backend</code>, with the
+backend owning database access through a DAO and the frontend reaching it
+over HTTP. Mid-term migrations caused real confusion; a new cohort starts on
+the current names and never sees it.</li>
+<li><strong>HTTPS everywhere.</strong> Student apps serve real HTTPS as of 2026-10-08. The
+docs no longer tell anyone to use <code>http://</code>. Residual trap: <code>curl</code> without
+<code>-L</code> prints <code>Found</code> instead of following the redirect.</li>
+<li><strong><code>:PORT</code> on the domain is now standard</strong>, not a remedy. It is harmless on a
+single-port service and prevents a 502-with-healthy-containers on a
+multi-port one. The template emits it; <code>student-debug.py</code> checks both
+directions.</li>
+<li><strong><code>student-debug.py</code> scope.</strong> <code>--all</code> reads the roster CSV, which is now the
+<em>group</em> roster, so individual sandboxes show as "ignored non-roster teams."
+Fine during the group phase, surprising in week one. Point it at the
+individual roster, or add a flag.</li>
+</ul>
+<hr />
+<h2 id="5-one-thing-still-uncommitted"><a class="header" href="#5-one-thing-still-uncommitted">5. One thing still uncommitted</a></h2>
+<p><code>hello-world-app</code> has a local commit that is <strong>not pushed</strong>: the container port
+in the Coolify domain, split from the browse URL, plus the single-port comment
+on <code>expose:</code>. It was held back deliberately so students mid-migration were not
+reading a template that contradicted their instructions.</p>
+<pre><code class="language-bash">cd hello-world-app &amp;&amp; git log --oneline -1 &amp;&amp; git push origin main
+</code></pre>
+<p>Push it before the next cohort clones anything.</p>
+<hr />
+<h2 id="how-to-tell-the-whole-thing-actually-works"><a class="header" href="#how-to-tell-the-whole-thing-actually-works">How to tell the whole thing actually works</a></h2>
+<p>In order, before any student touches it:</p>
+<pre><code class="language-bash">./scripts/smoke-test-cluster.sh                 # cluster: LLM, FIM, GPU hosts, Coolify
+./scripts/install-whisper-service.sh --check    # on rigel: transcription chain
+curl -s http://ml-capstone.cs.byu.edu:4000/v1/models   # all three aliases
+./scripts/term-start.sh                         # preview provisioning, changes nothing
+</code></pre>
+<p>Then do the first-deploy lab yourself, start to finish, as a student would —
+with a fresh repo and a fresh token. Every failure mode documented in
+<code>troubleshooting.md</code> was found that way, and it is the only test that covers
+the instructions rather than the infrastructure.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="coolify-runbook.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="coolify-runbook.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

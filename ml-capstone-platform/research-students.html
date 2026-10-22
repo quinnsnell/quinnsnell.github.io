@@ -1,0 +1,499 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Using the Classroom LLM - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html" class="active"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/research-students.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="research-students--using-the-classroom-llm"><a class="header" href="#research-students--using-the-classroom-llm">Research Students — Using the Classroom LLM</a></h1>
+<p>You have access to a shared GPU cluster running an open-weights coding model. This
+page covers the two ways to use it: <strong>opencode</strong>, an agentic assistant for your
+terminal or desktop, and <strong>calling it from Python</strong>.</p>
+<p>Nothing here involves Coolify, Docker, or deployment — that is the capstone
+course's half of this cluster, and you can ignore it.</p>
+<hr />
+<h2 id="what-you-have-access-to"><a class="header" href="#what-you-have-access-to">What you have access to</a></h2>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th></tr></thead><tbody>
+<tr><td>Endpoint</td><td><code>http://ml-capstone.cs.byu.edu:4000/v1</code></td></tr>
+<tr><td>Model</td><td><code>classroom-chat</code></td></tr>
+<tr><td>API style</td><td>OpenAI-compatible</td></tr>
+<tr><td>Auth</td><td>none — the cluster is protected by the VPN, not by a key</td></tr>
+<tr><td>Context window</td><td>131,072 tokens</td></tr>
+</tbody></table>
+</div>
+<p>It speaks the OpenAI API, so anything that talks to OpenAI talks to this: the
+<code>openai</code> Python SDK, LangChain, LlamaIndex, <code>curl</code>, your own HTTP calls. Point the
+base URL here and use <code>classroom-chat</code> as the model name.</p>
+<blockquote>
+<p>There is a second model, <code>classroom-autocomplete</code>. Ignore it. It is a
+fill-in-the-middle model for editor ghost-text — not instruction-tuned, no chat
+behaviour, and it will produce nonsense if you prompt it conversationally.</p>
+</blockquote>
+<p>There is also <code>classroom-transcribe</code> — Whisper <code>large-v3</code> for speech-to-text, on
+the same endpoint. See <a href="#transcribing-audio">Transcribing audio</a> below.</p>
+<hr />
+<h2 id="step-1--get-on-the-cs-vpn"><a class="header" href="#step-1--get-on-the-cs-vpn">Step 1 — Get on the CS VPN</a></h2>
+<p>The cluster is on the CS network and is not reachable from the public internet.</p>
+<p>BYU runs two different VPN gateways, and they are <strong>not</strong> interchangeable:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>Gateway</th><th>Reaches the cluster?</th></tr></thead><tbody>
+<tr><td>BYU campus VPN</td><td><code>vpn.byu.edu</code></td><td><strong>no</strong></td></tr>
+<tr><td><strong>CS VPN</strong></td><td><strong><code>cs-vpn.byu.edu</code></strong></td><td>yes</td></tr>
+</tbody></table>
+</div>
+<p>Install <strong>GlobalProtect</strong> from <a href="https://vpn.byu.edu">vpn.byu.edu</a>, then set the
+<strong>Portal</strong> to <code>cs-vpn.byu.edu</code> and connect.</p>
+<p>Check it works:</p>
+<pre><code class="language-bash">curl -sS http://ml-capstone.cs.byu.edu:4000/v1/models
+</code></pre>
+<p>You should get JSON listing <code>classroom-chat</code> and <code>classroom-autocomplete</code>.</p>
+<p>If that hangs or fails while GlobalProtect says "Connected", you are almost
+certainly on the campus gateway rather than the CS one. If <code>cs-vpn.byu.edu</code> rejects
+you or does not appear in GlobalProtect at all, you have not been granted CS
+network access — email your advisor or the cluster admin with your NetID. It is a
+separate entitlement from your NetID, and it is not instant.</p>
+<hr />
+<h2 id="step-2--install-opencode"><a class="header" href="#step-2--install-opencode">Step 2 — Install opencode</a></h2>
+<p><a href="https://opencode.ai">opencode</a> is an agentic coding assistant: it reads your
+files, proposes edits, and works through multi-step tasks. Similar to Claude Code,
+but pointed at this cluster instead of a commercial API.</p>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-bash">brew install opencode                   # terminal
+brew install --cask opencode-desktop    # optional GUI
+</code></pre>
+<p><strong>Windows</strong> — install the desktop app from <a href="https://opencode.ai/download">opencode.ai/download</a>.
+For the terminal version, install it inside <strong>WSL</strong>:</p>
+<pre><code class="language-bash">curl -fsSL https://opencode.ai/install | bash
+</code></pre>
+<p><strong>Linux:</strong></p>
+<pre><code class="language-bash">curl -fsSL https://opencode.ai/install | bash
+</code></pre>
+<hr />
+<h2 id="step-3--point-opencode-at-the-cluster"><a class="header" href="#step-3--point-opencode-at-the-cluster">Step 3 — Point opencode at the cluster</a></h2>
+<p>Create <code>~/.config/opencode/opencode.json</code>:</p>
+<pre><code class="language-json">{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "classroom": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Classroom Cluster",
+      "options": {
+        "baseURL": "http://ml-capstone.cs.byu.edu:4000/v1",
+        "apiKey": "sk-noauth"
+      },
+      "models": {
+        "classroom-chat": {
+          "name": "Classroom Chat",
+          "limit": { "context": 131072, "output": 32768 }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<p><strong>Where that file goes:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>You installed</th><th>Path</th></tr></thead><tbody>
+<tr><td>macOS or Linux</td><td><code>~/.config/opencode/opencode.json</code></td></tr>
+<tr><td>Windows <strong>desktop app</strong></td><td><code>%USERPROFILE%\.config\opencode\opencode.json</code></td></tr>
+<tr><td>Windows <strong>terminal in WSL</strong></td><td><code>~/.config/opencode/opencode.json</code> <em>inside WSL</em></td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p>Running both the Windows desktop app and the WSL terminal? You need this file in
+<strong>both</strong> places — they have different home directories, so a config in one is
+invisible to the other.</p>
+</blockquote>
+<p>Creating it:</p>
+<pre><code class="language-bash">mkdir -p ~/.config/opencode
+nano ~/.config/opencode/opencode.json
+</code></pre>
+<pre><code class="language-powershell"># Windows PowerShell, for the desktop app
+mkdir -Force $env:USERPROFILE\.config\opencode
+notepad $env:USERPROFILE\.config\opencode\opencode.json
+</code></pre>
+<h3 id="then-use-it"><a class="header" href="#then-use-it">Then use it</a></h3>
+<ul>
+<li><strong>Terminal:</strong> run <code>opencode</code>, type <code>/models</code>, pick <strong>Classroom Cluster › Classroom Chat</strong></li>
+<li><strong>Desktop app:</strong> choose the same from the model picker</li>
+<li><strong>Browser:</strong> <code>opencode web</code> starts a local server and opens a tab — same engine, no extra install</li>
+</ul>
+<p>Try something agentic rather than conversational — <em>"what files are in this
+directory and what does each one do?"</em> — since that exercises the tool-calling
+path, not just chat.</p>
+<hr />
+<h2 id="step-4--call-it-from-python"><a class="header" href="#step-4--call-it-from-python">Step 4 — Call it from Python</a></h2>
+<h3 id="with-the-openai-sdk"><a class="header" href="#with-the-openai-sdk">With the OpenAI SDK</a></h3>
+<pre><code class="language-bash">pip install openai
+</code></pre>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://ml-capstone.cs.byu.edu:4000/v1",
+    api_key="sk-noauth",          # required by the SDK, ignored by the server
+)
+
+response = client.chat.completions.create(
+    model="classroom-chat",
+    messages=[
+        {"role": "system", "content": "You are terse."},
+        {"role": "user", "content": "Name three Python testing libraries, comma separated."},
+    ],
+    max_tokens=60,
+    temperature=0.2,
+)
+
+print(response.choices[0].message.content)
+print(response.usage.total_tokens, "tokens")
+</code></pre>
+<pre><code>pytest, unittest, nose2
+33 tokens
+</code></pre>
+<h3 id="streaming"><a class="header" href="#streaming">Streaming</a></h3>
+<p>Worth using for anything long — you see output as it is produced instead of
+waiting for the whole response:</p>
+<pre><code class="language-python">stream = client.chat.completions.create(
+    model="classroom-chat",
+    messages=[{"role": "user", "content": "Explain gradient descent in three sentences."}],
+    stream=True,
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+print()
+</code></pre>
+<h3 id="listing-what-is-available"><a class="header" href="#listing-what-is-available">Listing what is available</a></h3>
+<pre><code class="language-python">print([m.id for m in client.models.list().data])
+# ['classroom-chat', 'classroom-autocomplete', 'classroom-transcribe']
+</code></pre>
+<h2 id="transcribing-audio"><a class="header" href="#transcribing-audio">Transcribing audio</a></h2>
+<p><code>classroom-transcribe</code> is Whisper <code>large-v3</code> running on faster-whisper, on the
+same base URL. It accepts audio <em>and</em> video files — you can hand it an <code>.mp4</code>
+directly without extracting the audio first.</p>
+<pre><code class="language-python">with open("clip.mp4", "rb") as f:
+    result = client.audio.transcriptions.create(
+        model="classroom-transcribe",
+        file=f,
+    )
+print(result.text)
+</code></pre>
+<p>Roughly 10× realtime: a 60-second clip returns in about 5 seconds. For long
+media, extracting audio first uploads far less data:</p>
+<pre><code class="language-bash">ffmpeg -i clip.mp4 -vn -ac 1 -ar 16000 clip.wav
+</code></pre>
+<h3 id="timestamps-and-per-segment-confidence"><a class="header" href="#timestamps-and-per-segment-confidence">Timestamps and per-segment confidence</a></h3>
+<p>Ask for <code>verbose_json</code> so the OpenAI SDK exposes the extra fields as typed
+attributes rather than leaving them in the raw payload:</p>
+<pre><code class="language-python">result = client.audio.transcriptions.create(
+    model="classroom-transcribe",
+    file=f,
+    response_format="verbose_json",
+)
+print(result.language, result.duration)
+for s in result.segments:
+    print(s["start"], s["end"], s["no_speech_prob"], s["text"])
+</code></pre>
+<p>It auto-detects across ~99 languages; pass <code>language="en"</code> only to force one.</p>
+<h3 id="whisper-invents-text-when-there-is-no-speech"><a class="header" href="#whisper-invents-text-when-there-is-no-speech">Whisper invents text when there is no speech</a></h3>
+<p>This is the failure that will quietly corrupt your results. Given audio with no
+speech in it, Whisper does not return an empty string — it emits a confident,
+plausible sentence. One second of a pure tone against this service returned:</p>
+<pre><code>text:           "Thanks for watching!"
+end timestamp:  29.98      (on a 1-second clip)
+no_speech_prob: 0.859
+</code></pre>
+<p>Read only <code>.text</code> and nothing about that looks wrong. It matters most for
+social-media video, where long stretches are music with no speech over them.</p>
+<p><strong>Filter on <code>no_speech_prob</code>.</strong> Discard segments above roughly <code>0.6</code>–<code>0.8</code>.
+For calibration, genuine speech in the same tests scored <code>0.003</code>. Then
+spot-check real transcripts by hand before building analysis on top of them.
+Loud background music degrades accuracy even where speech is present.</p>
+<p>Do <strong>not</strong> rely on <code>vad_filter</code> for this. The endpoint accepts the parameter,
+but it did not suppress the hallucination above in testing — and unknown
+parameters are accepted silently rather than rejected, so an <code>HTTP 200</code> is not
+evidence that an option took effect.</p>
+<h3 id="what-it-does-not-do"><a class="header" href="#what-it-does-not-do">What it does not do</a></h3>
+<ul>
+<li><strong>On-screen text.</strong> Whisper hears; it does not see. Burned-in captions and
+overlay text need OCR, which is a separate service we do not currently run.</li>
+<li><strong>Fetching media.</strong> Downloading the file is your code's job.</li>
+<li><strong>Speaker labels.</strong> No diarization.</li>
+</ul>
+<h3 id="without-any-dependencies"><a class="header" href="#without-any-dependencies">Without any dependencies</a></h3>
+<p>If you would rather not install anything:</p>
+<pre><code class="language-python">import json
+import urllib.request
+
+req = urllib.request.Request(
+    "http://ml-capstone.cs.byu.edu:4000/v1/chat/completions",
+    data=json.dumps({
+        "model": "classroom-chat",
+        "messages": [{"role": "user", "content": "Reply with exactly: pong"}],
+        "max_tokens": 20,
+        "temperature": 0,
+    }).encode(),
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer sk-noauth",
+    },
+)
+
+with urllib.request.urlopen(req, timeout=60) as r:
+    data = json.load(r)
+
+print(data["choices"][0]["message"]["content"])
+</code></pre>
+<p>Every example on this page was run against the live endpoint.</p>
+<hr />
+<h2 id="things-worth-knowing"><a class="header" href="#things-worth-knowing">Things worth knowing</a></h2>
+<p><strong>It is a shared cluster.</strong> Two GPU hosts behind a load balancer, serving a whole
+class as well as you. A long batch job will slow other people down. If you need
+sustained throughput for an experiment, talk to the admin first rather than
+discovering the limits empirically.</p>
+<p><strong>There is no authentication.</strong> The <code>sk-noauth</code> key is decorative — the endpoint is
+protected by being on the CS network, not by a secret. Don't put anything through
+it you wouldn't put on a shared departmental machine.</p>
+<p><strong>Prompts are not logged.</strong> Logging is off, so nobody is reading your prompts — but
+that also means nobody can recover them for you.</p>
+<p><strong>The model may change.</strong> <code>classroom-chat</code> is a stable alias in front of whatever
+model is currently deployed. Your code keeps working across a swap, but exact
+outputs will shift — so don't treat responses as reproducible across a semester.</p>
+<p><strong>No VPN, no cluster.</strong> There is no public route in. If you need access from off
+campus, that is the VPN, not a firewall exception.</p>
+<hr />
+<h2 id="when-it-does-not-work"><a class="header" href="#when-it-does-not-work">When it does not work</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Symptom</th><th>Cause</th></tr></thead><tbody>
+<tr><td><code>curl</code> hangs, GlobalProtect says "Connected"</td><td>On <code>vpn.byu.edu</code> instead of <code>cs-vpn.byu.edu</code></td></tr>
+<tr><td><code>cs-vpn.byu.edu</code> rejects you or is missing from GlobalProtect</td><td>No CS network access yet — ask for it, with your NetID</td></tr>
+<tr><td><code>nslookup ml-capstone.cs.byu.edu</code> returns a public address, not <code>10.55.x.x</code></td><td>You are not on the VPN. That one name resolves publicly as well, so an answer alone does not mean your VPN DNS is working</td></tr>
+<tr><td><code>nslookup ml-capstone.cs.byu.edu</code> returns NXDOMAIN</td><td>VPN DNS is not resolving internal names</td></tr>
+<tr><td>opencode shows no "Classroom Cluster"</td><td>Config file in the wrong place — see the table in step 3</td></tr>
+<tr><td>Model replies with nonsense</td><td>You selected <code>classroom-autocomplete</code>; use <code>classroom-chat</code></td></tr>
+<tr><td><code>litellm.BadRequestError</code> mentioning <code>--enable-auto-tool-choice</code></td><td>Server-side; report it to the admin</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="group-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="template-app.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="group-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="template-app.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

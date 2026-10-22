@@ -1,0 +1,455 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Moving to Your Group Project - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html" class="active"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/group-project.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="moving-to-your-group-project"><a class="header" href="#moving-to-your-group-project">Moving to Your Group Project</a></h1>
+<p>You have been deploying to your <strong>personal sandbox</strong> all term. Your group now
+has its own Coolify team, its own server, and its own GitHub team — and you are
+going to stand up one shared project in it.</p>
+<p>You are not starting from scratch. Pick one member's existing app, copy it into
+a group repo, point Terraform at the group team, and deploy. From there you
+build the real project together.</p>
+<p>Budget about 30 minutes for the member doing the setup, and read
+<a href="#four-things-that-will-bite-you">the gotchas</a> first — three of them have
+already cost people in this class an afternoon.</p>
+<hr />
+<h2 id="before-you-start"><a class="header" href="#before-you-start">Before you start</a></h2>
+<p><strong>Decide two things as a group:</strong></p>
+<ol>
+<li><strong>Whose project do you start from?</strong> Usually whoever is furthest along, or
+whose app is closest to what the group wants to build. It does not have to
+be anyone's "best" work — you will be rewriting most of it.</li>
+<li><strong>Who does the setup?</strong> One person. They need a laptop with <code>git</code>,
+<code>terraform</code>, and the CS VPN. Everyone else waits ten minutes, then clones.</li>
+</ol>
+<p><strong>Your group already has</strong>, provisioned for you:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th></tr></thead><tbody>
+<tr><td>Coolify team</td><td>the short name for your project — <code>amby-slm</code>, <code>fs-tree</code>, <code>gsl-forecast</code>, and so on</td></tr>
+<tr><td>Coolify server</td><td><code>ml-capstone</code>, inside that team</td></tr>
+<tr><td>GitHub team</td><td>same name, at <code>github.com/orgs/byu-ml-capstone/teams/&lt;your-team&gt;</code></td></tr>
+</tbody></table>
+</div>
+<p>You do <strong>not</strong> have a group repo, a group Coolify project, or group
+Applications yet. That is what this page is for.</p>
+<hr />
+<h2 id="1-copy-the-starting-project-into-a-group-repo"><a class="header" href="#1-copy-the-starting-project-into-a-group-repo">1. Copy the starting project into a group repo</a></h2>
+<p>Pick a repo name for the group. Same rules as the first lab — lowercase, no
+spaces, descriptive — and it becomes your deploy hostname, so keep it short.
+Something like <code>amby-slm-app</code> or <code>gsl-forecast</code>.</p>
+<p>This copies <strong>all branches and all history</strong> from the source repo. That matters:
+you need <code>main</code> <em>and</em> <code>staging</code>, and you want the commit history so the original
+author's work is not thrown away.</p>
+<pre><code class="language-bash"># 1. Make the empty group repo
+gh repo create byu-ml-capstone/&lt;group-repo&gt; --private
+
+# 2. Mirror the source repo into it
+git clone --bare https://github.com/byu-ml-capstone/&lt;source-repo&gt;.git
+cd &lt;source-repo&gt;.git
+git push --mirror https://github.com/byu-ml-capstone/&lt;group-repo&gt;.git
+cd ..
+rm -rf &lt;source-repo&gt;.git
+
+# 3. Clone the group repo normally, and work here from now on
+git clone https://github.com/byu-ml-capstone/&lt;group-repo&gt;.git
+cd &lt;group-repo&gt;
+git branch -a          # you should see both main and staging
+</code></pre>
+<blockquote>
+<p><strong>No <code>gh</code> CLI?</strong> Create the empty repo at
+<a href="https://github.com/organizations/byu-ml-capstone/repositories/new">github.com/organizations/byu-ml-capstone/repositories/new</a>,
+then run steps 2–3. Do <strong>not</strong> use "Use this template" on a classmate's repo —
+it drops the history, and unless you tick <em>Include all branches</em> it drops
+<code>staging</code> too.</p>
+</blockquote>
+<p><strong>Do not fork.</strong> A fork inside the same org stays tied to the original, and
+pull requests default to targeting the <em>source</em> repo rather than yours.</p>
+<h2 id="2-give-your-group-access-to-the-repo"><a class="header" href="#2-give-your-group-access-to-the-repo">2. Give your group access to the repo</a></h2>
+<p>Your GitHub team already exists with everyone in it. Grant it write access:</p>
+<p><strong>Repo → Settings → Collaborators and teams → Add teams →</strong> pick your group
+team → role <strong>Write</strong> → Add.</p>
+<p>Or in one command:</p>
+<pre><code class="language-bash">gh api -X PUT \
+  /orgs/byu-ml-capstone/teams/&lt;your-team&gt;/repos/byu-ml-capstone/&lt;group-repo&gt; \
+  -f permission=push
+</code></pre>
+<p>Everyone in the group can now clone and push. Have them do it now, so you find
+out immediately if someone is missing from the team.</p>
+<h2 id="3-make-a-coolify-token-for-the-group-team"><a class="header" href="#3-make-a-coolify-token-for-the-group-team">3. Make a Coolify token for the GROUP team</a></h2>
+<p><strong>Your existing token will not work.</strong> A Coolify API token is permanently bound
+to whichever team was active when you created it, and yours is bound to your
+personal sandbox. Using it here creates the project in your sandbox — which
+looks like it worked, right up until nobody else can see it.</p>
+<ol>
+<li>Open <a href="https://ml-capstone-admin.cs.byu.edu">ml-capstone-admin.cs.byu.edu</a> on
+the CS VPN</li>
+<li><strong>Switch teams first.</strong> The team switcher is the breadcrumb at the top of the
+main panel. Select your <strong>group</strong> team. Confirm it is showing before
+continuing — this is the step people skip</li>
+<li>Coolify wordmark → <strong>Keys &amp; Tokens → API Tokens → + New Token</strong></li>
+<li>Name it after the group, permission <strong><code>root</code></strong>, then <strong>Create token</strong></li>
+<li>Copy it immediately. It is shown once</li>
+</ol>
+<blockquote>
+<p><strong>Why <code>root</code>:</strong> it means root <em>of this team</em>, not of the server. Terraform
+needs both write and deploy, and Coolify's UI collapses the selection to
+<code>deploy</code> alone if you tick both — so <code>root</code> is the only workable choice. If
+everything except <code>read</code> is greyed out, you are looking at a team you are only
+a member of; switch teams.</p>
+</blockquote>
+<h2 id="4-get-the-groups-server-uuid"><a class="header" href="#4-get-the-groups-server-uuid">4. Get the group's server UUID</a></h2>
+<p>Every team has its own server record, all named <code>ml-capstone</code>, each with a
+different UUID. Your personal one will not work here.</p>
+<pre><code class="language-bash">curl -H "Authorization: Bearer &lt;your-new-group-token&gt;" \
+  https://ml-capstone-admin.cs.byu.edu/api/v1/servers
+</code></pre>
+<p>Exactly one server comes back. Copy its <code>uuid</code>.</p>
+<h2 id="5-fill-in-terraformtfvars"><a class="header" href="#5-fill-in-terraformtfvars">5. Fill in <code>terraform.tfvars</code></a></h2>
+<p>In your freshly cloned group repo:</p>
+<pre><code class="language-bash">cd terraform
+cp terraform.tfvars.example terraform.tfvars
+$EDITOR terraform.tfvars
+</code></pre>
+<p>Every value changes from the personal project. All four:</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>What goes in it</th></tr></thead><tbody>
+<tr><td><code>repo_name</code></td><td>your <strong>group</strong> repo name — just the name, no <code>byu-ml-capstone/</code> prefix</td></tr>
+<tr><td><code>coolify_api_token</code></td><td>the <strong>group</strong> token from step 3</td></tr>
+<tr><td><code>coolify_server_uuid</code></td><td>the UUID from step 4</td></tr>
+<tr><td><code>github_token</code></td><td>a GitHub PAT with <code>repo</code> scope — <code>gh auth token</code>, or <a href="https://github.com/settings/tokens">github.com/settings/tokens</a></td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>Edit <code>terraform.tfvars</code>, not <code>terraform.tfvars.example</code>.</strong> The <code>.example</code>
+file is tracked by git and must keep its <code>REPLACE_ME</code> placeholders. Someone in
+this class lost an hour to a <code>401 Bad Credentials</code> caused by editing the wrong
+file. <code>terraform.tfvars</code> is gitignored, which is why your real tokens belong
+only there.</p>
+</blockquote>
+<h2 id="6-apply"><a class="header" href="#6-apply">6. Apply</a></h2>
+<pre><code class="language-bash">terraform init
+terraform plan        # read this before applying
+terraform apply       # type: yes
+</code></pre>
+<p><code>plan</code> should end with <strong><code>Plan: 7 to add, 0 to change, 0 to destroy</code></strong>.</p>
+<p><strong>If it says anything about destroying,</strong> stop. You are running inside a
+directory that still has state from the personal project. See
+<a href="#four-things-that-will-bite-you">the gotchas</a>.</p>
+<p>This creates the Coolify project, both environments, both Applications, and the
+three GitHub Actions secrets on the group repo.</p>
+<h2 id="7-set-the-two-domains-then-redeploy"><a class="header" href="#7-set-the-two-domains-then-redeploy">7. Set the two domains, then redeploy</a></h2>
+<p>Terraform cannot do this part. For <strong>each</strong> of the two Applications:</p>
+<ol>
+<li><strong>Access</strong> → gear icon on <em>"N configured domains"</em> → <strong>+ Add</strong></li>
+<li><strong>Service:</strong> your public service — <code>frontend</code> on the current template, or
+whatever your app calls it. Never <code>backend</code> or <code>db</code></li>
+<li><strong>Protocol:</strong> <code>https</code></li>
+<li><strong>Domain:</strong> <code>&lt;group-repo&gt;-staging.ml-capstone.cs.byu.edu:&lt;port&gt;</code>, and
+<code>&lt;group-repo&gt;.ml-capstone.cs.byu.edu:&lt;port&gt;</code> for production — <strong>no</strong>
+<code>http://</code> (the protocol is the dropdown above), but <strong>with</strong> the port your
+public service listens on inside its container. <code>:8000</code> on the current
+template</li>
+<li><strong>Port</strong> and <strong>Path:</strong> leave both fields empty. Coolify ignores the Port
+field on a Compose application — the port that counts is the one on the end
+of the Domain</li>
+<li><strong>Save</strong>, then hit <strong>Redeploy</strong></li>
+</ol>
+<blockquote>
+<p><strong>Name the port even though it often works without it.</strong> Traefik infers the
+port from the container's exposed ports when the domain does not name one,
+which is fine until something exposes two. Putting an nginx image in front of
+a built frontend does exactly that — <code>nginx:alpine</code> carries <code>EXPOSE 80</code>, your
+own port makes two, and Traefik picks one. Guessing wrong produces a <code>502</code> on
+an app whose containers are all healthy. The port never appears in your public
+URL; it only selects the container port.</p>
+</blockquote>
+<p>Delete the auto-generated <code>sslip.io</code> placeholder and any <code>www.</code> row while you
+are there. <code>www.</code> cannot be made to work — the wildcard certificate covers one
+level of subdomain only.</p>
+<p><strong>The redeploy is not optional.</strong> Traefik bakes routing labels into the
+container at start, so a domain added afterwards leaves your URL returning
+<code>404</code> until a new container comes up.</p>
+<h2 id="8-deploy-and-check"><a class="header" href="#8-deploy-and-check">8. Deploy and check</a></h2>
+<pre><code class="language-bash">git checkout staging
+# make any small change, e.g. bump APP_VERSION
+git add -A
+git commit -m "group project: first deploy"
+git push
+</code></pre>
+<p>Watch Actions, then Coolify's Deployments tab. When it lands:</p>
+<pre><code class="language-bash">./smoke-test.sh https://&lt;group-repo&gt;-staging.ml-capstone.cs.byu.edu
+</code></pre>
+<p>Then promote to production with a pull request from <code>staging</code> into <code>main</code>, the
+same way you did in the first lab.</p>
+<p>Once that is green, <strong>start changing things.</strong> The point was never to deploy
+someone's old app — it was to get a working pipeline under the group so the
+first real feature has somewhere to land.</p>
+<hr />
+<h2 id="four-things-that-will-bite-you"><a class="header" href="#four-things-that-will-bite-you">Four things that will bite you</a></h2>
+<p><strong>1. Stale Terraform state.</strong> If you run <code>terraform apply</code> in your <em>personal</em>
+project directory after editing the tfvars, Terraform still holds state for the
+personal project and will try to move it rather than create something new. Work
+in a <strong>fresh clone of the group repo</strong> — its <code>terraform/</code> has no
+<code>terraform.tfstate</code>, which is exactly what you want. Never copy a <code>.tfstate</code>
+file between projects.</p>
+<p><strong>2. The wrong token.</strong> Covered in step 3, and worth repeating because the
+failure is silent: a sandbox-scoped token creates a project your group cannot
+see. If <code>terraform apply</code> succeeds but the project does not appear under the
+group team, this is why. Delete the project, make a group-scoped token, apply
+again.</p>
+<p><strong>3. Both branches.</strong> Your group repo needs <code>main</code> <em>and</em> <code>staging</code>. The mirror
+push in step 1 brings both. If <code>git branch -a</code> shows only <code>main</code>, fix it before
+deploying:</p>
+<pre><code class="language-bash">git checkout -B staging main
+git push -u origin staging
+</code></pre>
+<p><strong>4. The service name in the domain.</strong> If you rename the service in
+<code>docker-compose.yaml</code>, the domain in Coolify still points at the old name and
+Traefik has no route — a <code>404</code> on a deploy that otherwise succeeded. Re-attach
+the domain to the new service name, in <strong>both</strong> environments, then redeploy.</p>
+<h2 id="what-about-my-personal-project"><a class="header" href="#what-about-my-personal-project">What about my personal project?</a></h2>
+<p>Leave it. Your sandbox team, repo and Applications stay exactly as they are —
+you are a member of two Coolify teams now, and the switcher moves between them.
+Nothing in the group setup touches your sandbox.</p>
+<p>Do not delete your old Coolify project just to tidy up. It costs nothing to
+leave running, and if the group setup goes sideways it is useful to still have
+something that works.</p>
+<h2 id="where-to-look-when-something-breaks"><a class="header" href="#where-to-look-when-something-breaks">Where to look when something breaks</a></h2>
+<ul>
+<li><a href="troubleshooting.html">Troubleshooting</a> — symptom-first, covers every failure
+this class has actually hit</li>
+<li><a href="lab-first-deploy.html">Lab: your first deploy</a> — the long-form version of
+steps 3–8, with more explanation</li>
+<li><a href="migrating-your-project.html">Migrating your project</a> — the requirements your
+compose file has to satisfy, in a form you can hand to a coding agent</li>
+</ul>
+<p>If your URL returns <code>404</code> right after setup, you almost certainly skipped the
+redeploy in step 7.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="migrating-your-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="research-students.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="migrating-your-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="research-students.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

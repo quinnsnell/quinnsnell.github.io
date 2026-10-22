@@ -1,0 +1,541 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Term-Start Onboarding Checklist - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html" class="active"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/onboarding.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="admin-checklist--onboarding-the-class"><a class="header" href="#admin-checklist--onboarding-the-class">Admin checklist — onboarding the class</a></h1>
+<p>This is the term-start procedure to onboard students, whether they're doing individual sandbox work or forming groups later. Follow top to bottom.</p>
+<p>Everything past prerequisites is script-driven — students self-provision their Applications in Coolify. The instructor only runs three scripts once per term, plus a few <code>gh api</code> calls as groups form.</p>
+<hr />
+<h2 id="prerequisites--one-time-or-per-term-setup"><a class="header" href="#prerequisites--one-time-or-per-term-setup">Prerequisites — one-time or per-term setup</a></h2>
+<p>Before you onboard anyone, verify the following are live (most of these were set up during the initial cluster build — see <a href="admin-guide.html"><code>admin-guide.md</code></a> and <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a> for how):</p>
+<ul>
+<li>The cluster is healthy — run <code>./scripts/smoke-test-cluster.sh</code> (17/17 expected)</li>
+<li>Coolify admin UI reachable at <code>https://ml-capstone-admin.cs.byu.edu</code> (public via CS IT HAProxy; gated by OAuth invite-only signin)</li>
+<li>Wildcard DNS <code>*.ml-capstone.cs.byu.edu</code> → rigel is live</li>
+<li>The <code>byu-ml-capstone</code> GitHub org exists with you (and ideally a co-instructor) as Owners</li>
+<li>The <code>byu-ml-capstone-coolify</code> GitHub App is installed on the org with All Repositories access</li>
+<li>Coolify's <code>byu-ml-capstone-coolify</code> Source is configured System-Wide</li>
+<li>The <code>byu-ml-capstone/hello-world-app</code> template repo exists and is marked as a Template</li>
+<li>Registration Allowed = OFF in Coolify Settings → Advanced (invite-only OAuth)</li>
+<li><code>gh</code> CLI installed and authenticated as an org Owner (<code>gh auth refresh -h github.com -s admin:org</code> if you need admin scope)</li>
+<li>A known-good process with CS IT for granting <strong>CS VPN</strong> access to enrolled students (see the next section — this is the one prerequisite that isn't self-service)</li>
+</ul>
+<hr />
+<h2 id="term-start-request-cs-vpn-access-for-the-roster"><a class="header" href="#term-start-request-cs-vpn-access-for-the-roster">Term-start: request CS VPN access for the roster</a></h2>
+<p><strong>Do this first — before anything else, and before the first class meeting.</strong> It's the only onboarding step with an external dependency and a turnaround time you don't control, and nothing else in the class works without it.</p>
+<p>Students need <strong><code>cs-vpn.byu.edu</code></strong>, not the campus <code>vpn.byu.edu</code> gateway. CS VPN access is an entitlement separate from a student's NetID and separate from their enrollment in the course — a student can be fully registered, hold a valid NetID, connect to the campus VPN, and still not reach the cluster. Every symptom then looks like a broken editor config, which burns an entire first lab.</p>
+<blockquote>
+<p><strong>⚠️ Fill in the mechanism.</strong> The exact CS IT process (who to email, whether it's roster-based or per-student, whether it keys off a CS account or a group membership, expected turnaround) is <strong>not yet recorded here</strong>. Document it the first time you run it so the next instructor doesn't rediscover it. A draft request is in <a href="tickets/2026-09-15-cs-vpn-access-for-class-roster.html"><code>tickets/2026-09-15-cs-vpn-access-for-class-roster.md</code></a>.</p>
+</blockquote>
+<p>Practical notes:</p>
+<ul>
+<li><strong>Submit the full roster at once</strong>, then handle adds individually as students join in the first two weeks. Late adds are the common failure case.</li>
+<li><strong>Expect stragglers.</strong> Have students verify access on day one with <code>curl -sS http://ml-capstone.cs.byu.edu:4000/v1/models</code> rather than discovering the gap mid-lab.</li>
+<li><strong>Non-CS majors are the usual gap.</strong> A capstone or cross-listed section may include students with no prior CS account; those are the ones most likely to need provisioning from scratch.</li>
+<li>Students are told in <a href="student-guide.html"><code>student-guide.md</code></a> → <em>Before you start</em> to route VPN access problems to <strong>you</strong>, not to BYU IT.</li>
+</ul>
+<hr />
+<h2 id="term-start-build-the-roster-from-canvas"><a class="header" href="#term-start-build-the-roster-from-canvas">Term-start: build the roster from Canvas</a></h2>
+<p>The three provisioning scripts all read a roster CSV with columns <code>team_name,email,name,github_username</code>. Canvas supplies the name and email; it has no idea what anyone's <strong>GitHub username</strong> is, and that's the one field every script depends on. <code>scripts/canvas-roster.py</code> closes that gap with a Canvas survey.</p>
+<p><strong>Credentials.</strong> Create <code>.env</code> in the repo root (gitignored):</p>
+<pre><code>CANVAS_HOST=byu.instructure.com
+CANVAS_COURSE=35846
+CANVAS_TOKEN=&lt;personal access token&gt;
+</code></pre>
+<p>Generate the token in Canvas under <strong>Account → Settings → Approved Integrations → + New Access Token</strong>. It carries your full instructor privileges on every course you teach — treat it like a password, and set an expiry.</p>
+<h3 id="1-create-the-survey"><a class="header" href="#1-create-the-survey">1. Create the survey</a></h3>
+<pre><code class="language-bash">./scripts/canvas-roster.py create-quiz
+</code></pre>
+<p>Creates and publishes an ungraded Canvas survey titled <em>Class Cluster Setup</em>, with unlimited retakes so students can fix a typo. It asks three things:</p>
+<ul>
+<li><strong>GitHub username</strong> — the field Canvas can't give you. A typo here sends the org invite into the void, so the question spells out exactly what format to use.</li>
+<li><strong>GitHub email</strong> — every student types the full address, even when it matches their BYU one. Coolify matches OAuth logins against it, so a student whose GitHub uses a personal address would otherwise be locked out of the deploy platform with no obvious cause. There is deliberately no "same as Canvas" shortcut: that answer is ambiguous the moment someone picks it by mistake, and the roster would silently carry the wrong address.</li>
+<li><strong>CS VPN access</strong> — asks them to actually run the <code>curl</code> against the classroom LLM and report the result. This surfaces the VPN entitlement gap (see the previous section) in week one instead of mid-lab.</li>
+</ul>
+<p>The script refuses to create a second quiz with the same title unless you pass <code>--force</code>. Pass <code>--draft</code> to leave it unpublished so you can read it over in the Canvas UI before 30 students can see it.</p>
+<blockquote>
+<p>The survey is deliberately <strong>not anonymous</strong>. An anonymous Canvas survey cannot be joined back to a student, which would defeat the entire purpose.</p>
+</blockquote>
+<h3 id="2-chase-the-stragglers"><a class="header" href="#2-chase-the-stragglers">2. Chase the stragglers</a></h3>
+<pre><code class="language-bash">./scripts/canvas-roster.py status
+</code></pre>
+<p>Prints how many students have submitted a usable response and names everyone who hasn't, with their email. It also lists students who reported a VPN problem — those need CS IT action, and the earlier you know, the better.</p>
+<h3 id="3-build-the-csv"><a class="header" href="#3-build-the-csv">3. Build the CSV</a></h3>
+<pre><code class="language-bash">./scripts/canvas-roster.py build --term 2026-fall --verify-github
+</code></pre>
+<p>Writes <code>roster-2026-fall.csv</code>. What it handles for you:</p>
+<ul>
+<li><strong>Normalises usernames.</strong> Students paste <code>https://github.com/octocat</code>, <code>@octocat</code>, and <code>octocat </code> — all become <code>octocat</code>.</li>
+<li><strong><code>--verify-github</code></strong> checks each username actually resolves, via the <code>gh</code> CLI. Catching a typo here costs seconds; catching it after provisioning costs a support thread.</li>
+<li><strong>Derives <code>team_name</code></strong> as <code>&lt;First&gt;'s Sandbox</code>, matching <code>roster-example.csv</code>. <code>team_name</code> becomes a GitHub team slug and a Coolify team name, so it must be unique: when two students share a first name, <em>both</em> get qualified with their GitHub username rather than one keeping the clean name by luck of sort order. Override the pattern with <code>--team-template "{github}-sandbox"</code> or similar.</li>
+<li><strong>Refuses to guess.</strong> Anyone without a usable response is listed as skipped rather than silently dropped or half-provisioned. Re-running <code>build</code> after they respond is safe.</li>
+</ul>
+<p>Check the warnings before provisioning. The roster's <code>email</code> column is always the <strong>GitHub</strong> address, since that's what Coolify authenticates against; <code>build</code> prints which students use a non-Canvas one so you know who to expect questions from. A student who leaves the email blank or types something that isn't an address is skipped rather than guessed at.</p>
+<p>Rosters are gitignored (FERPA). Keep them on rigel; <code>scp</code> from your laptop as needed.</p>
+<hr />
+<h2 id="term-start-run-the-three-provisioning-scripts"><a class="header" href="#term-start-run-the-three-provisioning-scripts">Term-start: run the three provisioning scripts</a></h2>
+<blockquote>
+<p><strong>Shortcut:</strong> <code>./scripts/term-start.sh --term &lt;term&gt; --apply</code> runs all three in order, enforces the invitation-acceptance gate between steps 1 and 2, and drives the Coolify step on whichever host is actually running Coolify. See <a href="admin-guide.html"><code>admin-guide.md</code></a> §3. The sections below are the same work done by hand — useful when something needs unpicking, or when you want to run a single step.</p>
+</blockquote>
+<p>Everything reads the same <strong>roster CSV</strong> with columns <code>team_name,email,name,github_username</code>. See <code>roster-example.csv</code> for the shape. Each script is idempotent — safe to re-run whenever the roster grows.</p>
+<blockquote>
+<p><strong>All three scripts default to preview mode.</strong> Running without <code>--apply</code> shows what it <em>would</em> do (per-row plan + rollup) without making any changes. Always run the preview first, sanity-check the plan, then re-run with <code>--apply</code> to execute. This is safer than dry-run flags on some tools because the preview is the <em>actual</em> SQL / API calls the apply will make — not an approximation.</p>
+<p>All three read the newest <code>roster-*.csv</code> in the current directory if you omit <code>--roster</code>. Explicit <code>--roster</code> is recommended when multiple rosters coexist.</p>
+</blockquote>
+<p>Rosters are gitignored except <code>roster-example.csv</code> (FERPA — real emails + GitHub usernames must never enter public git history). Keep them on rigel; <code>scp</code> from your laptop as needed.</p>
+<h3 id="optional-the-pre-lab-readiness-survey"><a class="header" href="#optional-the-pre-lab-readiness-survey">Optional: the pre-lab readiness survey</a></h3>
+<p>Before a lab that expects students to arrive with working laptops, <code>scripts/prelab-check.py</code>
+creates a second Canvas survey asking how the prep went:</p>
+<pre><code class="language-bash">./scripts/prelab-check.py create --draft    # review, then publish
+./scripts/prelab-check.py status            # outcomes, who is stuck, who is silent
+</code></pre>
+<p><code>status</code> groups responses by where people got stuck rather than listing thirty
+free-text answers, so a common failure shows up as a count instead of a pattern
+you have to notice. It also lists who has not reported at all — silence and
+success look identical otherwise.</p>
+<p>Several students reporting the <em>same</em> failure usually means the instructions are
+wrong, not that thirty people made the same mistake.</p>
+<hr />
+<h3 id="1-send-github-org-invitations"><a class="header" href="#1-send-github-org-invitations">1. Send GitHub org invitations</a></h3>
+<p>Preview first:</p>
+<pre><code class="language-bash">./scripts/invite-to-org.sh --roster roster-2026-fall.csv
+</code></pre>
+<p>Sanity-check the plan (should show one line per row: <code>INVITE &lt;gh_user&gt;</code> or <code>SKIP (already member)</code>). Then apply for real:</p>
+<pre><code class="language-bash">./scripts/invite-to-org.sh --roster roster-2026-fall.csv --apply
+</code></pre>
+<p>Students receive an email and GitHub notification. They must accept before step 2 can add them to Teams.</p>
+<h3 id="2-wait-for-acceptance-then-create-github-teams"><a class="header" href="#2-wait-for-acceptance-then-create-github-teams">2. Wait for acceptance, then create GitHub Teams</a></h3>
+<p>Wait a day (or set a syllabus deadline: "accept the org invite by Friday"). Check who's outstanding at any point with <code>./scripts/term-start.sh --only gate</code> — read-only, and it separates "hasn't accepted yet" from "the invite never landed because the username is wrong". Then preview:</p>
+<pre><code class="language-bash">./scripts/provision-gh-teams.sh --roster roster-2026-fall.csv
+</code></pre>
+<p>Confirm each team's slug + expected member list. Then apply:</p>
+<pre><code class="language-bash">./scripts/provision-gh-teams.sh --roster roster-2026-fall.csv --apply
+</code></pre>
+<p>Creates one GitHub Team per unique <code>team_name</code> in the roster (slug = <code>slugify(team_name)</code>) and adds each roster row's <code>github_username</code> to their team.</p>
+<h3 id="3-create-coolify-teams-users-servers-destinations"><a class="header" href="#3-create-coolify-teams-users-servers-destinations">3. Create Coolify teams, users, servers, destinations</a></h3>
+<p>Runs on rigel — needs docker access to the <code>coolify-db</code> container. Add your user to the <code>docker</code> group once (<code>sudo usermod -aG docker snell</code> + re-login) so future runs don't need <code>sudo</code>. If your rigel <code>roster-*.csv</code> is out of date, <code>scp</code> it up first.</p>
+<p><strong>Step 3a — schema check (once per term, or after Coolify auto-upgrades).</strong> <code>provision-teams.sh</code> writes directly to Coolify's Postgres. Coolify may have auto-updated past the versions this script has been proven against, and a column rename/removal would silently mis-provision teams. Always run this first:</p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; git pull &amp;&amp; ./scripts/provision-teams.sh --check-schema'
+</code></pre>
+<p>Look at the first line under <code>PREFLIGHT</code>. It prints one of:</p>
+<ul>
+<li><code>Coolify version: X.Y.Z (known-good; script proven against 4.2.x, 4.3.x)</code> → safe to proceed.</li>
+<li><code>Coolify version: X.Y.Z (untested; script proven against ...)</code> → <strong>stop</strong>. Diff the dumped table schemas against <code>REQUIRED_COLS</code> in <code>scripts/provision-teams.sh</code>. If all our columns are still present with compatible types, add the new minor to <code>KNOWN_GOOD_MAJOR_MINORS</code> and try again.</li>
+</ul>
+<p><strong>Step 3b — preview the roster provisioning:</strong></p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; ./scripts/provision-teams.sh --roster roster-2026-fall.csv'
+</code></pre>
+<p>The per-row plan shows CREATE/EXISTS for each of the 6 tables (users, teams, team_user, servers, server_settings, standalone_dockers), plus a cleanup phase that deletes redundant auto-created personal teams for roster users. Add <code>--show-sql</code> to print the exact SQL that would run.</p>
+<p><strong>Step 3c — apply:</strong></p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; OPERATOR_EMAIL=snell@cs.byu.edu ./scripts/provision-teams.sh --roster roster-2026-fall.csv --apply'
+</code></pre>
+<p>The script runs preflight → plan → apply → verify in one transactional batch. If any preflight fails, it aborts cleanly without touching state. If the post-apply verify fails, it exits non-zero so you notice.</p>
+<blockquote>
+<p><strong><code>--observer &lt;email&gt;</code> (or <code>OPERATOR_EMAIL</code> env var)</strong> adds you as an admin of every provisioned team so they all appear in your Coolify team switcher. Without it, provisioned teams are invisible to your login (multi-tenant isolation) and you'd need to manually add yourself to each team's <code>team_user</code> row to walk the UI checklist in step 4. Set <code>OPERATOR_EMAIL</code> in your rigel shell profile (<code>~/.bashrc</code>) once and forget it. The observer email must already exist in Coolify's <code>users</code> table — sign in at least once via GitHub OAuth so the row exists.</p>
+</blockquote>
+<p><strong>Step 3d — the class password.</strong></p>
+<p>Coolify prompts for a password on every destructive-action modal (Delete
+Application, Delete Project) even when the session came from GitHub OAuth, and
+Coolify's own "Change Password" flow needs a current password to set a new one.
+So provisioning seeds one. Students never need it to log in — only to confirm a
+deletion.</p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; OPERATOR_EMAIL=snell@cs.byu.edu \
+  ./scripts/provision-teams.sh --roster roster-2026-fall.csv \
+  --class-password &lt;the-value&gt; --apply'
+</code></pre>
+<p>Three rules, in order of how badly they bite:</p>
+<ol>
+<li><strong>Never commit the value.</strong> This repository is public. The script's built-in
+placeholder, <code>capstone-changeme</code>, is therefore a published password — and
+Coolify's login form accepts email+password for accounts that already exist,
+even with registration disabled. A known password plus a student's email is
+an account takeover for anyone who can reach the CS VPN. <code>--apply</code> now
+refuses to run with the placeholder for exactly this reason.</li>
+<li><strong>Tell students out of band.</strong> Post it in Canvas or say it in class. The
+student guide and troubleshooting page deliberately say "ask your
+instructor" rather than printing a value, and they should stay that way.</li>
+<li><strong>Use <code>--keep-passwords</code> when adding existing students to new teams.</strong> The
+users insert is an upsert that rewrites <code>password</code> on conflict, so a group-
+phase run without this flag silently resets every account that already
+exists. With it, the clause becomes <code>DO NOTHING</code> and existing users are left
+completely alone; genuinely new students are still created normally.</li>
+</ol>
+<p><strong>Rotating it mid-term</strong> is the same command with a new value and the full
+roster — the upsert is doing its intended job there, rewriting every hash:</p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; \
+  ./scripts/provision-teams.sh --roster roster-2026-fall.csv \
+  --class-password &lt;the-new-value&gt; --apply'
+</code></pre>
+<p>Confirm afterwards that no student set their own password first — rotation
+overwrites a personal password too, which is why a class-wide rotation is worth
+announcing before you run it.</p>
+<h3 id="4-smoke-test-everything-before-handing-off-to-students"><a class="header" href="#4-smoke-test-everything-before-handing-off-to-students">4. Smoke-test everything before handing off to students</a></h3>
+<p>Run the verifier on rigel (read-only, no <code>--apply</code> — it's a pure check):</p>
+<pre><code class="language-bash">ssh rigel 'cd ~/ml-capstone-platform &amp;&amp; ./scripts/verify-provisioning.sh --roster roster-2026-fall.csv'
+</code></pre>
+<p>For each roster row it runs 9 checks against <strong>both</strong> GitHub and Coolify's DB:</p>
+<ul>
+<li><strong>GitHub</strong> — org membership, team exists, team membership</li>
+<li><strong>Coolify DB</strong> — users row, teams row, team_user pivot, <code>ml-capstone</code> server attached, <code>server_settings</code> has a valid encrypted <code>sentinel_token</code>, <code>standalone_dockers</code> destination on the <code>coolify</code> network</li>
+</ul>
+<p>Output modes:</p>
+<ul>
+<li>default — compact one-line-per-row table (right for a full class)</li>
+<li><code>--verbose</code> — grouped block per person with each check labeled (right for a single row or when a row failed and you need detail)</li>
+</ul>
+<p>Exit code is 0 if every row passed every check; non-zero if any row missed any artifact.</p>
+<p><strong>Then walk the manual UI checklist the script prints at the end.</strong> Because you provisioned with <code>--observer</code>, every team already appears in your Coolify team switcher — no DB-dance needed. For each unique team, switch to it in Coolify and walk:</p>
+<ul>
+<li><strong>Servers → ml-capstone</strong> — server-show page loads without a 500 (this is where the encrypted <code>sentinel_token</code> bug bit us; if this page renders, existing rows are compatible with the current Coolify version).</li>
+<li><strong>Projects → + New Project</strong> (throwaway name) → into production env → <strong>+ Add Resource → Private Repository (with GitHub App)</strong>. Confirm Screens 1-3: destination <code>coolify</code> pickable, source <code>byu-ml-capstone-coolify</code> pickable, org repos load including <code>hello-world-app</code>. Bail on Screen 4.</li>
+<li>Delete the throwaway Project (Danger Zone).</li>
+</ul>
+<p>The UI walkthrough is manual because Coolify's Livewire pages need a real browser session — no CLI substitute exists. Once per unique team, before turning students loose.</p>
+<p>Your observer membership stays on the team long-term so you can help students debug from your own login. Coolify's team-scoped views mean you see exactly what the student sees, without impersonating them.</p>
+<hr />
+<h2 id="what-students-do-after-the-scripts-run"><a class="header" href="#what-students-do-after-the-scripts-run">What students do after the scripts run</a></h2>
+<p>Students follow <a href="student-guide.html"><code>student-guide.md</code></a> → Part B → <strong>Setup: Sign in and create your Coolify Applications</strong>. In summary:</p>
+<ol>
+<li>Sign in to Coolify at <code>https://ml-capstone-admin.cs.byu.edu</code> via GitHub OAuth (email matches roster)</li>
+<li>Switch to their pre-provisioned Coolify team</li>
+<li>Create a Project → prod + staging Environments</li>
+<li>Use <code>github.com/byu-ml-capstone/hello-world-app</code> "Use this template" → owner = <code>byu-ml-capstone</code>, name = <code>&lt;team-slug&gt;-&lt;app&gt;</code></li>
+<li>In Coolify: Application creation → destination <code>coolify</code> → source <code>byu-ml-capstone-coolify</code> → their repo → main/staging branch</li>
+<li>Set domain to <code>&lt;team-slug&gt;.ml-capstone.cs.byu.edu</code> (prod) or <code>&lt;team-slug&gt;-staging.ml-capstone.cs.byu.edu</code> (staging)</li>
+<li>Turn off Coolify Auto Deploy on both Applications</li>
+<li>Copy each Application's Deploy Webhook URL</li>
+<li>Create a Coolify API token (deploy scope)</li>
+<li>Paste 3 secrets into their GitHub repo settings</li>
+<li>First push → GitHub Actions → deploy</li>
+</ol>
+<p>The instructor does NOT create Applications or Deploy Webhooks. Students do this per the guide.</p>
+<hr />
+<h2 id="during-a-lab-seeing-who-is-stuck"><a class="header" href="#during-a-lab-seeing-who-is-stuck">During a lab: seeing who is stuck</a></h2>
+<p><code>scripts/student-debug.py</code> reads Coolify, the running containers, and each
+student's <code>docker-compose.yaml</code> from GitHub.</p>
+<pre><code class="language-bash">./scripts/student-debug.py            # progress table for the whole class
+./scripts/student-debug.py person-43   # everything about one student
+</code></pre>
+<p>With no argument it prints a status table, grouped worst-first, and ends with the
+students who need attention now:</p>
+<pre><code>STUDENT                           STATUS         APPS  DOM  DEPL  UP  LAST
+Logan Reyes                       BROKEN            3    1     8   0  finished
+
+Casey Nguyen                      no domains        2    0     0   0
+Noa Takahashi                     not deployed      2    4     0   0
+Finley Ward                       staging only      2    2     1   1  finished
+Avery Collins                     LIVE              2    4     3   2  finished
+Emery Shaw                        not started       0    0     0   0
+</code></pre>
+<p>The <code>ON STEP</code> column maps observable state to the lab:</p>
+<div class="table-wrapper"><table><thead><tr><th>Step</th><th>Inferred from</th></tr></thead><tbody>
+<tr><td><code>1</code></td><td>no repo of theirs in the org</td></tr>
+<tr><td><code>2-8</code></td><td>repo exists, no Coolify project — somewhere between cloning and <code>terraform apply</code></td></tr>
+<tr><td><code>10</code></td><td>project and applications exist, no real domain set</td></tr>
+<tr><td><code>11</code></td><td>domains set, never deployed</td></tr>
+<tr><td><code>12</code></td><td>staging running, production not</td></tr>
+<tr><td><code>done</code></td><td>both environments running</td></tr>
+</tbody></table>
+</div>
+<p>Repo ownership comes from each repo's direct collaborators, not from matching
+names — students name repos freely (<code>rwilcox</code> owns <code>omega-tracker-repo</code>), so
+name matching is wrong in both directions.</p>
+<div class="table-wrapper"><table><thead><tr><th>Status</th><th>Means</th></tr></thead><tbody>
+<tr><td><code>BROKEN</code></td><td>deployed, nothing running — the only state that is actually wrong</td></tr>
+<tr><td><code>stuck?</code></td><td>last deployment failed</td></tr>
+<tr><td><code>no domains</code></td><td>terraform done, step 10 not started</td></tr>
+<tr><td><code>not deployed</code></td><td>configured, never pushed</td></tr>
+<tr><td><code>staging only</code></td><td>correct at step 11; they have not promoted yet</td></tr>
+<tr><td><code>LIVE</code></td><td>both environments running</td></tr>
+<tr><td><code>not started</code></td><td>no Coolify project</td></tr>
+</tbody></table>
+</div>
+<p><code>APPS</code> should be 2. More means a repeat <code>terraform apply</code> or an application made by
+hand, which is worth clearing before debugging anything else. Non-roster teams
+(demos, your own) are filtered out using the newest <code>roster-*.csv</code>, so the counts
+are the real class.</p>
+<p>With a name it checks the things that actually go wrong, in the order they bite:</p>
+<ul>
+<li>terraform shape — a project with two environments and two applications; more
+than two usually means a second <code>apply</code> or a hand-made application</li>
+<li>domains set, and attached to a service that still exists in their compose file</li>
+<li>deployment history, container health, and a live HTTP request to each URL</li>
+<li><strong>every long-running compose service has a <code>healthcheck:</code></strong> — one that reports
+nothing is treated as unhealthy and stopped hours after a clean deploy</li>
+<li><code>${SERVICE_FQDN_&lt;SERVICE&gt;}</code> matches the service the domain is on</li>
+<li><code>main</code> and <code>staging</code> define the same services, and what is running matches what
+the branch now defines</li>
+</ul>
+<p>That last pair catches the common mid-restructure state: a student renames the
+public service, pushes it, and the domain still points at the old name. The tool
+says so before their next deploy 404s.</p>
+<p>Requires the CS VPN, ssh to the Coolify host, and <code>gh</code>.</p>
+<hr />
+<h2 id="off-boarding-a-group--student-end-of-semester"><a class="header" href="#off-boarding-a-group--student-end-of-semester">Off-boarding a group / student (end of semester)</a></h2>
+<ol>
+<li><strong>CS VPN:</strong> if access was granted specifically for this course (rather than an entitlement the student already held as a CS major), tell CS IT to revoke it — same channel used at term start.</li>
+<li><strong>Coolify:</strong> delete the team via UI → Team → Danger Zone (or directly in Postgres — a <code>provision-teams.sh --cleanup</code> mode is on the roadmap as Phase 21).</li>
+<li><strong>GitHub org:</strong> remove the user from org → <strong>People</strong> → <strong>Remove from org</strong> (via UI or <code>gh api DELETE /orgs/byu-ml-capstone/members/&lt;username&gt;</code>).</li>
+<li><strong>GitHub Teams:</strong> deleting the org member auto-removes them from all Teams. Team itself can be deleted via <code>gh api DELETE /orgs/byu-ml-capstone/teams/&lt;slug&gt;</code> if unused.</li>
+<li><strong>Repos:</strong> student org repos survive unless deliberately deleted. Consider transferring valuable repos back to the student's personal account before removing them from the org (they lose access on removal). Or leave repos public + archive them.</li>
+</ol>
+<hr />
+<h2 id="mid-semester-reset-a-group-they-broke-their-setup-badly"><a class="header" href="#mid-semester-reset-a-group-they-broke-their-setup-badly">Mid-semester "reset a group" (they broke their setup badly)</a></h2>
+<p>If a team's Applications get into a weird state:</p>
+<ol>
+<li><strong>Delete their Applications</strong> (via Coolify UI → Application → Danger Zone → Delete).</li>
+<li><strong>Re-run through student-guide Step 5-6</strong> — they recreate the Applications from scratch, get new Deploy Webhook URLs, update their repo secrets.</li>
+</ol>
+<p>Their code + GitHub repos are untouched — only Coolify state is reset. The Coolify Team + <code>ml-capstone</code> server + destination all survive because those live in the DB independently of Applications.</p>
+<h2 id="repo-naming-convention-in-the-class-org"><a class="header" href="#repo-naming-convention-in-the-class-org">Repo naming convention in the class org</a></h2>
+<p>30 students + one org = namespace collisions if everyone names their repo <code>hello-world-app</code>. The convention documented in <a href="student-guide.html"><code>student-guide.md</code></a> Step 4 is:</p>
+<pre><code>&lt;team-slug&gt;-&lt;app&gt;
+</code></pre>
+<p>Examples:</p>
+<ul>
+<li>Individual sandbox phase: <code>alice-sandbox-hello</code>, <code>alice-sandbox-sentiment</code></li>
+<li>Group phase: <code>group-1-sentiment</code>, <code>group-3-recommender</code></li>
+</ul>
+<p><code>&lt;team-slug&gt;</code> should be a lowercased, dash-separated version of the student's Coolify team name (e.g., "Alice's Sandbox" → <code>alice-sandbox</code>). This aligns:</p>
+<ul>
+<li>Repo path: <code>byu-ml-capstone/alice-sandbox-hello</code></li>
+<li>Coolify team: "Alice's Sandbox"</li>
+<li>Deploy domain: <code>alice-sandbox.ml-capstone.cs.byu.edu</code> (production) or <code>alice-sandbox-staging.ml-capstone.cs.byu.edu</code> (staging)</li>
+</ul>
+<p>If you'd rather use GitHub username as the prefix instead (e.g., <code>qsnell-hello</code>), that also works — just be consistent and document your choice in the syllabus/intro handout.</p>
+<h2 id="grant-a-github-team-access-to-a-groups-repo"><a class="header" href="#grant-a-github-team-access-to-a-groups-repo">Grant a GitHub Team access to a group's repo</a></h2>
+<p>After a group creates their group repo (e.g., <code>byu-ml-capstone/group-1-sentiment</code>), grant the matching GitHub Team Write access so every group member can push:</p>
+<pre><code class="language-bash">gh api -X PUT /orgs/byu-ml-capstone/teams/group-1/repos/byu-ml-capstone/group-1-sentiment -f permission=push
+</code></pre>
+<p>Team slugs are derived from the Coolify team name (lowercased + dash-separated). "Group 1" → <code>group-1</code>, "Alice's Sandbox" → <code>alice-s-sandbox</code>, etc. See slugify function in <code>scripts/provision-gh-teams.sh</code> for the exact rule.</p>
+<p>This step could be automated in a future script iteration (e.g., a <code>grant-team-to-repos.sh</code> that scans repos matching <code>&lt;team-slug&gt;-*</code> and grants team access), but manually granting one team → one repo is trivial via <code>gh</code> CLI and only happens once per group.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="admin-guide.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="coolify-runbook.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="admin-guide.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="coolify-runbook.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

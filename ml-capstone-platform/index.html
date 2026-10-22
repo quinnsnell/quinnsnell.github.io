@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html" class="active">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/README.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="classroom-ai--cicd-cluster"><a class="header" href="#classroom-ai--cicd-cluster">Classroom AI + CI/CD Cluster</a></h1>
+<blockquote>
+<p><strong>📖 Read the guides as a website:</strong> <a href="https://quinnsnell.github.io/ml-capstone-platform/"><strong>quinnsnell.github.io/ml-capstone-platform</strong></a> — searchable, sidebar navigation, mobile-friendly. Preferred entry point for students and instructors. This README stays here as the repo's landing page.</p>
+</blockquote>
+<p>Server-side infrastructure and docs for a shared classroom cluster that gives students:</p>
+<ol>
+<li><strong>AI coding assistance</strong> in their editor — chat + inline ghost-text backed by a shared GPU pool (Qwen coder models via vLLM).</li>
+<li><strong>A CI/CD platform</strong> — push code to GitHub, run tests in GitHub Actions, and on green tests their app auto-deploys to a URL they can share.</li>
+</ol>
+<p>Both capabilities live on a single hostname students remember: <strong><code>ml-capstone.cs.byu.edu</code></strong>.</p>
+<p>Everything runs on the BYU CS network. Only the GitHub webhook and Coolify deploy-API paths are publicly reachable (via CS IT's HAProxy). The LLM endpoint and deployed student apps require the BYU CS VPN. The Coolify admin UI is publicly resolvable but gated by GitHub OAuth (invite-only).</p>
+<hr />
+<h2 id="who-is-this-for"><a class="header" href="#who-is-this-for">Who is this for?</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>You are…</th><th>Start here</th></tr></thead><tbody>
+<tr><td><strong>A student</strong> — want to use the classroom LLM in your editor and/or deploy an app</td><td><a href="https://quinnsnell.github.io/ml-capstone-platform/student-guide.html">Student Setup Guide</a></td></tr>
+<tr><td><strong>An admin / instructor</strong> — setting up the cluster or onboarding groups</td><td><a href="https://quinnsnell.github.io/ml-capstone-platform/admin-guide.html">Administrator Guide</a>, then <a href="https://quinnsnell.github.io/ml-capstone-platform/onboarding.html">Onboarding Checklist</a></td></tr>
+<tr><td><strong>A TA / assistant admin</strong> — helping students hit a wall</td><td><a href="https://quinnsnell.github.io/ml-capstone-platform/troubleshooting.html">Troubleshooting</a></td></tr>
+<tr><td><strong>Curious about how it's built</strong> — architecture and design decisions</td><td><a href="https://quinnsnell.github.io/ml-capstone-platform/coolify-runbook.html">Coolify Runbook</a></td></tr>
+</tbody></table>
+</div>
+<p>Or open the raw markdown in this repo: <a href="student-guide.html"><code>student-guide.md</code></a>, <a href="admin-guide.html"><code>admin-guide.md</code></a>, <a href="onboarding.html"><code>onboarding.md</code></a>, <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a>, <a href="troubleshooting.html"><code>troubleshooting.md</code></a>.</p>
+<hr />
+<h2 id="cluster-at-a-glance"><a class="header" href="#cluster-at-a-glance">Cluster at a glance</a></h2>
+<p>Five physical hosts on <code>.cs.byu.edu</code>. The hosts themselves are reachable only
+on the CS VPN; <strong>deployed student apps also answer from the wider BYU network</strong>
+(see <a href="#public-endpoints">Public endpoints</a>):</p>
+<div class="table-wrapper"><table><thead><tr><th>Host</th><th>GPUs</th><th>Role</th></tr></thead><tbody>
+<tr><td><strong>rigel</strong></td><td>4× A6000 (48 GB each)</td><td>Front-end. Runs LiteLLM (<code>:4000</code>), Coolify admin UI (<code>https://ml-capstone-admin.cs.byu.edu</code>), Coolify's Traefik (<code>:80</code>/<code>:443</code>), and student app containers</td></tr>
+<tr><td><strong>castor</strong></td><td>1× Blackwell 96 GB + 1× RTX 4090 24 GB</td><td>vLLM chat on Blackwell (<code>:8000</code>). The 4090 served FIM (<code>:8010</code>) until 2026-10-19; it is now reallocated to other research work, so castor is <strong>out of the autocomplete pool</strong></td></tr>
+<tr><td><strong>pollux</strong></td><td>2× Blackwell 96 GB</td><td>vLLM chat (<code>:8000</code>) + FIM (<code>:8010</code>) — currently the <strong>only</strong> host serving autocomplete</td></tr>
+<tr><td><strong>vega</strong></td><td>4× RTX 6000 Pro</td><td>Reserved for TLJH (JupyterHub) for other courses</td></tr>
+<tr><td><strong>sirius</strong></td><td>3× A6000</td><td>Unassigned / spare</td></tr>
+</tbody></table>
+</div>
+<p>Students never see host names — they interact only with <code>ml-capstone.cs.byu.edu</code> (and their group URLs under it).</p>
+<hr />
+<h2 id="what-lives-in-this-repo"><a class="header" href="#what-lives-in-this-repo">What lives in this repo</a></h2>
+<pre><code>ml-capstone-platform/
+├── README.md              ← you are here
+├── student-guide.md       Student setup: editor + deploy
+├── admin-guide.md         Admin setup: cluster install + management
+├── coolify-runbook.md     Deep-dive: how the front-end host is built
+├── onboarding.md          Admin checklist: add a new student group
+├── annual-maintenance.md  Between-cohorts checklist: upgrades, deferred decisions, deadlines
+├── troubleshooting.md     Common failure modes + fixes
+├── scripts/
+│   ├── install-qwen-cluster.sh    Idempotent installer for GPU hosts (castor, pollux)
+│   ├── uninstall-qwen-cluster.sh  Reverse of the above
+│   ├── verify-qwen-host.sh        Health check on a GPU host post-install
+│   ├── smoke-test-cluster.sh      End-to-end smoke test (run from your laptop over VPN)
+│   ├── pin-gpu-host.sh           Freeze/verify a GPU host's kernel + NVIDIA driver pin
+│   ├── canvas-roster.py          Canvas roster + GitHub-username survey -&gt; roster CSV
+│   ├── prelab-check.py           Canvas survey: did the pre-lab setup work? + triage
+│   ├── student-debug.py          Who is stuck, and why (Coolify + containers + their compose)
+│   ├── term-start.sh             Ordered term-start provisioning (roster -&gt; GitHub -&gt; Coolify)
+│   ├── provision-teams.sh         Bulk-create Coolify teams+users+servers from roster CSV (runs on rigel)
+│   ├── verify-provisioning.sh     Post-provision check: GitHub + Coolify state per roster row (runs on rigel)
+│   ├── invite-to-org.sh           Invite roster users to the byu-ml-capstone GitHub org (runs on laptop)
+│   ├── provision-gh-teams.sh      Create GitHub Teams mirroring Coolify teams + add members (runs on laptop)
+│   ├── install-whisper-service.sh Stand up shared speech-to-text + register it with LiteLLM as `classroom-transcribe` (runs on rigel)
+│   └── verify-routes.sh           Is each service reachable the way it should be from where you are? (CS VPN / BYU VPN / off-VPN)
+├── sentiment-test-app/    Reference app: LLM + local HF, base+app Docker split, integration tests
+├── testing/
+│   └── test-playground/   Sandbox VS Code workspace to verify Continue + the classroom LLM before real use
+├── tickets/
+│   ├── README.md          Index of past + active infrastructure asks
+│   ├── coolify-upstream/  Bugs filed against Coolify itself + local-patch status
+│   └── archive/           Historical / resolved CS IT tickets
+└── roster-*.csv           Class rosters — provision-teams.sh reads these
+</code></pre>
+<hr />
+<h2 id="public-endpoints"><a class="header" href="#public-endpoints">Public endpoints</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Purpose</th><th>URL</th><th>Reachable from</th></tr></thead><tbody>
+<tr><td>Editor endpoint for the classroom LLM</td><td><code>http://ml-capstone.cs.byu.edu:4000/v1</code></td><td><strong>CS VPN</strong></td></tr>
+<tr><td>GitHub webhook (auto-deploy)</td><td><code>https://ml-capstone.cs.byu.edu/webhooks/*</code></td><td>Public internet (via CS IT HAProxy)</td></tr>
+<tr><td>Coolify API (deploy trigger from GitHub Actions)</td><td><code>https://ml-capstone-admin.cs.byu.edu/api/v1/deploy/...</code></td><td>Public internet, token-gated (via CS IT HAProxy)</td></tr>
+<tr><td>Coolify admin UI</td><td><code>https://ml-capstone-admin.cs.byu.edu</code></td><td>Publicly resolvable but OAuth-gated (invite-only)</td></tr>
+<tr><td>Student and group apps</td><td><code>https://&lt;your-repo&gt;.ml-capstone.cs.byu.edu</code></td><td><strong>CS VPN or BYU VPN</strong> — serve real HTTPS</td></tr>
+</tbody></table>
+</div>
+<p>What opens from the wider BYU network is rigel's <strong>web ports</strong>, so a sponsor or
+classmate without CS VPN access can load a staging link — and Coolify's admin UI
+answers there too, OAuth-gated as always. What stays CS-VPN-only is everything
+on another port: the classroom LLM (<code>:4000</code>), <code>ssh</code>, and Coolify's realtime and
+terminal ports, so live deploy logs need the CS VPN even though the UI
+around them loads without it.</p>
+<p>Research students who only need the LLM — not the deployment platform — have a
+short setup page: <a href="research-students.html"><code>research-students.md</code></a>.</p>
+<p>Model aliases exposed by LiteLLM:</p>
+<ul>
+<li><code>classroom-chat</code> — chat and agentic edits (Qwen3-Coder)</li>
+<li><code>classroom-autocomplete</code> — inline FIM ghost-text (Qwen2.5-Coder-7B)</li>
+</ul>
+<hr />
+<h2 id="whats-live-vs-planned"><a class="header" href="#whats-live-vs-planned">What's live vs. planned</a></h2>
+<p><strong>Working end-to-end today:</strong></p>
+<ul>
+<li>LiteLLM proxy on rigel:4000 (pools castor + pollux)</li>
+<li>Coolify with GitHub App + tests-gate-deploy pipeline</li>
+<li>Wildcard DNS <code>*.ml-capstone.cs.byu.edu</code> → rigel (delivered 2026-08-11) — group URLs resolve automatically</li>
+<li>Coolify admin UI at <code>https://ml-capstone-admin.cs.byu.edu</code> with GitHub OAuth (invite-gated via <code>Registration Allowed=off</code>)</li>
+<li>Self-serve Coolify Teams per student/group via <code>scripts/provision-teams.sh</code> (reads a roster CSV, seeds users + teams + servers)</li>
+<li>Two starter apps: <a href="https://github.com/byu-ml-capstone/hello-world-app"><code>hello-world-app</code></a> (template repo — minimal FastAPI for the Coolify onboarding lab, plus a bonus <code>terraform/</code> directory that recreates the whole Coolify+GitHub wiring as declarative HCL) and <code>sentiment-test-app/</code> (LLM + local HF reference)</li>
+<li>Cluster smoke test hits 17/17</li>
+</ul>
+<p><strong>Planned:</strong></p>
+<ul>
+<li>Self-hosted GitHub Actions runner for integration tests against staging URLs (Phase 18)</li>
+<li>Team cleanup / reset script (Phase 21)</li>
+</ul>
+<hr />
+<h2 id="quick-smoke-test"><a class="header" href="#quick-smoke-test">Quick smoke test</a></h2>
+<p>From your laptop on VPN:</p>
+<pre><code class="language-bash">./scripts/smoke-test-cluster.sh
+</code></pre>
+<p>Runs 17 checks against LiteLLM, direct-to-vLLM (castor + pollux), Coolify UI, and the deployed reference app. All green means the cluster is healthy.</p>
+<hr />
+<h2 id="contributing--making-changes"><a class="header" href="#contributing--making-changes">Contributing / making changes</a></h2>
+<p>This repo tracks classroom infrastructure. Small documentation edits can be PRs; anything touching the cluster (scripts, Coolify config) should be coordinated with the current admin.</p>
+<p><strong>Never commit:</strong> cert bundles, private keys, <code>.env</code> files with real values. The <code>.gitignore</code> blocks the usual suspects but be careful about pasting URLs with embedded tokens into docs.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="student-guide.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="student-guide.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

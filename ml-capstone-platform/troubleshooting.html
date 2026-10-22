@@ -1,0 +1,591 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Troubleshooting - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html" class="active"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/troubleshooting.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<p>Common failure modes, organized by symptom. If your problem isn't here, escalate to the current admin.</p>
+<p><strong>Related docs:</strong></p>
+<ul>
+<li><a href="student-guide.html"><code>student-guide.md</code></a> — student setup basics</li>
+<li><a href="admin-guide.html"><code>admin-guide.md</code></a> — cluster architecture and admin controls</li>
+<li><a href="coolify-runbook.html"><code>coolify-runbook.md</code></a> — deep Coolify troubleshooting</li>
+</ul>
+<hr />
+<h2 id="editor--llm-problems"><a class="header" href="#editor--llm-problems">Editor / LLM problems</a></h2>
+<h3 id="chat-panel-shows-an-unexpected-model-claude-gpt-etc-instead-of-classroom-chat"><a class="header" href="#chat-panel-shows-an-unexpected-model-claude-gpt-etc-instead-of-classroom-chat">Chat panel shows an unexpected model (Claude, GPT, etc.) instead of Classroom Chat</a></h3>
+<p>You're on a Continue Hub Assistant that shadows your local <code>~/.continue/config.yaml</code>. Sign out of Continue Hub:</p>
+<ul>
+<li>Continue side panel → profile icon (bottom-left) → <strong>Sign out</strong></li>
+<li>Reload VS Code (<code>Cmd+Shift+P</code> → <strong>Developer: Reload Window</strong>)</li>
+<li>Check that your assistant is now <code>Classroom</code></li>
+</ul>
+<h3 id="chat-sends-but-no-response-comes-back"><a class="header" href="#chat-sends-but-no-response-comes-back">Chat sends but no response comes back</a></h3>
+<p>Almost always VPN. Test:</p>
+<pre><code class="language-bash">curl -sS http://ml-capstone.cs.byu.edu:4000/v1/models
+</code></pre>
+<p>Should return a JSON list including <code>classroom-chat</code>, <code>classroom-autocomplete</code>, and <code>classroom-transcribe</code>. If it fails:</p>
+<ul>
+<li>Connect / reconnect to <code>cs-vpn.byu.edu</code> via GlobalProtect</li>
+<li>Try <code>nslookup ml-capstone.cs.byu.edu</code> — on a BYU VPN this returns an internal
+<code>10.55.x.x</code> address. <strong>A public-looking answer means you are not on a VPN</strong>:
+this one name also resolves on the public internet, pointing at CS's shared
+proxy, so getting an answer is not proof your VPN DNS works. To test that
+properly, look up an app hostname instead — <code>nslookup &lt;your-repo&gt;.ml-capstone.cs.byu.edu</code>
+returns nothing at all off-VPN.</li>
+<li>If still broken, LiteLLM may be down — see admin section below</li>
+</ul>
+<h3 id="502-bad-gateway-but-every-container-reports-healthy"><a class="header" href="#502-bad-gateway-but-every-container-reports-healthy"><code>502 Bad Gateway</code>, but every container reports healthy</a></h3>
+<p>Traefik is forwarding to the wrong port. On a Compose application it picks the
+port from what the container exposes, and that is only unambiguous when the
+container exposes one. Check what yours advertises:</p>
+<pre><code class="language-bash">docker ps --format '{{.Names}}\t{{.Ports}}' | grep &lt;your-service&gt;
+</code></pre>
+<p>Two ports listed means Traefik is guessing. The usual cause is a base image with
+its own <code>EXPOSE</code> — <code>nginx:alpine</code> ships <code>EXPOSE 80</code>, so adding your own 8000
+advertises both, and Docker cannot un-expose the inherited one.</p>
+<p>Fix it in Coolify by naming the port on the end of the domain:
+<code>&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu:8000</code>, then <strong>Redeploy</strong>. The port
+does not become part of your public URL — it only tells Traefik which container
+port to use. Leave the separate <strong>Port</strong> field empty; it is ignored for Compose
+applications.</p>
+<p>The cleaner long-term fix is to serve on the port the base image already
+exposes, so there is only ever one.</p>
+<h3 id="transcription-returns-invalid-model-name-passed-in-modelclassroom-transcribe"><a class="header" href="#transcription-returns-invalid-model-name-passed-in-modelclassroom-transcribe">Transcription returns <code>Invalid model name passed in model=classroom-transcribe</code></a></h3>
+<p>The alias is not registered with LiteLLM. Confirm what the proxy is actually
+advertising:</p>
+<pre><code class="language-bash">curl -sS http://ml-capstone.cs.byu.edu:4000/v1/models
+</code></pre>
+<p>If <code>classroom-transcribe</code> is absent, that is an admin-side problem — on rigel,
+<code>scripts/install-whisper-service.sh --check</code> reports the whole chain
+(container, model weights, LiteLLM's view, and whether LiteLLM can reach the
+container). Coolify runbook §6b has the details.</p>
+<h3 id="a-transcript-contains-text-that-was-never-spoken"><a class="header" href="#a-transcript-contains-text-that-was-never-spoken">A transcript contains text that was never spoken</a></h3>
+<p>Working as designed, unfortunately. Whisper hallucinates on audio with no
+speech in it — a pure tone returns things like <code>"Thanks for watching!"</code> with a
+nonsense end timestamp. Use <code>response_format="verbose_json"</code> and discard
+segments whose <code>no_speech_prob</code> is above about <code>0.6</code>; real speech scores near
+<code>0.003</code>. <code>vad_filter</code> does <strong>not</strong> fix this. Full explanation in
+<a href="research-students.html#transcribing-audio">Transcribing audio</a>.</p>
+<h3 id="globalprotect-says-connected-but-nothing-on-the-cluster-resolves"><a class="header" href="#globalprotect-says-connected-but-nothing-on-the-cluster-resolves">GlobalProtect says "Connected" but nothing on the cluster resolves</a></h3>
+<p>You're probably on the <strong>campus</strong> VPN (<code>vpn.byu.edu</code>) rather than the <strong>CS</strong> VPN (<code>cs-vpn.byu.edu</code>). They are different gateways and they reach different things:</p>
+<p>The split is by <strong>port</strong>, not by hostname: the wider BYU network reaches
+rigel's web ports and nothing else.</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th><code>cs-vpn.byu.edu</code></th><th><code>vpn.byu.edu</code></th></tr></thead><tbody>
+<tr><td>Your deployed app</td><td>✅</td><td>✅</td></tr>
+<tr><td>Coolify's web UI</td><td>✅</td><td>✅ — it loads</td></tr>
+<tr><td>Coolify's live deploy log and container terminal</td><td>✅</td><td>❌</td></tr>
+<tr><td>The classroom LLM (<code>:4000</code>)</td><td>✅</td><td>❌</td></tr>
+<tr><td><code>ssh</code> to the hosts</td><td>✅</td><td>❌</td></tr>
+</tbody></table>
+</div>
+<p>So the symptom to recognise is <strong>partial</strong>, not a flat failure. On the campus
+VPN your app loads and Coolify's pages load, but the editor cannot reach the
+LLM, and Coolify's deploy log sits empty while the deploy actually runs — those
+use a separate port that stays closed. If you are watching a deploy and the log
+never appears, switch to <code>cs-vpn.byu.edu</code> rather than assuming the deploy hung.</p>
+<p>If <em>nothing</em> resolves at all, you are not on either VPN. Check which portal
+your GlobalProtect client is connected to.</p>
+<p>If <code>cs-vpn.byu.edu</code> isn't in the portal list, or login is rejected there, the student hasn't been granted CS VPN access — that's an entitlement separate from their NetID. Collect the NetID and submit it through whatever CS IT roster process is in effect (see <a href="onboarding.html"><code>onboarding.md</code></a> → <em>Term-start: request CS VPN access for the roster</em>). Students should route this through you, not BYU IT.</p>
+<h3 id="opencode-or-any-agentic-client-fails-with-auto-tool-choice-requires---enable-auto-tool-choice"><a class="header" href="#opencode-or-any-agentic-client-fails-with-auto-tool-choice-requires---enable-auto-tool-choice">opencode (or any agentic client) fails with "auto tool choice requires --enable-auto-tool-choice"</a></h3>
+<p>Full error, as surfaced through LiteLLM:</p>
+<pre><code>litellm.BadRequestError: OpenAIException - "auto" tool choice requires
+--enable-auto-tool-choice and --tool-call-parser to be set.
+Received Model Group=classroom-chat
+</code></pre>
+<p>Nothing is wrong with your client config. Agentic clients (opencode, Continue's agent mode, Copilot CLI) send a <code>tools</code> array plus <code>tool_choice: "auto"</code> on every request. The vLLM chat engine only accepts those if it was started with tool-calling enabled — this is a <strong>server-side</strong> setting on <code>castor</code> and <code>pollux</code>, so report it rather than trying to fix it locally.</p>
+<p>Plain chat with no tools still works while this is broken, which is why Continue's chat panel can look healthy while opencode fails on the first message.</p>
+<p><strong>Admin fix.</strong> The <code>qwen3-coder*</code> profiles in <code>scripts/install-qwen-cluster.sh</code> pass <code>--enable-auto-tool-choice --tool-call-parser qwen3_xml</code> in <code>CHAT_EXTRA_ARGS</code>. If an engine predates that change, re-run the installer on each GPU host:</p>
+<pre><code class="language-bash">sudo ./install-qwen-cluster.sh --profile qwen3-coder
+</code></pre>
+<p>Confirm the running unit actually has the flags:</p>
+<pre><code class="language-bash">systemctl cat qwen-chat | grep -E 'tool-call-parser|enable-auto-tool-choice'
+</code></pre>
+<p>If vLLM rejects <code>qwen3_xml</code> as an invalid choice, that build is too old for it — check what it accepts with
+<code>/opt/qwen-cluster/venv/bin/python -m vllm.entrypoints.openai.api_server --help | grep -A20 'tool-call-parser'</code>
+and fall back to <code>--tool-call-parser qwen3_coder</code>. vLLM's own docs recommend <code>qwen3_xml</code> for Qwen3-Coder; the older <code>qwen3_coder</code> parser has a known failure where long tool-call inputs degenerate into an endless <code>!!!!!!</code> stream.</p>
+<p><strong>Do not add <code>classroom-autocomplete</code> to an agentic client's model list.</strong> It's Qwen2.5-Coder-7B <em>base</em> — a fill-in-the-middle completion model with no instruct tuning and no tool-calling ability. It's correct for ghost-text in Continue and useless as an opencode agent model.</p>
+<h3 id="no-inline-ghost-text-autocomplete"><a class="header" href="#no-inline-ghost-text-autocomplete">No inline ghost-text (autocomplete)</a></h3>
+<ul>
+<li>Copilot might be enabled and competing with Continue → disable Copilot in this workspace</li>
+<li>Autocomplete model missing from <code>~/.continue/config.yaml</code> — verify it has <code>useLegacyCompletionsEndpoint: true</code> on the <code>Classroom Autocomplete</code> entry</li>
+<li>YAML indentation off — must be 2 spaces, no tabs, <code>-</code> list markers aligned under <code>models:</code></li>
+</ul>
+<h3 id="continues-yaml-config-doesnt-seem-to-load"><a class="header" href="#continues-yaml-config-doesnt-seem-to-load">Continue's YAML config doesn't seem to load</a></h3>
+<ul>
+<li>Coolify's UI provider dropdown doesn't include "OpenAI Compatible" as an option — you have to configure via YAML</li>
+<li>File must be at <code>~/.continue/config.yaml</code> (not <code>.json</code>)</li>
+<li>Signed into Continue Hub? Hub assistants shadow local config; sign out (above)</li>
+</ul>
+<hr />
+<h2 id="deploy--coolify-problems"><a class="header" href="#deploy--coolify-problems">Deploy / Coolify problems</a></h2>
+<h3 id="cant-open-a-pr-staging-has-no-history-in-common-with-main"><a class="header" href="#cant-open-a-pr-staging-has-no-history-in-common-with-main">Can't open a PR: "staging has no history in common with main"</a></h3>
+<p>Your repo was created with <strong>"Include all branches"</strong> ticked. GitHub's template copy gives each branch its own separate initial commit, so <code>main</code> and <code>staging</code> share no ancestor and GitHub refuses to diff or merge them.</p>
+<p>Prevent it by rebuilding <code>staging</code> on <code>main</code> immediately after cloning, while the branches still hold identical files (lab step 3). To fix it after the fact, while <code>staging</code> has little unique work on it:</p>
+<pre><code class="language-bash">git fetch origin
+git checkout main &amp;&amp; git pull --ff-only
+git checkout -B staging main          # recreate staging on top of main
+# re-apply any staging-only work here, then:
+git push --force origin staging
+</code></pre>
+<p>Check it worked — this should report <code>ahead</code>, not an error:</p>
+<pre><code class="language-bash">gh api /repos/byu-ml-capstone/&lt;your-repo&gt;/compare/main...staging --jq .status
+</code></pre>
+<p>If <code>staging</code> already carries work you can't lose, cherry-pick those commits onto the rebuilt branch rather than force-pushing over them.</p>
+<p>Prevention: create <code>staging</code> from <code>main</code> yourself (<code>git checkout -b staging main</code>) instead of ticking "Include all branches" — see student-guide Setup Step 1.</p>
+<h3 id="push-happened-but-the-app-didnt-update"><a class="header" href="#push-happened-but-the-app-didnt-update">Push happened but the app didn't update</a></h3>
+<p>Check in order:</p>
+<ol>
+<li><strong>GitHub Actions tab</strong> — did the <code>test</code> job pass? If red, code is broken. Fix locally, push.</li>
+<li><strong>Actions <code>deploy-prod</code> job</strong> — did it curl Coolify successfully? A curl error means webhook URL or API token is wrong. Verify repo secrets.</li>
+<li><strong>Coolify Deployments tab</strong> — did the deploy fire? If not, check that:
+<ul>
+<li>Auto Deploy is OFF (should be — deploy path is Actions, not Coolify webhook)</li>
+<li><code>COOLIFY_DEPLOY_WEBHOOK_PROD</code> secret is the exact URL from Coolify's Webhooks tab</li>
+</ul>
+</li>
+<li><strong>Deployed and marked healthy?</strong> Coolify's health check polls <code>/health</code>. If <code>/health</code> returns 5xx (LLM unreachable, model failed to load, etc.), the deploy is marked unhealthy and the old version keeps serving.</li>
+</ol>
+<h3 id="docker-compose-up-fails-additional-property-start_interval-is-not-allowed"><a class="header" href="#docker-compose-up-fails-additional-property-start_interval-is-not-allowed"><code>docker compose up</code> fails: "Additional property start_interval is not allowed"</a></h3>
+<p>Your Docker is too old. The template's health checks use <code>start_interval</code>, which probes frequently while a container is starting and then backs off — that's what keeps a fresh container detected in seconds without <code>pg_isready</code> running every 5 seconds for the rest of the day.</p>
+<p>It needs <strong>Docker Engine 25+ / Compose 2.20+</strong> (early 2024). Check yours:</p>
+<pre><code class="language-bash">docker version --format 'engine {{.Server.Version}}'
+docker compose version
+</code></pre>
+<p>Update Docker Desktop (Settings → Software updates), or on Linux update the <code>docker-ce</code> / <code>docker-compose-plugin</code> packages. Nothing else in the template needs a recent Docker.</p>
+<h3 id="app-url-returns-404-page-not-found"><a class="header" href="#app-url-returns-404-page-not-found">App URL returns "404 page not found"</a></h3>
+<p>That plain-text 404 is Traefik saying <em>no route exists for this hostname</em> — it is not your app returning 404, and it is not DNS (a DNS failure gives a connection error instead). Three causes, in the order to check them:</p>
+<ol>
+<li>
+<p><strong>Nothing has been deployed yet.</strong> Creating an Application and setting its domain does not start a container. Until a deploy finishes, there is no service behind the hostname. Push to the branch, or hit Deploy in Coolify, and watch it complete.</p>
+</li>
+<li>
+<p><strong>The domain was set after the container started.</strong> Traefik routes on labels baked in at container start, so a container launched before you saved the domain keeps the old rule. Hit <strong>Redeploy</strong>. Confirm afterwards with:</p>
+<pre><code class="language-bash">docker inspect &lt;container&gt; --format '{{json .Config.Labels}}' | grep -o 'Host(`[^`]*`)'
+</code></pre>
+<p>Your domain should appear in that list.</p>
+</li>
+<li>
+<p><strong>The domain is set but you never redeployed.</strong> Traefik bakes its routing labels into the container when it starts, so a domain added after the container came up leaves the URL with no route. Hit <strong>Redeploy</strong>. This is the single most common cause of a 404 or 503 on an app that deployed successfully.</p>
+<p>Student apps now serve <strong>HTTPS</strong> — CS IT issued a wildcard for <code>*.ml-capstone.cs.byu.edu</code>. An <code>http://</code> URL redirects rather than failing. If <code>curl</code> prints the literal word <code>Found</code>, that is the redirect: add <code>-L</code>, or use the https URL. A <code>www.</code> domain is two labels deep and is <strong>not</strong> covered by the wildcard; delete those rows.</p>
+</li>
+</ol>
+<h3 id="deploy-succeeded-then-the-app-died-a-couple-of-hours-later"><a class="header" href="#deploy-succeeded-then-the-app-died-a-couple-of-hours-later">Deploy succeeded, then the app died a couple of hours later</a></h3>
+<p>Symptoms: the deployment log ends in success, the site works briefly, and later the
+URL 404s. In Coolify the resource reads <strong><code>exited:unhealthy</code></strong>, and <code>docker ps -a</code>
+shows no containers at all — so their logs are gone too.</p>
+<p><strong>Most likely cause: a service with no <code>healthcheck:</code>.</strong></p>
+<p>Coolify decides whether your application is alive by reading its containers' Docker
+health status. A container with no health check does not report "fine" — it reports
+<em>nothing</em>, and a resource Coolify cannot confirm is healthy eventually gets marked
+unhealthy and stopped. Coolify's periodic cleanup then removes the stopped
+containers, taking the logs with them.</p>
+<p>Read your own deploy log for the giveaway. Services with a health check announce
+themselves twice:</p>
+<pre><code>Container db-xxxx       Started
+Container db-xxxx       Healthy        &lt;- has a healthcheck
+Container frontend-xxxx Started
+                                       &lt;- no "Healthy" line: no healthcheck
+</code></pre>
+<p><strong>This bites when you restructure the template.</strong> The template ships a health check
+on all three services. Rename <code>frontend</code>, split <code>backend</code> in two, or add a service,
+and it is easy to carry over <code>expose:</code>, <code>restart:</code> and <code>${SERVICE_FQDN_*}</code> while
+leaving the health check behind — the app works locally, deploys cleanly, and then
+quietly dies.</p>
+<p>Every long-running service needs one. For an HTTP service:</p>
+<pre><code class="language-yaml">frontend:
+  build: ./frontend
+  expose:
+    - "80"
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+    start_period: 30s
+    start_interval: 2s
+    interval: 5m
+    timeout: 5s
+    retries: 3
+  restart: unless-stopped
+</code></pre>
+<p>Use whatever the image actually has — <code>wget</code> on Alpine, <code>curl</code> elsewhere, <code>python -c</code>
+if it ships Python, <code>pg_isready</code> for Postgres. A check that cannot run is as bad as
+no check.</p>
+<p>Make it test something real. A health check that returns 200 unconditionally is a
+gate that always opens, which is worse than useless: it will happily promote a build
+whose database connection is broken.</p>
+<p><strong>While you are in there</strong>, confirm the rest of the rename landed:</p>
+<ul>
+<li>the domain in Coolify is attached to the service you actually renamed to</li>
+<li><code>${SERVICE_FQDN_&lt;SERVICENAME&gt;}</code> matches that service's name, in caps</li>
+<li><code>main</code> and <code>staging</code> are running the same shape of application — if you rewrote
+compose on <code>staging</code> only, promoting will deploy something different to production</li>
+</ul>
+<h3 id="app-url-returns-bad-gateway-or-traefik-branded-error"><a class="header" href="#app-url-returns-bad-gateway-or-traefik-branded-error">App URL returns "Bad Gateway" or Traefik-branded error</a></h3>
+<p>Container is running but not reachable from Coolify's proxy. Most common causes:</p>
+<ul>
+<li>App bound to <code>127.0.0.1</code> inside container instead of <code>0.0.0.0</code> — nothing outside the container can reach it. Fix in <code>frontend/main.py</code> / <code>uvicorn</code> command (or the equivalent path in your service's directory).</li>
+<li><code>EXPOSE</code> in Dockerfile doesn't match the port Coolify's config expects (usually 8000)</li>
+<li>App crashed on startup — check Coolify's logs</li>
+</ul>
+<h3 id="build-fails-at-pip-install--model-download-step"><a class="header" href="#build-fails-at-pip-install--model-download-step">Build fails at pip install / model download step</a></h3>
+<p>Coolify's build container downloads deps fresh each time. Possible issues:</p>
+<ul>
+<li><strong>Network hiccup</strong> — retry the deploy; usually transient</li>
+<li><strong><code>requirements.txt</code> mismatch</strong> — a version got yanked from PyPI, or a package rename. Update <code>requirements.txt</code>.</li>
+<li><strong>HF model URL 429 (rate limit)</strong> — HuggingFace occasionally rate-limits. Retry; if persistent, mirror the model in a private location.</li>
+</ul>
+<h3 id="github-actions-deploy-prod-curl-fails-with-401"><a class="header" href="#github-actions-deploy-prod-curl-fails-with-401">GitHub Actions deploy-prod curl fails with 401</a></h3>
+<p>The <code>COOLIFY_API_TOKEN</code> secret is wrong or expired. Regenerate the token in Coolify (Keys &amp; Tokens → API Tokens), update the repo secret.</p>
+<h3 id="terraform-bonus-lab-apply-fails-with-http-404-github-app-not-found"><a class="header" href="#terraform-bonus-lab-apply-fails-with-http-404-github-app-not-found">Terraform bonus lab: <code>apply</code> fails with <code>HTTP 404: Github App not found</code></a></h3>
+<p><strong>Fixed upstream; this should no longer happen.</strong> Coolify ≥ 4.3.24 honors
+<code>is_system_wide</code> GitHub Apps for team-scoped tokens, verified functionally on
+2026-10-21 (the call that used to 404 returned <code>201</code>). rigel runs 4.3.24, and
+the local patch that used to be needed here has been retired.</p>
+<p>If you somehow still see this 404, the instance has been rolled back below
+4.3.24 — tell your instructor rather than retrying, and reference
+<a href="https://github.com/coollabsio/coolify/issues/11449">coollabsio/coolify#11449</a>.</p>
+<h3 id="coolify-ui-asks-for-a-password-when-i-try-to-delete-something"><a class="header" href="#coolify-ui-asks-for-a-password-when-i-try-to-delete-something">Coolify UI asks for a password when I try to delete something</a></h3>
+<p>Coolify's UI prompts for your password on destructive-action confirmations (Delete Application, Delete Project, etc.) even when your session is authenticated via GitHub OAuth. Your instructor set a <strong>class-wide Coolify password</strong> during provisioning — ask them for it and type it into the modal. It is deliberately not written down in these docs, which are public; it is posted where only the class can see it.</p>
+<p>If you forget the password AND you have your <code>COOLIFY_API_TOKEN</code> from Setup Step 8, you can bypass the UI entirely and delete resources via the API:</p>
+<pre><code class="language-bash">BASE=https://ml-capstone-admin.cs.byu.edu/api/v1
+TOKEN=&lt;your COOLIFY_API_TOKEN&gt;
+
+# List Projects, note UUIDs
+curl -sS -H "Authorization: Bearer $TOKEN" "$BASE/projects" | python3 -m json.tool
+
+# Delete a specific Application (surgical)
+curl -sS -X DELETE -H "Authorization: Bearer $TOKEN" "$BASE/applications/&lt;uuid&gt;"
+
+# Delete a whole Project (cascades to its Environments + Applications)
+curl -sS -X DELETE -H "Authorization: Bearer $TOKEN" "$BASE/projects/&lt;uuid&gt;"
+</code></pre>
+<p>The API doesn't ask for a password — token auth is sufficient. Same commands work for cleanup between fresh-slate testing rounds.</p>
+<h3 id="container-starts-but-health-is-503"><a class="header" href="#container-starts-but-health-is-503">Container starts but <code>/health</code> is 503</a></h3>
+<p>The deep health check calls the LLM. If it fails:</p>
+<ul>
+<li>Container can't reach <code>ml-capstone.cs.byu.edu:4000</code> — check <code>LITELLM_URL</code> env var; it should be <code>http://ml-capstone.cs.byu.edu:4000/v1</code> (not <code>https://</code> — LLM is HTTP)</li>
+<li>LiteLLM is down or unreachable from Coolify's docker network</li>
+<li>The local HF model failed to load (GPU issue) — check <code>/gpu</code> endpoint</li>
+</ul>
+<hr />
+<h2 id="cluster-wide-problems-admin"><a class="header" href="#cluster-wide-problems-admin">Cluster-wide problems (admin)</a></h2>
+<h3 id="one-llm-request-errors-once-then-succeeds"><a class="header" href="#one-llm-request-errors-once-then-succeeds">One LLM request errors once, then succeeds</a></h3>
+<p>Normal. A vLLM engine crashed and LiteLLM routed the retry to the surviving engine on the other GPU host. Investigate <code>journalctl -u qwen-chat -f</code> on the affected host.</p>
+<h3 id="all-llm-requests-time-out"><a class="header" href="#all-llm-requests-time-out">All LLM requests time out</a></h3>
+<p>Front-end host (rigel) is down or LiteLLM is stopped. Recovery order:</p>
+<ol>
+<li><code>ssh rigel &amp;&amp; sudo docker ps | grep litellm</code> — is the container running?</li>
+<li>If not: <code>sudo docker start litellm</code>; check <code>sudo docker logs litellm</code></li>
+<li>If persistent: fall back to direct-to-vLLM on castor/pollux (see student guide's fallback section). Notify students to change their <code>apiBase</code>.</li>
+</ol>
+<h3 id="install-qwen-clustersh-prints-nothing-at-all-and-changes-nothing"><a class="header" href="#install-qwen-clustersh-prints-nothing-at-all-and-changes-nothing"><code>install-qwen-cluster.sh</code> prints nothing at all and changes nothing</a></h3>
+<p>The command returns immediately with no banner, no error, no steps — and the engines keep running the old config. Check the driver:</p>
+<pre><code class="language-bash">nvidia-smi
+</code></pre>
+<p>If it reports <code>Failed to initialize NVML: Driver/library version mismatch</code>, that's the cause. Preflight runs <code>nvidia-smi</code> inside a command substitution; under <code>set -euo pipefail</code> its failure aborted the script before the ERR trap was installed, so nothing was printed. Current versions of the script detect this and print an explanation — <code>git pull</code> if yours exits silently.</p>
+<p><strong>The mismatch itself</strong> means the NVIDIA packages on disk were upgraded while an older kernel module is still loaded. Rebooting loads the new module and is the normal fix — but confirm DKMS built it for the kernel you'd boot into <em>first</em>:</p>
+<pre><code class="language-bash">uname -r                                   # what's running now
+ls -1 /boot/vmlinuz-* | sort -V | tail -1  # what GRUB would boot next
+modinfo -k &lt;that kernel&gt; nvidia            # does it have a module?
+sudo ./scripts/pin-gpu-host.sh             # checks all of the above
+</code></pre>
+<p>Use <code>modinfo</code>, not <code>dkms status</code> — a driver shipped as a precompiled signed module is perfectly usable but invisible to DKMS. And check the kernel that would <em>boot</em>, not every directory under <code>/lib/modules</code>: hosts accumulate leftovers from long-removed kernels, and those are clutter rather than risk.</p>
+<p>If the next-boot kernel has no module, the host comes back with no GPU at all and both vLLM engines fail to start. Either build the module for it or remove that kernel (<code>sudo apt-get remove --purge linux-image-&lt;ver&gt; linux-headers-&lt;ver&gt;</code>) before rebooting. If you're already stuck at that point, select the previous kernel in GRUB's "Advanced options" at boot.</p>
+<p>Because LiteLLM pools both GPU hosts for chat, one host can be down for this without taking the class offline — as long as the other one is healthy. Never reboot both at once.</p>
+<p>Autocomplete is the exception: pollux is the only FIM host as of 2026-10-19, so rebooting pollux stops ghost-text class-wide even though chat survives on castor. Say so in advance rather than letting people think their editor broke.</p>
+<h3 id="install-qwen-clustersh-aborts-in-step-16-with-dpkg-errors"><a class="header" href="#install-qwen-clustersh-aborts-in-step-16-with-dpkg-errors"><code>install-qwen-cluster.sh</code> aborts in step 1/6 with dpkg errors</a></h3>
+<p>Symptom: the run dies at "Installing OS packages" with <code>E: Sub-process /usr/bin/dpkg returned an error code (1)</code>, listing kernel packages (<code>linux-headers-*</code>, <code>linux-image-*</code>) as "not fully installed or removed" — even though every package the script actually wants reports "already the newest version".</p>
+<p>The installer isn't the problem. <code>apt-get install</code> asks dpkg to configure <em>all</em> pending packages first, so any unrelated broken package on the host makes it fail, and the script's <code>ERR</code> trap aborts the run. The usual culprit on a GPU host is an NVIDIA DKMS module that won't build against a newly installed kernel.</p>
+<p>Step 1 now skips apt entirely when the five required packages are already present, so a pre-existing dpkg mess no longer blocks a model swap. If you're on an older copy of the script, <code>git pull</code> and re-run.</p>
+<p><strong>Then deal with the underlying breakage, because it is a latent outage.</strong> If DKMS can't build the NVIDIA module for the new kernel, the host keeps working only until it reboots — at which point it comes up on the new kernel with no GPU driver and both vLLM engines fail to start.</p>
+<pre><code class="language-bash">uname -r                     # kernel currently running (has a working module)
+dkms status                  # which module versions built for which kernels
+cat /var/lib/dkms/nvidia/&lt;version&gt;/build/make.log   # why the build failed
+</code></pre>
+<p>Hold the kernel packages so the next <code>apt upgrade</code> can't widen the gap, then schedule a driver update that supports the new kernel:</p>
+<pre><code class="language-bash">sudo apt-mark hold linux-image-generic-hwe-24.04 linux-headers-generic-hwe-24.04 linux-generic-hwe-24.04
+</code></pre>
+<p>Do not reboot the host until <code>dkms status</code> shows the module built for the kernel it would boot into.</p>
+<h3 id="coolify-ui-unreachable"><a class="header" href="#coolify-ui-unreachable">Coolify UI unreachable</a></h3>
+<ul>
+<li>rigel:8000 not responding: check <code>sudo docker ps</code> on rigel for <code>coolify</code> container</li>
+<li>If crashed: <code>sudo docker restart coolify</code>; check logs</li>
+<li>If disk full: <code>sudo docker system prune -af --filter until=168h --volumes</code></li>
+</ul>
+<h3 id="deploys-succeed-but-wrong-version-is-served"><a class="header" href="#deploys-succeed-but-wrong-version-is-served">Deploys succeed but wrong version is served</a></h3>
+<p>Coolify's port mapping or Domain field doesn't match what the app is bound to internally. Confirm:</p>
+<ul>
+<li>Application → Configuration → Advanced → <strong>Ports Mappings</strong> shows the right pair</li>
+<li>Application → Configuration → General → <strong>Domains</strong> contains the group's URL</li>
+</ul>
+<h3 id="github-webhook-shows-delivered-but-coolify-does-nothing"><a class="header" href="#github-webhook-shows-delivered-but-coolify-does-nothing">GitHub webhook shows "delivered" but Coolify does nothing</a></h3>
+<ul>
+<li>Actions triggered but the workflow's deploy jobs don't fire (check branch — <code>deploy-prod</code> only fires on <code>main</code>)</li>
+<li>Coolify's Auto Deploy is off AND Actions webhook secret is wrong</li>
+</ul>
+<h3 id="cs-it-haproxy-returns-eof-on-webhook-attempts"><a class="header" href="#cs-it-haproxy-returns-eof-on-webhook-attempts">CS IT HAProxy returns EOF on webhook attempts</a></h3>
+<p>HAProxy's SNI passthrough rule is misconfigured. See <a href="tickets/archive/2026-08-07-haproxy-followup.html"><code>tickets/archive/2026-08-07-haproxy-followup.md</code></a> for the diagnostic pattern; re-open a ticket with CS IT if needed.</p>
+<h3 id="wildcard-tls-cert-expired"><a class="header" href="#wildcard-tls-cert-expired">Wildcard TLS cert expired</a></h3>
+<p>The <code>*.cs.byu.edu</code> DigiCert cert is valid Jul 9 2026 → Jan 23 2027. Renewal is via CS IT ticket; see <a href="coolify-runbook.html"><code>coolify-runbook.md</code></a> §8 (TLS termination) for where the cert files live on rigel.</p>
+<hr />
+<h2 id="database--persistent-storage-problems"><a class="header" href="#database--persistent-storage-problems">Database / persistent storage problems</a></h2>
+<h3 id="notes-or-another-db-backed-endpoint-returns-500-after-a-deploy"><a class="header" href="#notes-or-another-db-backed-endpoint-returns-500-after-a-deploy"><code>/notes</code> (or another DB-backed endpoint) returns 500 after a deploy</a></h3>
+<p>The app couldn't apply its schema. Check the Coolify container logs for the <strong><code>backend</code></strong> service — that is where migrations run, and a common wrong turn is reading the <code>frontend</code> logs and finding nothing. Look for <code>applied migration ...</code> or a <code>psycopg</code> traceback. Common causes:</p>
+<ul>
+<li><strong>Migration SQL is broken.</strong> Fix the <code>.sql</code> file, push. <code>apply_migrations()</code> didn't record the failed one (the tracking-table insert is in the same transaction as the SQL), so it'll retry on the next deploy.</li>
+<li><strong>Column removed but code still queries it.</strong> You dropped a column in a migration but forgot to update <code>list_all()</code> / <code>insert()</code> in the DAO. Push the DAO fix.</li>
+<li><strong>Database was hand-modified and diverged from what code expects.</strong> <code>POST /admin/reset</code> wipes everything and re-applies migrations from scratch. Set <code>ALLOW_ADMIN_RESET=true</code> in Coolify env vars → redeploy → curl the endpoint → remove the env var → redeploy.</li>
+</ul>
+<h3 id="docker-compose-down--v-locally-lost-data-can-i-recover"><a class="header" href="#docker-compose-down--v-locally-lost-data-can-i-recover"><code>docker compose down -v</code> locally lost data. Can I recover?</a></h3>
+<p>No. <code>-v</code> deletes the named volume, and there's no backup unless you took one. <code>pg_dump</code> before destructive ops if you care about the data. For class projects, the app's <code>apply_migrations()</code> will recreate the schema on next startup — just re-populate.</p>
+<h3 id="coolifys-persistent-storage-tab-shows-my-volume-but-theres-no-delete-button"><a class="header" href="#coolifys-persistent-storage-tab-shows-my-volume-but-theres-no-delete-button">Coolify's Persistent Storage tab shows my volume but there's no delete button</a></h3>
+<p>Correct — Coolify hides delete for auto-declared compose volumes. To nuke: SSH to rigel and <code>docker volume rm &lt;coolify-uuid&gt;_db-data</code> (name is in the deploy log), or delete the Application with the "delete volumes" checkbox. See <code>student-guide.md</code>'s "Cleaning up when things go wrong" for the full procedure.</p>
+<hr />
+<h2 id="gpu-allocation-problems"><a class="header" href="#gpu-allocation-problems">GPU allocation problems</a></h2>
+<h3 id="gpu-shows-cuda_available-false"><a class="header" href="#gpu-shows-cuda_available-false"><code>/gpu</code> shows <code>cuda_available: false</code></a></h3>
+<p>The container has no GPU. In Coolify → Application → Configuration → Advanced → <strong>GPU</strong> section:</p>
+<ul>
+<li>Enable GPU</li>
+<li>Set GPU Device Ids (or leave empty for all)</li>
+<li>Save + redeploy</li>
+</ul>
+<h3 id="nvidia-smi-on-rigel-shows-all-4-gpus-pegged"><a class="header" href="#nvidia-smi-on-rigel-shows-all-4-gpus-pegged"><code>nvidia-smi</code> on rigel shows all 4 GPUs pegged</a></h3>
+<p>Multiple groups are running heavy workloads. Options:</p>
+<ul>
+<li>Encourage the biggest offenders to stop when done</li>
+<li>Adjust <code>CUDA_VISIBLE_DEVICES</code> on Applications to spread load</li>
+<li>Long-term: deploy a shared inference service for common models (see <a href="admin-guide.html"><code>admin-guide.md</code></a> on GPU sharing)</li>
+</ul>
+<hr />
+<h2 id="emergency-escalations"><a class="header" href="#emergency-escalations">Emergency escalations</a></h2>
+<p>When to escalate to CS IT vs. self-fix:</p>
+<div class="table-wrapper"><table><thead><tr><th>Symptom</th><th>Try first</th><th>Escalate if</th></tr></thead><tbody>
+<tr><td>VPN unreachable</td><td>Reconnect, restart GlobalProtect</td><td>Widespread — likely CS IT issue</td></tr>
+<tr><td>Cert about to expire</td><td>Renew via CS IT ticket</td><td>30 days before expiry — proactive</td></tr>
+<tr><td>HAProxy dropping connections</td><td>Diagnostic curl (SNI check)</td><td>If you can reproduce failure from campus network too</td></tr>
+<tr><td>Public DNS problems</td><td>Verify with <code>dig @8.8.8.8</code></td><td>If mismatch persists after ~1 hour</td></tr>
+</tbody></table>
+</div>
+<p>Everything else — cluster-side issues — the current admin handles.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="annual-maintenance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="annual-maintenance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

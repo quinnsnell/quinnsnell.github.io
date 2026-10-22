@@ -1,0 +1,923 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Coolify Runbook - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html" class="active"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/coolify-runbook.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="classroom-deployment-platform--coolify-runbook"><a class="header" href="#classroom-deployment-platform--coolify-runbook">Classroom Deployment Platform — Coolify Runbook</a></h1>
+<p>This is the <strong>server-side</strong> setup guide for <code>rigel.cs.byu.edu</code>, the GPU-equipped front-end machine that hosts:</p>
+<ul>
+<li><strong>LiteLLM</strong> — the single proxy fronting the two GPU inference boxes (<code>castor</code>, <code>pollux</code>), exposed to students as <code>ml-capstone.cs.byu.edu:4000</code>. Also fronts a local speech-to-text service on rigel itself (<code>classroom-transcribe</code>)</li>
+<li><strong>Coolify</strong> — a self-hosted, GitHub-webhook-driven "push to deploy" platform students use for their class projects; admin UI at <code>ml-capstone-admin.cs.byu.edu</code> (live, publicly reachable via CS IT HAProxy, gated by GitHub OAuth invite-only signin)</li>
+<li><strong>4× NVIDIA A6000 GPUs</strong> — available to student Docker containers via Coolify for GPU-accelerated deploys</li>
+</ul>
+<p>TLJH (JupyterHub) is NOT deployed on rigel — it lives on other hosts (<code>castor</code>, <code>pollux</code>, <code>vega</code>) for classes that need notebooks. Rigel is Coolify + LiteLLM only.</p>
+<p>Students learn the industry-standard flow: push to a GitHub repo → tests run in Actions → deploy webhook fires → Coolify pulls, builds, deploys, routes traffic.</p>
+<p>Only one path on <code>rigel</code> is reachable from the public internet: the GitHub webhook endpoint (<code>ml-capstone.cs.byu.edu/webhooks/*</code>) and the Coolify deploy API (<code>/api/v1/deploy</code>), both via CS IT's HAProxy doing SNI passthrough. Everything else — LLM endpoint, deployed apps, admin UI — requires the BYU CS VPN.</p>
+<h2 id="contents"><a class="header" href="#contents">Contents</a></h2>
+<ol>
+<li><a href="#1-architecture">Architecture</a></li>
+<li><a href="#2-prerequisites">Prerequisites</a></li>
+<li><a href="#3-base-host-preparation">Base Host Preparation</a></li>
+<li><a href="#4-install-nvidia-container-toolkit">Install NVIDIA Container Toolkit</a></li>
+<li><a href="#5-install-coolify">Install Coolify</a>, and <a href="#5a-dockers-address-pool-must-stay-out-of-10x">keep Docker's address pool out of 10.x</a></li>
+<li><a href="#6-install-litellm-alongside">Install LiteLLM Alongside</a></li>
+<li><a href="#7-public-entry-via-cs-it-haproxy">Public entry via CS IT HAProxy</a></li>
+<li><a href="#8-tls-termination--cs-provided-cs-byu-edu-wildcard-cert">TLS termination — CS-provided wildcard cert</a></li>
+<li><a href="#9-create-the-github-app">Create the GitHub App</a></li>
+<li><a href="#10-wire-the-github-app-into-coolify">Wire the GitHub App into Coolify</a></li>
+<li><a href="#11-team--user-model--self-serve-teams-via-github-oauth">Team &amp; User Model — self-serve teams via GitHub OAuth</a></li>
+<li><a href="#12-per-resource-limits--set-these-before-any-deploys">Per-Resource Limits</a></li>
+<li><a href="#13-gpu-allocation-policy">GPU Allocation Policy</a></li>
+<li><a href="#14-student-facing-flow">Student-Facing Flow</a></li>
+<li><a href="#15-backups">Backups</a></li>
+<li><a href="#16-upgrade--teardown">Upgrade &amp; Teardown</a></li>
+<li><a href="#17-failure-modes">Failure Modes</a></li>
+<li><a href="#18-why-this-design">Why This Design</a></li>
+</ol>
+<hr />
+<h2 id="1-architecture"><a class="header" href="#1-architecture">1. Architecture</a></h2>
+<pre><code>+-------------------------------------------------------------------------------+
+|                          STUDENT WORKSTATION                                  |
+|                                                                               |
+|  [ VS Code / browser / git ]                                                  |
+|         |                                                                     |
+|         | BYU VPN                                                             |
+|         v                                                                     |
++---------+---------------------------------------------------------------------+
+          |
+          | (all internal traffic)
+          v
++---------+---------------------------------------------------------------------+
+|                       RIGEL.CS.BYU.EDU                                        |
+|                                                                               |
+|  Traefik (bundled with Coolify)  :80 / :443                                   |
+|      routes internal wildcard *.ml-capstone.cs.byu.edu -&gt; student containers      |
+|      also routes ml-capstone-admin.cs.byu.edu -&gt; coolify:8080 (admin UI)      |
+|      TLS termination via CS-provided *.cs.byu.edu DigiCert wildcard           |
+|                                                                               |
+|  LiteLLM              :4000        chat + FIM pools -&gt; castor, pollux         |
+|                                    transcription    -&gt; whisper (local)        |
+|  speaches (whisper) 172.24.0.1:8020  faster-whisper on GPU 0, bridge-only       |
+|  Coolify UI           :8000                                                   |
+|  Coolify realtime     :6001                                                   |
+|  Coolify terminal     :6002                                                   |
+|                                                                               |
+|  Docker + NVIDIA Container Toolkit                                            |
+|   +------------------------------------------+                                |
+|   | student containers (Coolify-managed):    |                                |
+|   |   alice-web        CPU-only              |                                |
+|   |   bob-inference    GPU 0 reserved        |                                |
+|   |   carol-training   GPU 1 reserved        |                                |
+|   |   (GPU 2 + GPU 3 free)                   |                                |
+|   +------------------------------------------+                                |
+|                                                                               |
++---------+---------------------------------------------------------------------+
+          |                                                    ^
+          | (outbound: git clone, model pulls, npm, etc.)      | GitHub webhook + Actions
+          v                                                    |
+     Public internet                              +------------+-------------+
+          |                                       | CS IT HAProxy            |
+          v                                       | (haproxy1.cs.byu.edu)    |
+     GitHub -------- webhook (push) -------------&gt;+ SNI passthrough :443     |
+                                                  | -&gt; rigel :443 (Traefik)  |
+                                                  +--------------------------+
+
+                Castor.cs.byu.edu                     Pollux.cs.byu.edu
+                (vLLM chat :8000)                     (vLLM chat :8000)
+                (vLLM FIM  :8010)                     (vLLM FIM  :8010)
+                     ^                                      ^
+                     |                                      |
+                     +--- LiteLLM pool fan-out --------------+
+</code></pre>
+<p>Key points:</p>
+<ul>
+<li><strong>VPN is the primary access control.</strong> Everything on <code>rigel</code> binds to interfaces reachable via the campus network. VPN users see the machine directly.</li>
+<li><strong>Public entry point is CS IT's HAProxy</strong>, doing SNI passthrough from <code>haproxy1.cs.byu.edu:443</code> → <code>rigel:443</code> (Traefik). Only the GitHub webhook path and the Coolify deploy API are reachable that way — everything else on <code>rigel</code> requires VPN.</li>
+<li><strong>TLS is a CS-provided <code>*.cs.byu.edu</code> DigiCert wildcard</strong> cert, terminated by Traefik directly from files on disk. No Let's Encrypt, no DNS-01, no API tokens. Valid 2026-07-09 → 2027-01-23; set a January renewal reminder.</li>
+<li><strong>GPUs are per-container.</strong> Coolify apps opt in to GPUs via Docker Compose. A6000 has no MIG, so it's one container per GPU at a time.</li>
+</ul>
+<hr />
+<h2 id="2-prerequisites"><a class="header" href="#2-prerequisites">2. Prerequisites</a></h2>
+<p><strong>Machine.</strong> <code>rigel.cs.byu.edu</code>. Recommended baseline:</p>
+<ul>
+<li>32+ CPU cores, 64 GB RAM, 1 TB NVMe SSD (Coolify build cache grows fast, and Docker images for ML workloads are large)</li>
+<li>4× NVIDIA A6000 GPUs, drivers installed, <code>nvidia-smi</code> works</li>
+<li>Ubuntu 22.04 LTS or 24.04 LTS</li>
+<li>Static IP, campus DNS entry <code>rigel.cs.byu.edu</code></li>
+<li>SSSD-joined to the classroom LDAP directory, with <code>/home</code> NFS-mounted from <code>qsynology</code> (10.55.0.30:/volume1/nethome). See <code>castor</code>'s <code>/etc/sssd/sssd.conf</code> for the reference config.</li>
+<li>Root or passwordless-sudo SSH access</li>
+</ul>
+<p><strong>DNS</strong> (coordinate all of these with CS IT — see <a href="tickets/README.html"><code>tickets/README.md</code></a> for the ticket templates that got them):</p>
+<ul>
+<li><strong>Wildcard for student apps.</strong> <code>*.ml-capstone.cs.byu.edu</code> → <code>rigel.cs.byu.edu</code>. Resolves both on VPN (for students hitting their apps) and publicly (so GitHub webhooks land at HAProxy, which forwards to rigel).</li>
+<li><strong>Coolify admin alias.</strong> <code>ml-capstone-admin.cs.byu.edu</code> → <code>rigel.cs.byu.edu</code>. Public; HAProxy passes SNI through to Traefik → Coolify UI.</li>
+</ul>
+<p><strong>TLS.</strong> CS IT provisions a <code>*.cs.byu.edu</code> DigiCert wildcard cert. Files live on rigel at <code>/data/coolify/proxy/certs/star_cs_byu_edu.{fullchain.pem,key}</code>, and Traefik terminates TLS from those files. No Let's Encrypt or DNS-01 setup needed. The <code>*.cs.byu.edu</code> wildcard covers one level only, so <code>ml-capstone-admin.cs.byu.edu</code> gets HTTPS but two-level names like <code>&lt;team&gt;.ml-capstone.cs.byu.edu</code> do not — student apps serve HTTP over VPN. See §8 for the Traefik dynamic-config that wires the cert in.</p>
+<p><strong>Public entry point.</strong> CS IT's HAProxy (<code>haproxy1.cs.byu.edu</code>) does SNI passthrough to <code>rigel:443</code>. No inbound ports opened on <code>rigel</code> for the public internet directly. See §7 for the config CS IT applied.</p>
+<p><strong>GitHub.</strong> A class GitHub org students will be invited to. You'll create one GitHub App scoped to that org.</p>
+<p><strong>Ports on <code>rigel</code></strong> (nothing here is exposed to the public internet — VPN clients hit them directly):</p>
+<div class="table-wrapper"><table><thead><tr><th>Port</th><th>Service</th><th>Notes</th></tr></thead><tbody>
+<tr><td>22</td><td>SSH</td><td>Admin only</td></tr>
+<tr><td>80</td><td>Traefik</td><td>Internal — VPN clients hitting HTTP student apps (redirects to 443 where applicable)</td></tr>
+<tr><td>443</td><td>Traefik</td><td>Internal — VPN clients hitting HTTPS student apps + admin UI</td></tr>
+<tr><td>4000</td><td>LiteLLM</td><td>Internal — students' editors</td></tr>
+<tr><td>8020</td><td>speaches (Whisper)</td><td><strong>Docker bridge only</strong> (<code>172.24.0.1</code>) — not published on any external interface; reachable solely via LiteLLM</td></tr>
+</tbody></table>
+</div>
+<h3 id="proxy-access-logging"><a class="header" href="#proxy-access-logging">Proxy access logging</a></h3>
+<p>Traefik shipped with <strong>no access log</strong>, which meant that when PHP2Shell
+(CVE-2026-109618/109619) landed on 2026-10-21 there was no way to answer
+"was the publicly-reachable Coolify probed?" — there was simply no record of
+inbound requests. Enable it with
+<a href="scripts/enable-traefik-accesslog.sh"><code>scripts/enable-traefik-accesslog.sh --apply</code></a>.</p>
+<p>Logs land at <code>/data/coolify/proxy/access.log</code> in JSON, with request headers
+<strong>dropped</strong> so <code>Authorization</code> and <code>Cookie</code> values are never written to disk,
+and a <code>logrotate</code> rule keeps 14 compressed days.</p>
+<blockquote>
+<p><strong>Recreating <code>coolify-proxy</code> strips its network attachments.</strong> Coolify
+attaches the proxy to every application's per-app Docker network at deploy
+time, and those attachments are runtime container state — they are not in the
+compose file. <code>docker compose up -d --force-recreate</code> therefore brings the
+proxy back on the <code>coolify</code> network alone and drops all ~86 of them. This
+happened on 2026-10-21: Traefik stayed <em>healthy</em>, the admin UI kept working
+because it lives on the <code>coolify</code> network, and every student app timed out.
+Recovery is one loop:</p>
+<pre><code class="language-bash">for n in $(docker network ls --format '{{.Name}}' \
+           | grep -vE '^(bridge|host|none|coolify|ml-svc)$'); do
+  docker network connect "$n" coolify-proxy 2&gt;/dev/null
+done
+</code></pre>
+<p>Anything that recreates the proxy must snapshot the attachments first and
+restore them after. <code>enable-traefik-accesslog.sh</code> now does this on all three
+of its recreate paths, including the failure path, and refuses to finish until
+a real student app returns 200.</p>
+</blockquote>
+<blockquote>
+<p><strong><code>coolify-proxy</code>'s config lives in Coolify's database, not just on disk.</strong>
+The source of truth is <code>servers.proxy -&gt;&gt; 'last_saved_proxy_configuration'</code>,
+and Coolify rewrites <code>/data/coolify/proxy/docker-compose.yml</code> from it whenever
+the proxy is re-applied. Editing only the file looks like it worked and then
+silently reverts. The script writes both, validates with
+<code>docker compose config</code> before recreating anything, and probes a real student
+app's URL before and after — a malformed proxy config takes down every
+student app and the admin UI at once. <code>--revert</code> restores both from the
+newest backup.
+| 8000 | Coolify UI | Internal — VPN clients only |
+| 6001 | Coolify realtime | Internal |
+| 6002 | Coolify terminal | Internal |
+| 2049 | NFS     | Outbound only, to qsynology (10.55.0.30) for <code>/home</code> |</p>
+</blockquote>
+<hr />
+<h2 id="3-base-host-preparation"><a class="header" href="#3-base-host-preparation">3. Base Host Preparation</a></h2>
+<pre><code class="language-bash"># On rigel as root or with sudo:
+apt-get update &amp;&amp; apt-get upgrade -y
+apt-get install -y curl ca-certificates ufw fail2ban
+</code></pre>
+<h3 id="a-host-firewall-does-not-gate-the-containers"><a class="header" href="#a-host-firewall-does-not-gate-the-containers">A host firewall does not gate the containers</a></h3>
+<p>This is the part worth understanding before touching any rule, and it is the
+opposite of what most people assume.</p>
+<p><strong>Docker publishes ports by writing its own <code>iptables</code> rules, and they are
+evaluated before ufw's.</strong> So a <code>ufw deny</code> does <em>not</em> close a port that Docker
+has published — the packet is forwarded to the container before ufw ever sees
+it. On this host that covers every student app, Coolify's own ports, and
+anything else published with <code>ports:</code>. Writing a ufw rule for one of those
+ports produces a comforting line in <code>ufw status</code> and changes nothing.</p>
+<p>What a host firewall here <em>does</em> govern is traffic terminating on the host
+itself, <code>ssh</code> being the one that matters.</p>
+<p>Two consequences:</p>
+<ul>
+<li><strong>Who can reach the apps is decided upstream of this machine</strong>, by the
+network, not by rules on rigel. Reachability changes are requests to the
+network group, not edits here.</li>
+<li><strong>Closing a published port means not publishing it.</strong> Bind it to a specific
+interface, or drop the <code>ports:</code> entry — see §6b, where Whisper is published
+on the Docker bridge address precisely so nothing off the host can reach it.</li>
+</ul>
+<p>The live rule set is operational state and is not recorded in this public repo;
+read it on the host with <code>ufw status verbose</code> and keep the authoritative copy
+wherever the host's other credentials and state live.</p>
+<blockquote>
+<p><strong>Do not enable or re-apply a firewall from memory on a running term.</strong> Any
+rule that looks like it protects a container is at best inert, and a
+<code>default deny incoming</code> applied without an <code>ssh</code> allow already in place locks
+the host.</p>
+</blockquote>
+<p><strong><code>fail2ban</code> is installed and deliberately not enabled.</strong> The apt line above
+installs it; installing it does not start it, and we have chosen to leave it
+stopped. The reasoning, so it is a decision rather than an oversight:</p>
+<ul>
+<li>The only service terminating on the host is <code>ssh</code>, and <code>ssh</code> is reachable
+only from the CS VPN — the wider BYU network reaches rigel's web ports and
+nothing else. There is no internet-facing login surface for it to defend.</li>
+<li>Everything a password could be guessed against sits behind something else:
+Coolify's UI is OAuth-gated, and the classroom LLM has no auth but is not
+reachable off the CS VPN.</li>
+<li>The failure it could cause is worse than the one it prevents here. A looping
+deploy script or a mistyped key bans your own address, and recovering a
+self-banned admin on a GPU host used by a class means console access.</li>
+</ul>
+<p><strong>Revisit if</strong> <code>ssh</code> ever becomes reachable from the wider network or the
+internet, which is the condition that makes it worth the lockout risk. If you
+do enable it, do it with a known-good session already open and
+<code>ignoreip</code> set for the networks you administer from.</p>
+<p>The public-webhook path arrives via CS IT's HAProxy → <code>:443</code>, so nothing on
+rigel needs opening for internet ingress.</p>
+<hr />
+<h2 id="4-install-nvidia-container-toolkit"><a class="header" href="#4-install-nvidia-container-toolkit">4. Install NVIDIA Container Toolkit</a></h2>
+<p>Docker needs to hand GPUs to containers. Install the NVIDIA Container Toolkit before Coolify so the runtime is available when Coolify's Docker engine starts.</p>
+<pre><code class="language-bash">distribution=$(. /etc/os-release; echo $ID$VERSION_ID)
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
+  gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' \
+  | tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+apt-get update
+apt-get install -y nvidia-container-toolkit
+nvidia-ctk runtime configure --runtime=docker
+systemctl restart docker
+
+# Verify:
+docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
+</code></pre>
+<p>That last command should list all four A6000s. If it fails, Coolify's GPU flags won't work — fix it before continuing.</p>
+<hr />
+<h2 id="5-install-coolify"><a class="header" href="#5-install-coolify">5. Install Coolify</a></h2>
+<p>Coolify ships a one-line installer. <strong>Give it Docker's address pool</strong>: left to
+itself it sets <code>10.0.0.0/8</code>, which collides with BYU's own addresses (§5a).</p>
+<pre><code class="language-bash">env DOCKER_ADDRESS_POOL_BASE=172.20.0.0/14 DOCKER_ADDRESS_POOL_SIZE=24 \
+  bash -c 'curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash'
+</code></pre>
+<p>Then put the default bridge (<code>docker0</code>) outside BYU's range too. The installer
+doesn't set this one:</p>
+<pre><code class="language-bash">sudo cp /etc/docker/daemon.json /etc/docker/daemon.json.bak
+sudo jq '.bip = "172.24.0.1/24"' /etc/docker/daemon.json.bak | sudo tee /etc/docker/daemon.json
+sudo systemctl restart docker
+ip -4 route | grep '^10\.0\.'      # must print nothing
+</code></pre>
+<p>First-boot flow (open <code>http://rigel.cs.byu.edu:8000</code> from the VPN):</p>
+<ol>
+<li>Create the admin (root) account.</li>
+<li>Skip the "connect a server" step — Coolify defaults to <code>localhost</code>, which is what we want.</li>
+<li>In <strong>Settings → Instance</strong>, set the "Instance Domain" to <code>ml-capstone.cs.byu.edu</code>. Coolify uses this when generating per-app subdomains.</li>
+<li>Enable "Force HTTPS."</li>
+</ol>
+<h3 id="5a-dockers-address-pool-must-stay-out-of-10x"><a class="header" href="#5a-dockers-address-pool-must-stay-out-of-10x">5a. Docker's address pool must stay out of 10.x</a></h3>
+<p>Every Coolify app gets its own Docker network, one /24 from Docker's
+<code>default-address-pools</code>, and rigel adds a route for each. BYU campus and VPN
+clients also have 10.x addresses. If Docker's pool is in 10.x, a client whose
+address falls inside one of rigel's networks gets its replies sent into that
+container network instead of back out, and every app times out for them, with
+no error anywhere. Which clients fail depends on the address they're handed,
+and the broken range grows with every new app. Coolify's installer defaults to
+<code>10.0.0.0/8</code>, so this has to be set deliberately.</p>
+<div class="table-wrapper"><table><thead><tr><th>Setting in <code>/etc/docker/daemon.json</code></th><th>Value</th><th>Room</th></tr></thead><tbody>
+<tr><td><code>default-address-pools</code></td><td><code>[{"base": "172.20.0.0/14", "size": 24}]</code></td><td>1,024 networks</td></tr>
+<tr><td><code>bip</code> (docker0)</td><td><code>172.24.0.1/24</code></td><td></td></tr>
+</tbody></table>
+</div>
+<p><strong>What keeps it, and what doesn't:</strong></p>
+<ul>
+<li><strong>Kept:</strong> Docker package upgrades, Coolify upgrades, and re-running Coolify's installer on the same machine (it keeps an existing pool unless run with <code>DOCKER_POOL_FORCE_OVERRIDE=true</code>).</li>
+<li><strong>Lost:</strong> an OS reinstall or a new server. Use the install command in §5.</li>
+</ul>
+<p><strong>Check it after any change to rigel.</strong> This must print nothing:</p>
+<pre><code class="language-bash">ip -4 route | grep '^10\.0\.'
+</code></pre>
+<p><strong>Moving an existing install.</strong> Changing <code>daemon.json</code> only affects networks
+created afterwards, so the existing ones have to be recreated. That can be done
+live, network by network: disconnect the containers, recreate the network with
+the same name and labels, and reconnect them with the same aliases. Each app is
+down for a few seconds and nothing is rebuilt. The Docker restart that applies
+the new pool restarts every container once. Afterwards, rebuild the Whisper
+container (§6b), because its port is bound to docker0's address.</p>
+<hr />
+<h2 id="6-install-litellm-alongside"><a class="header" href="#6-install-litellm-alongside">6. Install LiteLLM Alongside</a></h2>
+<p>LiteLLM does not conflict with Coolify — different port, different Docker network. Run it as an independent Docker container so it survives Coolify upgrades.</p>
+<p>Create <code>/etc/litellm/config.yaml</code>. Both GPU hosts serve the chat pool; only
+pollux serves autocomplete (castor's 4090 was reallocated on 2026-10-19 —
+see <a href="#13-gpu-allocation-policy">GPU Allocation Policy</a>):</p>
+<pre><code class="language-yaml">model_list:
+  - model_name: classroom-chat
+    litellm_params:
+      model: openai/Qwen/Qwen3-Coder-Next-FP8
+      api_base: http://castor.cs.byu.edu:8000/v1
+      api_key: sk-noauth
+  - model_name: classroom-chat
+    litellm_params:
+      model: openai/Qwen/Qwen3-Coder-Next-FP8
+      api_base: http://pollux.cs.byu.edu:8000/v1
+      api_key: sk-noauth
+  - model_name: classroom-autocomplete
+    litellm_params:
+      model: openai/Qwen/Qwen2.5-Coder-7B
+      api_base: http://pollux.cs.byu.edu:8010/v1
+      api_key: sk-noauth
+
+litellm_settings:
+  turn_off_message_logging: true   # keep student prompts out of logs
+</code></pre>
+<blockquote>
+<p><strong>Pin the version; do not use <code>main-stable</code>.</strong> We ran <code>main-stable</code> until
+2026-10-21 and it left us on 1.92.0, which is inside the affected range of
+<a href="https://github.com/advisories/GHSA-3cv6-jpf6-8222">CVE-2026-84377</a> (SSRF +
+provider-credential exfiltration via unvalidated request-body routing
+parameters; fixed in 1.92.2). A floating tag also means <code>docker restart</code> can
+silently change the running version — which matters more than usual after the
+2026-10-21 supply-chain compromise of litellm 1.107.0 on PyPI. Pin, and bump
+deliberately.</p>
+</blockquote>
+<p>Then:</p>
+<pre><code class="language-bash">docker run -d --name litellm \
+  --restart=always \
+  -p 4000:4000 \
+  -v /etc/litellm/config.yaml:/app/config.yaml \
+  ghcr.io/berriai/litellm:v1.92.2 \
+  --config /app/config.yaml
+</code></pre>
+<p>Verify from a workstation on VPN: <code>curl http://ml-capstone.cs.byu.edu:4000/v1/models</code> should list <code>classroom-chat</code>, <code>classroom-autocomplete</code>, and <code>classroom-transcribe</code>.</p>
+<blockquote>
+<p><strong>Autocomplete has no redundancy right now.</strong> The chat pool has two entries,
+so LiteLLM fails over silently when one host drops. <code>classroom-autocomplete</code>
+has a single entry, so if pollux's FIM engine stops, ghost-text stops
+class-wide — there is nothing to fail over to. Chat is unaffected. To put
+castor back in the pool, restart its FIM engine and re-add the
+<code>castor.cs.byu.edu:8010</code> block.</p>
+</blockquote>
+<h3 id="6b-speech-to-text-behind-the-same-proxy"><a class="header" href="#6b-speech-to-text-behind-the-same-proxy">6b. Speech-to-text behind the same proxy</a></h3>
+<p>LiteLLM already exposes <code>/v1/audio/transcriptions</code>; it only needs a model
+registered against it. The transcriber itself runs on rigel's own GPUs rather
+than on castor/pollux — Whisper is small enough that it does not warrant a
+vLLM host.</p>
+<p>Everything is handled by <a href="scripts/install-whisper-service.sh"><code>scripts/install-whisper-service.sh</code></a>,
+which is idempotent and safe to re-run:</p>
+<pre><code class="language-bash">scripts/install-whisper-service.sh            # install; prompts before restarting LiteLLM
+scripts/install-whisper-service.sh --check    # read-only state report
+scripts/install-whisper-service.sh --rollback # remove the entry, restart, drop the container
+</code></pre>
+<p>What it stands up:</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th></tr></thead><tbody>
+<tr><td>Container</td><td><code>whisper</code>, image <code>ghcr.io/speaches-ai/speaches:latest-cuda</code></td></tr>
+<tr><td>Engine</td><td>faster-whisper (CTranslate2) — the same engine the Python library uses</td></tr>
+<tr><td>Model</td><td><code>Systran/faster-whisper-large-v3</code>, cached in the <code>whisper-hf-cache</code> named volume</td></tr>
+<tr><td>GPU</td><td>device 0; ~4.4 GB resident, unloaded after idle</td></tr>
+<tr><td>Bind</td><td><code>172.24.0.1:8020</code> — the docker bridge, <strong>not</strong> loopback and not the VPN</td></tr>
+<tr><td>Alias</td><td><code>classroom-transcribe</code> in <code>/etc/litellm/config.yaml</code></td></tr>
+</tbody></table>
+</div>
+<p>The config entry it inserts:</p>
+<pre><code class="language-yaml">  - model_name: classroom-transcribe
+    litellm_params:
+      model: openai/Systran/faster-whisper-large-v3
+      api_base: http://172.24.0.1:8020/v1
+      api_key: sk-noauth
+    model_info:
+      mode: audio_transcription
+</code></pre>
+<blockquote>
+<p><strong>The binding is the part that bites.</strong> Publishing the container on
+<code>127.0.0.1:8020</code> looks more secure and is what you reach for first, but a
+host loopback port is invisible from inside another container — LiteLLM gets
+<code>ECONNREFUSED</code>. It has to be the bridge address, which the script discovers
+from <code>docker0</code> rather than hardcoding. Binding to the bridge is still not
+VPN-reachable, so students can only arrive through LiteLLM.</p>
+</blockquote>
+<blockquote>
+<p><strong>When docker0's address changes</strong> (moving it to <code>172.24.0.1</code>, §5a), Whisper
+can't bind to the old address, and LiteLLM's entry still points there.
+Rerunning the script alone won't fix it: the script leaves an existing config
+entry alone. Instead, run <code>--rollback</code>, then install again. The model cache
+volume is kept, so nothing is downloaded twice. The examples below use
+whichever address <code>docker0</code> has (<code>ip -4 addr show docker0</code>).</p>
+</blockquote>
+<p>The script validates the edited YAML and restores its timestamped backup
+<strong>without restarting LiteLLM</strong> if the file does not parse, so a typo cannot
+take the chat service down. It also proves LiteLLM can reach the container
+before touching the config at all.</p>
+<p><strong>Swapping the model.</strong> The image carries a registry of ~640 ASR models
+(<code>curl http://172.24.0.1:8020/v1/registry?task=automatic-speech-recognition</code>),
+pulled on demand by Hugging Face id. To move to a faster or language-specific
+one, download it and repoint the alias:</p>
+<pre><code class="language-bash">curl -X POST http://172.24.0.1:8020/v1/models/deepdml/faster-whisper-large-v3-turbo-ct2
+sudo $EDITOR /etc/litellm/config.yaml     # change the `model:` line
+sudo docker restart litellm
+</code></pre>
+<p><code>large-v3-turbo</code> is roughly 4× faster at close to the same English quality.
+Nothing in the student-facing contract changes — the alias is stable.</p>
+<hr />
+<h2 id="7-public-entry-via-cs-it-haproxy"><a class="header" href="#7-public-entry-via-cs-it-haproxy">7. Public entry via CS IT HAProxy</a></h2>
+<p>The only path from the public internet to rigel is CS IT's shared HAProxy doing SNI passthrough on <code>haproxy1.cs.byu.edu:443 → rigel:443</code>. GitHub webhooks + the Coolify deploy API arrive that way; everything else on rigel stays VPN-only.</p>
+<p>Setup is entirely on the CS IT side — no cloudflared, no tunnel daemon, no inbound rules on rigel beyond the campus-CIDR <code>:443</code> allow. Request via a ticket; templates in <a href="tickets/README.html"><code>tickets/README.md</code></a>.</p>
+<p><strong>Checking the path without pushing anything.</strong> On the CS VPN, DNS hands back
+rigel's internal address, so an ordinary <code>curl</code> tests the internal route rather
+than the public one. Force the public hop instead:</p>
+<pre><code class="language-bash">curl -sS -o /dev/null -w '%{http_code}\n' \
+  --resolve ml-capstone.cs.byu.edu:443:$(dig +short @8.8.8.8 ml-capstone.cs.byu.edu | tail -1) \
+  -X POST -H 'Content-Type: application/json' -d '{}' \
+  https://ml-capstone.cs.byu.edu/webhooks/source/github/events/manual
+</code></pre>
+<p>A <code>200</code> means the public name, HAProxy, Traefik and Coolify are all still
+wired together; an empty body is rejected harmlessly further in. This matters
+after any DNS change, because the public record for this one hostname is what
+GitHub resolves — lose it and deploys stop silently, with the failure visible
+only in the GitHub App's <strong>Advanced → Recent Deliveries</strong>.</p>
+<p>Verified this way on 2026-10-21 after the address-pool move: <code>POST</code> returned
+<code>200</code>, <code>GET</code> returned <code>302</code>.</p>
+<p>What CS IT applies on their end (for reference / if a rule ever needs debugging):</p>
+<pre><code># HAProxy frontend (SSL passthrough — HAProxy never terminates)
+frontend ml_capstone_sni
+    bind *:443
+    mode tcp
+    tcp-request inspect-delay 5s
+    tcp-request content accept if { req_ssl_hello_type 1 }
+
+    use_backend ml_capstone if { req_ssl_sni -m end .ml-capstone.cs.byu.edu }
+    use_backend ml_capstone if { req_ssl_sni ml-capstone-admin.cs.byu.edu }
+
+backend ml_capstone
+    mode tcp
+    server rigel rigel.cs.byu.edu:443 send-proxy-v2
+</code></pre>
+<p>Verify from anywhere on the public internet:</p>
+<pre><code class="language-bash">curl -I https://ml-capstone.cs.byu.edu/webhooks/source/github/events
+# Expect: 405 Method Not Allowed (GitHub POSTs; GET is fine as a reachability check)
+
+curl -I https://ml-capstone-admin.cs.byu.edu/
+# Expect: 200 or Coolify login redirect
+</code></pre>
+<p>Historical note: the original design used a Cloudflare Tunnel (<code>cloudflared</code> on rigel). That was retired 2026-08-07 in favor of the HAProxy path because CS IT already runs HAProxy for other campus services, and it removes an external dependency (Cloudflare account + DNS delegation) that the rest of the classroom stack didn't need.</p>
+<hr />
+<h2 id="8-tls-termination--cs-provided-csbyuedu-wildcard-cert"><a class="header" href="#8-tls-termination--cs-provided-csbyuedu-wildcard-cert">8. TLS termination — CS-provided <code>*.cs.byu.edu</code> wildcard cert</a></h2>
+<p>CS IT issues a DigiCert wildcard for <code>*.cs.byu.edu</code> and hands it to us as <code>fullchain.pem</code> + <code>key</code>. Traefik (inside Coolify) terminates TLS directly from those files. No Let's Encrypt, no DNS-01, no API tokens.</p>
+<p><strong>Cert files on rigel:</strong></p>
+<pre><code>/data/coolify/proxy/certs/star_cs_byu_edu.fullchain.pem
+/data/coolify/proxy/certs/star_cs_byu_edu.key
+</code></pre>
+<p><strong>Traefik dynamic config</strong> (Coolify UI → Settings → Advanced → Custom Traefik Dynamic Configuration):</p>
+<pre><code class="language-yaml">tls:
+  certificates:
+    - certFile: /traefik/certs/star_cs_byu_edu.fullchain.pem
+      keyFile:  /traefik/certs/star_cs_byu_edu.key
+      stores: [default]
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /traefik/certs/star_cs_byu_edu.fullchain.pem
+        keyFile:  /traefik/certs/star_cs_byu_edu.key
+</code></pre>
+<p>Restart Coolify's proxy after wiring the cert in: <code>docker restart coolify-proxy</code>.</p>
+<p><strong>Coverage.</strong> The wildcard covers one level under <code>cs.byu.edu</code>, so it covers <code>ml-capstone-admin.cs.byu.edu</code> (single level) but not two-level names like <code>&lt;team&gt;.ml-capstone.cs.byu.edu</code>. Consequences:</p>
+<ul>
+<li>Coolify admin UI, LiteLLM, GitHub webhooks — all get HTTPS.</li>
+<li>Student apps at <code>&lt;team&gt;.ml-capstone.cs.byu.edu</code> — serve <strong>HTTPS</strong>, terminated by Traefik using the <code>*.ml-capstone.cs.byu.edu</code> wildcard CS IT issued on 2026-10-08. The cert pair lives in <code>/traefik/certs/</code> and is declared in <code>/traefik/dynamic/ml-capstone-wildcard.yaml</code>, which the file provider watches, so installing it needed no restart. A single wildcard matches one label, so <code>www.&lt;repo&gt;.ml-capstone.cs.byu.edu</code> is <strong>not</strong> covered.</li>
+</ul>
+<p><strong>Renewal.</strong> Cert valid 2026-07-09 → 2027-01-23. Set a mid-January calendar reminder; CS IT will re-issue and hand off new files. Drop them in place and <code>docker restart coolify-proxy</code>.</p>
+<hr />
+<h2 id="9-create-the-github-app"><a class="header" href="#9-create-the-github-app">9. Create the GitHub App</a></h2>
+<ol>
+<li>In your class GitHub org, go to <strong>Settings → Developer settings → GitHub Apps → New GitHub App</strong>.</li>
+<li><strong>Name:</strong> <code>byu-ml-capstone-coolify</code> (the name referenced everywhere else in these docs; must be globally unique across GitHub — pick a variant if it's taken).</li>
+<li><strong>Homepage URL:</strong> <code>https://ml-capstone.cs.byu.edu</code></li>
+<li><strong>Webhook URL:</strong> <code>https://ml-capstone.cs.byu.edu/webhooks/source/github/events</code> (the exact path is in Coolify's UI when you create a GitHub source in §10)</li>
+<li><strong>Webhook secret:</strong> generate a random string; save it.</li>
+<li><strong>Permissions</strong> (Repository):
+<ul>
+<li>Contents: Read-only</li>
+<li>Metadata: Read-only</li>
+<li>Pull requests: Read-only</li>
+<li>Webhooks: Read &amp; write</li>
+<li>Deployments: Read &amp; write (optional)</li>
+</ul>
+</li>
+<li><strong>Subscribe to events:</strong> Push, Pull request.</li>
+<li><strong>Make the App public</strong> (so students can self-install without admin intervention):
+<ul>
+<li>The App is created as <strong>Private</strong> by default — installable only by the App owner. Students trying to install it will see "This is a private GitHub App" with no button.</li>
+<li>After creation: sign in as the App owner → https://github.com/organizations/byu-ml-capstone/settings/apps/byu-ml-capstone-coolify → <strong>Advanced</strong> tab (leftmost sidebar of that page) → scroll to red-bordered <strong>Danger Zone</strong> at the bottom → click <strong>"Make this GitHub App public"</strong> → confirm.</li>
+<li>Verify: incognito window at https://github.com/apps/byu-ml-capstone-coolify should now show an <strong>Install</strong> button, not "private GitHub App."</li>
+</ul>
+</li>
+<li>Create the app → generate a <strong>private key</strong> (download the <code>.pem</code>).</li>
+<li>Note the <strong>App ID</strong> and <strong>Client ID</strong>.</li>
+<li><strong>Install App</strong> → install it on the class org, "All repositories."</li>
+</ol>
+<hr />
+<h2 id="10-wire-the-github-app-into-coolify"><a class="header" href="#10-wire-the-github-app-into-coolify">10. Wire the GitHub App into Coolify</a></h2>
+<p>Coolify UI: <strong>Sources → New → GitHub App</strong>. Fill in App ID, Client ID, Client Secret, Webhook Secret, and paste the <code>.pem</code> contents. Coolify validates against the GitHub API. Green check = ready.</p>
+<hr />
+<h2 id="11-team--user-model--self-serve-teams-via-github-oauth"><a class="header" href="#11-team--user-model--self-serve-teams-via-github-oauth">11. Team &amp; User Model — self-serve teams via GitHub OAuth</a></h2>
+<p>Students sign in via GitHub OAuth, land in a pre-provisioned team, and create their own Projects, Environments, and Applications through the UI. The instructor's ongoing per-student workload is (in the steady state) zero — the term-start provisioning scripts do all the setup.</p>
+<p>Rationale: GitHub OAuth eliminates the password-management friction of individual accounts. Students click "Sign in with GitHub" once, no new password. Self-serve is roughly as easy to set up as admin-provisioning would be, but has much better long-term properties (nearly zero ongoing professor workload, higher educational value, matches industry pattern).</p>
+<h3 id="admin-accounts"><a class="header" href="#admin-accounts">Admin accounts</a></h3>
+<ul>
+<li><strong>1 root/admin account</strong> for the instructor (created during first-boot with email + password). This account survives OAuth linking — instructor's GitHub email matches the admin row → OAuth just becomes an alternate credential.</li>
+<li><strong>TA accounts</strong> created the same way as students below (a row in the roster CSV), or manually via Coolify UI → <strong>Team → Members</strong> if you want them in the root team specifically.</li>
+<li><strong>Registration Allowed = OFF</strong> (Coolify UI → Settings → Advanced). This is what makes OAuth invite-only: only email addresses already in the <code>users</code> table can complete sign-in. An unknown GitHub account gets "Registration is disabled" at the OAuth handoff.</li>
+</ul>
+<h3 id="provisioning-student-teams-bulk"><a class="header" href="#provisioning-student-teams-bulk">Provisioning student teams (bulk)</a></h3>
+<p>Use <a href="scripts/provision-teams.sh"><code>scripts/provision-teams.sh</code></a>. One invocation reads a roster CSV and writes to Coolify's Postgres directly (Coolify's REST API doesn't cover team or user creation as of v4.2):</p>
+<pre><code class="language-bash"># On rigel, in the docker group (or with sudo):
+./scripts/provision-teams.sh                                         # dry-run against newest roster-*.csv
+./scripts/provision-teams.sh --check-schema                          # inspect DB layout first
+./scripts/provision-teams.sh --roster roster-2026-fall.csv --apply   # execute
+</code></pre>
+<p>Per row, the script (idempotently) creates:</p>
+<ol>
+<li><strong><code>users</code></strong> row (email lowercased — Coolify issue #6291 duplicates on case mismatch)</li>
+<li><strong><code>teams</code></strong> row with <code>personal_team=false</code></li>
+<li><strong><code>team_user</code></strong> pivot with <code>role='admin'</code> (v4.2 broke the <code>member</code> role)</li>
+<li><strong><code>servers</code></strong> row named <code>ml-capstone</code> pointing at <code>host.docker.internal</code> (Coolify talks to Docker via the socket, not SSH)</li>
+<li><strong><code>server_settings</code></strong> row with <code>is_reachable=true</code>, <code>is_usable=true</code>, <code>is_sentinel_enabled=false</code>, plus an encrypted placeholder <code>sentinel_token</code> — without any of these the dashboard 500s</li>
+<li><strong><code>standalone_dockers</code></strong> destination on the <code>coolify</code> network — without this, the Application-create flow shows "Select a destination" with no options</li>
+</ol>
+<p>The script also deletes any redundant personal team that Coolify auto-creates on a roster user's first OAuth signup (the "No servers found" trap team). See its header docstring for the full preflight/plan/apply/verify flow.</p>
+<p>CSV shape (headers required): <code>team_name,email,name,github_username</code>. Multiple rows per email = user in multiple teams (this is how the "individual sandbox in Phase 1 → group team in Phase 2" arc works — Phase-2 rows get appended, Phase-1 rows stay).</p>
+<p>Naming convention:</p>
+<ul>
+<li>Phase 1 (individual sandboxes): <code>&lt;student-first-name&gt; Sandbox</code> — e.g., <code>Alice Sandbox</code></li>
+<li>Phase 2 (groups): <code>Group N</code> — e.g., <code>Group 1</code></li>
+</ul>
+<h3 id="what-students-do-in-the-ui"><a class="header" href="#what-students-do-in-the-ui">What students do (in the UI)</a></h3>
+<p>See <a href="student-guide.html"><code>student-guide.md</code></a> → Part B → <strong>Setup: Sign in and create your Coolify Applications</strong> for the 11-step lab. Summary:</p>
+<ol>
+<li>Sign in via GitHub OAuth at <code>https://ml-capstone-admin.cs.byu.edu</code></li>
+<li>Switch to their team via the team switcher</li>
+<li>Use <code>github.com/byu-ml-capstone/hello-world-app</code> "Use this template" → owner = <code>byu-ml-capstone</code>, name = <code>&lt;team-slug&gt;-&lt;app&gt;</code>. The org-level <code>byu-ml-capstone-coolify</code> App installation already covers the new repo automatically — no per-repo App install step.</li>
+<li>Create Project → prod + staging Environments → one Application per Environment (both point at the same repo, different branches: <code>main</code> for prod, <code>staging</code> for staging)</li>
+<li>Assign domain per team's convention (<code>&lt;team-slug&gt;.ml-capstone.cs.byu.edu</code> and <code>&lt;team-slug&gt;-staging.ml-capstone.cs.byu.edu</code>)</li>
+<li>Turn off Coolify's auto-deploy on both Applications (GitHub Actions drives the deploys instead)</li>
+<li>Copy Deploy Webhook URLs + create an API token → paste as GitHub Actions secrets</li>
+</ol>
+<h3 id="cleanup--reset-for-term-end-or-mid-term"><a class="header" href="#cleanup--reset-for-term-end-or-mid-term">Cleanup / reset (for term-end or mid-term)</a></h3>
+<p>Not scripted yet — Phase 21 pending. For now: <code>docker exec coolify-db psql</code> and delete the team rows, or use the Coolify UI's Team → Danger Zone → Delete Team button.</p>
+<hr />
+<h2 id="12-per-resource-limits--set-these-before-any-deploys"><a class="header" href="#12-per-resource-limits--set-these-before-any-deploys">12. Per-Resource Limits — Set These Before Any Deploys</a></h2>
+<p>Without limits, one runaway container OOMs the box and everyone loses LiteLLM + Coolify.</p>
+<p><strong>Global Docker defaults</strong> — <code>/etc/docker/daemon.json</code>:</p>
+<pre><code class="language-json">{
+  "default-ulimits": {
+    "nofile": { "Name": "nofile", "Hard": 4096, "Soft": 4096 }
+  },
+  "log-driver": "json-file",
+  "log-opts": { "max-size": "10m", "max-file": "3" },
+  "default-address-pools": [{ "base": "172.20.0.0/14", "size": 24 }],
+  "bip": "172.24.0.1/24"
+}
+</code></pre>
+<p>Then <code>systemctl restart docker</code>. Keep the last two keys in any rewrite of this
+file: they keep Docker out of BYU's 10.x addresses (§5a).</p>
+<p><strong>Per-application resource limits in Coolify</strong> — set on each student's Application resource under <strong>Configuration → Resource Limits</strong>:</p>
+<ul>
+<li>Memory: 4 GB (adjust to <code>total_ram / expected_concurrent_apps</code>)</li>
+<li>CPU: 2 cores</li>
+<li>Disk: 20 GB (persistent volumes count against this)</li>
+</ul>
+<p>Under the self-serve model (§11), each team is its own quota domain. Set the same defaults on every team's Application resources. Coolify doesn't currently offer team-level quotas that flow down to Applications automatically — students set them per-Application during the onboarding lab, or you extend <code>provision-teams.sh</code> to seed shared env vars that Applications inherit.</p>
+<p><strong>Disk pressure</strong> — weekly prune:</p>
+<pre><code class="language-bash">0 3 * * 0  docker system prune -af --filter "until=168h" --volumes
+</code></pre>
+<hr />
+<h2 id="13-gpu-allocation-policy"><a class="header" href="#13-gpu-allocation-policy">13. GPU Allocation Policy</a></h2>
+<p><code>rigel</code> has 4× A6000. A6000 doesn't support MIG, so it's one container per GPU at a time. Decide the policy up front:</p>
+<p><strong>Recommended default: one GPU per team, first-come-first-served, "please stop when done."</strong> Coolify won't schedule this — it just fails the container start if all GPUs are claimed. Communicate the etiquette in the student guide.</p>
+<p>For a student to opt into GPU access, they add this to their app's Docker Compose:</p>
+<pre><code class="language-yaml">services:
+  app:
+    image: ...
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1              # or `device_ids: ["0"]` to pin
+              capabilities: [gpu]
+</code></pre>
+<p>Coolify will pass <code>--gpus 1</code> to Docker on deploy. If all GPUs are taken, the container fails to start — check with <code>nvidia-smi</code> to see who's using what.</p>
+<p><strong>Optional hardening if the free-for-all gets messy:</strong></p>
+<ul>
+<li>Track claims manually in a shared doc (student, GPU index, deadline).</li>
+<li>Limit GPU deploys to specific teams (mark some student teams as "GPU-eligible" in your onboarding notes).</li>
+<li>For long-running training jobs, require a scheduled window and enforce with a stop-and-remove cron.</li>
+</ul>
+<hr />
+<h2 id="14-student-facing-flow"><a class="header" href="#14-student-facing-flow">14. Student-Facing Flow</a></h2>
+<p>Under the self-serve model (§11), students DO touch Coolify — just once, during the ~15-minute onboarding lab in <a href="student-guide.html"><code>student-guide.md</code></a> → Part B → Setup. After that, day-to-day "deploying" is <code>git push</code>. What that looks like end-to-end:</p>
+<ol>
+<li>Student edits code locally on a feature branch, <code>git push</code> to their fork/branch on <code>github.com/byu-ml-capstone/&lt;team-slug&gt;-&lt;app&gt;</code>.</li>
+<li>GitHub Actions runs unit tests + docker build on any push. On green, if the branch is <code>staging</code> or <code>main</code>, Actions fires the corresponding Coolify Deploy Webhook via <code>curl -X POST</code>.</li>
+<li>Coolify pulls, builds, runs the container, then polls <code>/health</code>. If <code>/health</code> returns 2xx, the new container takes over; otherwise the previous version keeps serving.</li>
+<li>Student hits their app URL — <code>&lt;team-slug&gt;-staging.ml-capstone.cs.byu.edu</code> or <code>&lt;team-slug&gt;.ml-capstone.cs.byu.edu</code> — and sees the update.</li>
+</ol>
+<p><strong>When a deploy fails</strong>, students have two feedback channels:</p>
+<ul>
+<li><strong>GitHub Actions tab</strong> shows unit test / docker build failures immediately (no VPN required to see them). This is the first line of defense — most issues surface here before Coolify gets involved.</li>
+<li><strong>Coolify Deployments tab</strong> (their team's Application → Deployments) shows Coolify-side failures: build errors, health-check failures, container crashes. Students can read logs themselves; no admin surfacing needed.</li>
+</ul>
+<p><strong>Env vars / secrets</strong> go directly into each Application's <strong>Configuration → Environment Variables</strong> in Coolify. The onboarding lab (student-guide Step 10) walks through this. Repo secrets (webhook URLs, <code>COOLIFY_API_TOKEN</code>) live in GitHub Actions secrets; app-runtime secrets (LLM keys, DB creds) live in Coolify env vars — never commit either to the repo.</p>
+<p><strong>GPU access</strong> is opt-in via <code>docker-compose.yaml</code> in the student's repo — see §13.</p>
+<hr />
+<h2 id="15-backups"><a class="header" href="#15-backups">15. Backups</a></h2>
+<p>Nightly Coolify state dump:</p>
+<pre><code class="language-bash"># /etc/cron.daily/coolify-backup
+docker exec coolify-db pg_dump -U coolify coolify | \
+  gzip &gt; /var/backups/coolify/coolify-$(date +\%F).sql.gz
+find /var/backups/coolify -mtime +14 -delete
+</code></pre>
+<p>Student app <em>data</em> is a per-app problem — students configure backups for their own Postgres / volumes through Coolify's UI.</p>
+<hr />
+<h2 id="16-upgrade--teardown"><a class="header" href="#16-upgrade--teardown">16. Upgrade &amp; Teardown</a></h2>
+<p><strong>Upgrade Coolify:</strong> use <a href="scripts/upgrade-coolify.sh"><code>scripts/upgrade-coolify.sh</code></a> — it pins a
+version rather than taking whatever is latest, backs up Postgres and <code>/data/coolify</code> first and
+refuses to continue if the dump looks implausible, waits for <code>/api/health</code>, then verifies the PHP
+version, row counts for applications/teams/servers, student containers, Traefik, LiteLLM, and the
+patch marker. <code>--check</code> reports without changing anything; <code>--backup</code> stops after the backup.</p>
+<pre><code class="language-bash">sudo ./upgrade-coolify.sh --check            # report
+sudo ./upgrade-coolify.sh --backup           # backup only
+sudo ./upgrade-coolify.sh --apply            # default target: the 4.3.x patch line
+sudo ./upgrade-coolify.sh --apply --to 4.4.7
+</code></pre>
+<p>The UI's <strong>Settings → Update</strong> and re-running the installer both still work, but neither pins a
+version and neither takes a database backup before running migrations.</p>
+<p><strong>Post-install patches: none.</strong> This instance carried one local patch for
+<a href="https://github.com/coollabsio/coolify/issues/11449">coollabsio/coolify#11449</a>
+(<code>POST /applications/private-github-app</code> returning 404 for <code>is_system_wide</code>
+GitHub Apps on team-scoped tokens, which broke the terraform bonus lab) from
+2026-08-21 until 2026-10-21. <strong>It is retired.</strong> Upstream ships the fix as of
+4.3.24, confirmed two ways: the patch marker is present in the stock image, and
+the call itself was retested with a genuinely team-scoped token against the
+system-wide <code>byu-ml-capstone-coolify</code> App and returned <strong>HTTP 201</strong> where it
+used to return 404.</p>
+<p><code>scripts/repatch-coolify.sh</code> is deleted. Nothing needs reapplying after a
+Coolify upgrade any more — which also means a container recreate is no longer a
+silent way to break the terraform lab.</p>
+<blockquote>
+<p><strong>If a future upgrade regresses this</strong>, <code>scripts/upgrade-coolify.sh</code> reports
+the marker's presence in both the running container and the stock target
+image on every run, so a regression shows up before students hit it.</p>
+</blockquote>
+<p>History is tracked in <a href="tickets/README.html"><code>tickets/coolify-upstream/</code></a>.</p>
+<p><strong>End of semester:</strong></p>
+<ol>
+<li>Export team + resource list.</li>
+<li>Revoke the GitHub App's org installation (or leave it — it's harmless when no repos use it).</li>
+<li>Ask CS IT to disable the HAProxy SNI passthrough for the class hostnames if you want the public entry point closed.</li>
+<li><code>docker compose -f /data/coolify/source/docker-compose.yml down</code>.</li>
+<li>Snapshot <code>/data/coolify</code> if you want to preserve state.</li>
+<li>LiteLLM container is independent — leave it or <code>docker rm -f litellm</code>.</li>
+</ol>
+<hr />
+<h2 id="17-failure-modes"><a class="header" href="#17-failure-modes">17. Failure Modes</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Student push doesn't trigger deploy</td><td>GitHub webhook failed, HAProxy dropped the connection, or Actions job never fired the curl</td><td>GitHub Actions tab first; then GitHub App → Advanced → Recent Deliveries; then HAProxy diagnostic (see <a href="troubleshooting.html"><code>troubleshooting.md</code></a> "CS IT HAProxy returns EOF")</td></tr>
+<tr><td>Terraform bonus lab fails: <code>HTTP 404: Github App not found</code></td><td>Local patch for coollabsio/coolify#11449 got wiped by a Coolify update or container recreate</td><td><code>scripts/repatch-coolify.sh --apply</code> on rigel (see §16 "Post-install patches")</td></tr>
+<tr><td>Build fails with "no space left"</td><td>Docker build cache full</td><td>Run the prune cron manually</td></tr>
+<tr><td>All apps 502</td><td>Traefik crashed or Coolify updated mid-request</td><td><code>docker restart coolify-proxy</code></td></tr>
+<tr><td>TLS cert about to expire</td><td><code>*.cs.byu.edu</code> DigiCert expires 2027-01-23</td><td>File CS IT ticket for renewal; drop new files in <code>/data/coolify/proxy/certs/</code>; <code>docker restart coolify-proxy</code> (§8)</td></tr>
+<tr><td>LiteLLM unreachable</td><td>Container died, or the caller is not on the CS VPN</td><td><code>docker ps --filter name=litellm</code>; then check the VPN. Not a firewall matter: port 4000 is Docker-published, so host rules do not gate it (§3)</td></tr>
+<tr><td>GPU app fails: "could not select device driver"</td><td>NVIDIA Container Toolkit not installed / Docker not restarted</td><td>Re-run §4; <code>systemctl restart docker</code></td></tr>
+<tr><td>GPU app fails: "no such device" or "all GPUs in use"</td><td>Another container has claimed all 4</td><td><code>nvidia-smi</code> to identify; ask the holder to stop</td></tr>
+<tr><td>Some campus or <code>vpn.byu.edu</code> users time out on every app; <code>cs-vpn</code> works</td><td>The client's 10.x address is inside one of rigel's Docker networks, so the replies go into the container network</td><td><code>ip -4 route | grep '^10\.0\.'</code> prints lines: Docker's pool is back in 10.x. See §5a</td></tr>
+<tr><td><code>rigel</code> fully offline</td><td>Hardware / network / OS</td><td>Coolify + LiteLLM + apps all down until recovery. LLM users can fall back to direct-to-vLLM on castor/pollux — see the admin guide's emergency section</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="18-why-this-design"><a class="header" href="#18-why-this-design">18. Why This Design</a></h2>
+<ul>
+<li><strong>Coolify over Dokku:</strong> students learn the GitHub-webhook workflow that mirrors industry CI/CD.</li>
+<li><strong>GitHub App (for repo auth) + GitHub OAuth (for Coolify sign-in):</strong> one credential to manage per role, org-scoped, one-click revoke at term end. Students sign in via OAuth (invite-gated by roster) instead of maintaining separate Coolify passwords.</li>
+<li><strong>Self-serve teams over admin-provisioned Applications:</strong> students click "Sign in with GitHub," land in their pre-provisioned team, and create their own Projects/Environments/Applications. Instructor's ongoing per-student workload drops to near zero, and students learn the real Coolify workflow instead of a stripped-down admin-only view.</li>
+<li><strong>Coexists with LiteLLM on <code>rigel</code>:</strong> LiteLLM is CPU-cheap and needs no GPU. Coolify + LiteLLM + LLM proxy on one box is easier to reason about than two.</li>
+<li><strong>CS IT HAProxy as the public entry point</strong> (SNI passthrough, <code>haproxy1.cs.byu.edu:443 → rigel:443</code>): no cloudflared daemon on rigel, no external Cloudflare dependency, no DNS delegation. Only the GitHub webhook path and the Coolify deploy API are reachable from the internet; everything else stays VPN-only.</li>
+<li><strong>CS-provided <code>*.cs.byu.edu</code> wildcard cert</strong> instead of Let's Encrypt: no ACME challenge dance, no API tokens to rotate. Trade-off: single-level wildcard only, so student apps at <code>&lt;team&gt;.ml-capstone.cs.byu.edu</code> serve HTTP (VPN encrypts them anyway).</li>
+<li><strong>GPUs on <code>rigel</code> for student containers:</strong> students can deploy GPU-accelerated apps (inference, small training, media). A6000-per-container is a hard cap — plan a policy before demand outstrips supply.</li>
+<li><strong>No TLJH on rigel:</strong> rigel is Coolify + LiteLLM only. Classes that need JupyterHub use <code>castor</code>, <code>pollux</code>, or <code>vega</code>, which keep TLJH separate from the Coolify/webhook infra.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="onboarding.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="annual-maintenance.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="onboarding.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="annual-maintenance.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

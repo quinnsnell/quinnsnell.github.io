@@ -1,0 +1,927 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Lab — Your First Deploy - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html" class="active"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/lab-first-deploy.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lab--your-first-deploy"><a class="header" href="#lab--your-first-deploy">Lab — Your First Deploy</a></h1>
+<p>Take a repo from your laptop to a live URL, using Terraform to create the
+infrastructure and GitHub Actions to deploy it.</p>
+<p>Budget about 90 minutes. Work in order — each step depends on the one before.</p>
+<blockquote>
+<p><strong>The condensed version of Part B.</strong> <a href="student-guide.html"><code>student-guide.md</code></a> has
+the long explanations, every screenshot-level detail, and the Coolify-UI
+alternative if Terraform gives you trouble. Use this page to move; use the
+guide when you want to know <em>why</em>.</p>
+</blockquote>
+<hr />
+<h2 id="before-you-start"><a class="header" href="#before-you-start">Before you start</a></h2>
+<p>You should already have, from the pre-lab email:</p>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Accepted the <strong>byu-ml-capstone</strong> GitHub organization invitation</li>
+<li><input disabled="" type="checkbox"/>
+<strong>Docker Engine 25+</strong> — check with <code>docker version</code></li>
+<li><input disabled="" type="checkbox"/>
+Connected to the <strong>CS VPN</strong> (<code>cs-vpn.byu.edu</code> portal, <em>not</em> campus <code>vpn.byu.edu</code>)</li>
+</ul>
+<p>Missing any of those? Fix it first — every later step depends on them. In
+particular, you cannot create a repository inside the organization until you have
+accepted the invitation, so step 1 will fail.</p>
+<hr />
+<h2 id="1-create-your-repository-from-the-template"><a class="header" href="#1-create-your-repository-from-the-template">1. Create your repository from the template</a></h2>
+<p>Everyone starts from the same template repo and makes their own copy of it.</p>
+<p>If you already did this from the pre-lab email, just run the verification at the
+end of this step and move on.</p>
+<p>Go to the <strong>byu-ml-capstone</strong> organization on GitHub, open <strong>hello-world-app</strong>,
+and click the green <strong>Use this template</strong> → <strong>Create a new repository</strong>.</p>
+<p>Four things on that screen:</p>
+<p><strong>Owner — change it to <code>byu-ml-capstone</code>.</strong> It defaults to your personal account,
+which is wrong. A repo in the wrong place has no Coolify source and cannot deploy,
+and you will not find out until several steps later.</p>
+<p><strong>Repository name — be deliberate.</strong> This name is not throwaway:</p>
+<ul>
+<li>it becomes your app's web address — <code>alice-hello</code> → <code>alice-hello.ml-capstone.cs.byu.edu</code></li>
+<li>it becomes your Coolify project name</li>
+<li>it sits in a shared class organization that your instructor, your classmates, and later your group will all browse</li>
+</ul>
+<p>Use <code>&lt;yourname&gt;-&lt;appname&gt;</code>, lowercase, hyphens between words:</p>
+<div class="table-wrapper"><table><thead><tr><th>Good</th><th>Why</th></tr></thead><tbody>
+<tr><td><code>asmith-hello</code></td><td>identifies you, says what it is</td></tr>
+<tr><td><code>jdoe-sentiment</code></td><td>still obvious in a list of thirty</td></tr>
+<tr><td><code>mchen-recommender</code></td><td>reads fine as a URL</td></tr>
+</tbody></table>
+</div><div class="table-wrapper"><table><thead><tr><th>Avoid</th><th>Why</th></tr></thead><tbody>
+<tr><td><code>test</code>, <code>myapp</code>, <code>project1</code></td><td>meaningless in a list of thirty</td></tr>
+<tr><td><code>Alice_Hello App</code></td><td>spaces and capitals make an ugly URL</td></tr>
+<tr><td>in-jokes and handles</td><td>this is coursework in a shared org, and it ends up in a URL you will share</td></tr>
+</tbody></table>
+</div>
+<p>Treat it the way you would a repo at work, because that is the habit being built.</p>
+<p><strong>"Include all branches" — check this box.</strong> You need both <code>main</code> and <code>staging</code>.</p>
+<p><strong>Public or private</strong> — either is fine.</p>
+<p>Then click <strong>Create repository from template</strong>.</p>
+<p><strong>Verify before moving on.</strong> On your new repo's page, click the branch dropdown
+above the file list. You should see <strong>both</strong> <code>main</code> and <code>staging</code>. If you only see
+<code>main</code>, you missed the checkbox — delete the repo and redo this step now rather
+than working around it later.</p>
+<hr />
+<h2 id="2-sign-in-to-coolify-and-look-around"><a class="header" href="#2-sign-in-to-coolify-and-look-around">2. Sign in to Coolify and look around</a></h2>
+<p>Open <a href="https://ml-capstone-admin.cs.byu.edu">https://ml-capstone-admin.cs.byu.edu</a> and <strong>Sign in with GitHub</strong>.</p>
+<p><strong>Change nothing yet.</strong> You are here to confirm your account works and to see
+what empty looks like, so the difference after Terraform runs is obvious.</p>
+<p>Check three things:</p>
+<div class="table-wrapper"><table><thead><tr><th>Where</th><th>What you should see</th></tr></thead><tbody>
+<tr><td>Team switcher (top of the main panel)</td><td>your own team, e.g. <em>Alice Smith's Sandbox</em></td></tr>
+<tr><td>Left sidebar → <strong>Servers</strong></td><td>one server, <code>ml-capstone</code>, green "reachable"</td></tr>
+<tr><td>Left sidebar → <strong>Projects</strong></td><td>empty</td></tr>
+</tbody></table>
+</div>
+<p><strong>"Registration is disabled. Please contact the administrator"</strong> means the email
+on your GitHub account doesn't match your roster row. Tell the instructor which
+email to use — don't create a second account.</p>
+<hr />
+<h2 id="3-clone-your-repo-and-switch-to-staging"><a class="header" href="#3-clone-your-repo-and-switch-to-staging">3. Clone your repo and switch to staging</a></h2>
+<p>Clone <strong>your</strong> repo, not the template:</p>
+<pre><code class="language-bash">git clone https://github.com/byu-ml-capstone/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+git branch -a          # you should see main and staging
+git checkout staging
+</code></pre>
+<p>Everything in this lab happens on <code>staging</code>. You will promote to <code>main</code> at the
+end — that is the point of having two branches.</p>
+<p>If <code>git branch -a</code> shows only <code>main</code>, go back to step 1 — the <strong>Include all
+branches</strong> box was missed.</p>
+<h3 id="one-command-before-you-start-working"><a class="header" href="#one-command-before-you-start-working">One command before you start working</a></h3>
+<pre><code class="language-bash">git checkout -B staging main
+git push --force origin staging
+</code></pre>
+<p><strong>Do this now, before you change anything.</strong> When GitHub copies a template it
+gives each branch its own separate first commit, so <code>main</code> and <code>staging</code> start
+life with no shared history. Git will refuse to open a pull request between them
+later:</p>
+<pre><code>pull request create failed: The staging branch has no history in common with main
+</code></pre>
+<p>At this moment the two branches hold identical files, so rebuilding <code>staging</code> on
+top of <code>main</code> costs you nothing and loses nothing. Do it after you have real work
+on <code>staging</code> and it costs you that work.</p>
+<hr />
+<h2 id="4-start-the-local-build-now"><a class="header" href="#4-start-the-local-build-now">4. Start the local build now</a></h2>
+<p>The first build pulls images and installs dependencies and takes a few minutes.
+Start it, then keep reading — steps 5 and 6 happen in the browser while this runs.</p>
+<pre><code class="language-bash">export SERVICE_FQDN_FRONTEND=http://localhost:8000
+docker compose up -d --build
+</code></pre>
+<p>When it finishes, check all three services and run the smoke test:</p>
+<pre><code class="language-bash">docker compose ps        # frontend, backend, db — all "healthy"
+./smoke-test.sh
+</code></pre>
+<p><code>smoke-test.sh</code> builds, waits for <code>/health</code>, then exercises every endpoint. Green
+here means your code is sound; anything that fails now will also fail deployed,
+just slower.</p>
+<p><strong>The three services, and why it is worth copying the shape.</strong> This is the same
+frontend / backend / database split from lecture, and the template is wired the
+way your project should be:</p>
+<div class="table-wrapper"><table><thead><tr><th>Service</th><th>Reachable from</th><th>Holds</th></tr></thead><tbody>
+<tr><td><code>frontend</code></td><td>the internet, via Traefik</td><td>pages and the HTTP API. <strong>No</strong> database driver, no password, no SQL</td></tr>
+<tr><td><code>backend</code></td><td>only <code>frontend</code></td><td>your application logic, and the only code that touches the database</td></tr>
+<tr><td><code>db</code></td><td>only <code>backend</code></td><td>Postgres, on a volume that survives restarts</td></tr>
+</tbody></table>
+</div>
+<p>A request for data travels <code>frontend</code> → <code>backend</code> → <code>db</code> and the answer comes
+back the same way. Run <code>curl -s localhost:8000/notes</code> and you have exercised all
+three. The split matters for a reason that outlives the lab: the service exposed
+to the internet holds no credentials, so a bug there cannot leak or corrupt data
+it has no way to reach.</p>
+<p>Two files are worth reading before you start on your own project, because they
+are the pattern:</p>
+<ul>
+<li><code>backend/notes_dao.py</code> — every SQL statement in the repo lives here, so routes
+say <code>notes_dao.insert(body)</code> and never mention a cursor.</li>
+<li><code>frontend/backend_client.py</code> — every call to the backend lives here, so routes
+say <code>backend.create_note(body)</code> and never mention a URL.</li>
+</ul>
+<p>Each service has one file owning one boundary, which is why both <code>main.py</code> files
+stay short and why each test suite can mock at its own seam without a database
+or a running container.</p>
+<p>Poke at it by hand too:</p>
+<pre><code class="language-bash">curl -s localhost:8000/
+curl -s localhost:8000/health
+curl -s localhost:8000/ready            # frontend AND the backend behind it
+curl -s "localhost:8000/?lang=es"
+curl -s localhost:8000/time             # frontend -&gt; backend
+curl -s -X POST localhost:8000/notes -H 'Content-Type: application/json' -d '{"body":"hello"}'
+curl -s localhost:8000/notes            # frontend -&gt; backend -&gt; db
+</code></pre>
+<p>Leave it running or <code>docker compose down</code> — either is fine from here on.</p>
+<hr />
+<h2 id="5-create-a-coolify-api-token"><a class="header" href="#5-create-a-coolify-api-token">5. Create a Coolify API token</a></h2>
+<p>Terraform needs to authenticate as you.</p>
+<p><strong>Switch to your own team first.</strong> The token is scoped to whichever team is
+active when you create it, and that decides where your Applications get created.</p>
+<p>Then: click the <strong>Coolify</strong> wordmark (top-left) → **Keys &amp; Tokens → API Tokens →</p>
+<ul>
+<li>New Token**</li>
+</ul>
+<ul>
+<li>Description: <code>terraform</code></li>
+<li>Permissions: tick <strong><code>root</code></strong></li>
+<li>Expires: 1 year</li>
+<li>Create — then <strong>copy it immediately</strong>. Coolify shows it exactly once.</li>
+</ul>
+<blockquote>
+<p><strong>Why <code>root</code> and not <code>write</code> + <code>deploy</code>?</strong> Coolify's permissions are mutually
+exclusive in a way the UI does not explain: clicking <code>deploy</code> clears everything
+else you had selected, so you cannot hold <code>write</code> and <code>deploy</code> together.
+Terraform needs both — <code>write</code> to create your applications, <code>deploy</code> to trigger
+deploys — and <code>root</code> is the single option that covers them.</p>
+<p><code>root</code> here means root <strong>of your own team</strong>, not of the whole Coolify instance.
+Your token can only see and change your team's resources. If <code>root</code> is greyed
+out, you are looking at a team you are only a member of — switch to your own.</p>
+</blockquote>
+<hr />
+<h2 id="6-find-your-server-uuid"><a class="header" href="#6-find-your-server-uuid">6. Find your server UUID</a></h2>
+<p>Coolify gives <strong>every team its own server record</strong>. They are all named
+<code>ml-capstone</code> and all point at the same machine, but each has a different UUID —
+so there is no value that works for everyone, and you cannot copy a neighbour's.</p>
+<pre><code class="language-bash">curl -H "Authorization: Bearer &lt;your-token&gt;" \
+  https://ml-capstone-admin.cs.byu.edu/api/v1/servers
+</code></pre>
+<p>Exactly one server comes back. Copy its <code>uuid</code>.</p>
+<hr />
+<h2 id="7-fill-in-your-terraform-variables"><a class="header" href="#7-fill-in-your-terraform-variables">7. Fill in your Terraform variables</a></h2>
+<pre><code class="language-bash">cd terraform
+cp terraform.tfvars.example terraform.tfvars
+ls -la terraform.tfvars          # this is the file you edit
+</code></pre>
+<blockquote>
+<p><strong>Edit <code>terraform.tfvars</code>, not <code>terraform.tfvars.example</code>.</strong> The names differ by
+one word and your editor will happily open whichever you clicked last. Two things
+go wrong if you edit the example:</p>
+<ul>
+<li>Terraform does not read it, so your values are ignored. You get
+<code>401 Bad credentials</code> from GitHub or <code>Unauthenticated</code> from Coolify, and the
+token looks fine when you test it by hand — because the token <em>is</em> fine.</li>
+<li><code>terraform.tfvars.example</code> is <strong>tracked by git</strong>. <code>terraform.tfvars</code> is
+gitignored precisely because it holds live credentials. Put real tokens in the
+example and your next commit publishes them.</li>
+</ul>
+<p>If you have already done it: copy the example to <code>terraform.tfvars</code>, then
+<code>git checkout terraform/terraform.tfvars.example</code> to restore the placeholders.
+Check with <code>git diff</code> that the tracked file is back to <code>REPLACE_ME</code>, and if you
+already committed or pushed it, <strong>rotate both tokens</strong> — removing a secret in a
+later commit does not un-publish it.</p>
+</blockquote>
+<p>Open <code>terraform.tfvars</code> and set four values:</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Value</th></tr></thead><tbody>
+<tr><td><code>coolify_token</code></td><td>the token from step 5</td></tr>
+<tr><td><code>github_token</code></td><td>run <code>gh auth token</code>, or create a classic PAT with <code>repo</code> scope</td></tr>
+<tr><td><code>repo_name</code></td><td>just the repo name — <code>alice-hello</code>, <strong>not</strong> <code>byu-ml-capstone/alice-hello</code></td></tr>
+<tr><td><code>coolify_server_uuid</code></td><td>the UUID from step 6</td></tr>
+</tbody></table>
+</div>
+<h3 id="getting-your-github-token"><a class="header" href="#getting-your-github-token">Getting your GitHub token</a></h3>
+<p>Terraform needs it for two things: reading your repository, and writing the three
+GitHub Actions secrets onto it.</p>
+<p><strong>If you have the GitHub CLI</strong>, this is the whole job:</p>
+<pre><code class="language-bash">gh auth token
+</code></pre>
+<p>Copy the output — about 40 characters, starting <code>gho_</code> or <code>ghp_</code>.</p>
+<p><strong>From the GitHub website</strong>, if you don't have <code>gh</code>:</p>
+<ol>
+<li>Sign in to github.com and click your <strong>avatar</strong> (top right) → <strong>Settings</strong></li>
+<li>Scroll to the very bottom of the left sidebar → <strong>Developer settings</strong></li>
+<li><strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+<li><strong>Generate new token</strong> → <strong>Generate new token (classic)</strong></li>
+<li><strong>Note:</strong> <code>terraform-lab</code></li>
+<li><strong>Expiration:</strong> pick something that covers the course. If it lapses you can
+generate another — avoid "No expiration"</li>
+<li><strong>Scopes:</strong> tick the top-level <strong><code>repo</code></strong> box. That selects its sub-boxes and
+is all you need</li>
+<li>Scroll to the bottom → <strong>Generate token</strong></li>
+<li><strong>Copy it immediately.</strong> GitHub shows it exactly once. It starts <code>ghp_</code></li>
+</ol>
+<blockquote>
+<p>Using a <strong>fine-grained</strong> token instead? Give it access to your repo, then under
+<strong>Repository permissions</strong> set <strong>Secrets → Read and write</strong> (Metadata → Read is
+added for you). Classic tokens are simpler for this lab.</p>
+</blockquote>
+<h3 id="then-guard-the-file"><a class="header" href="#then-guard-the-file">Then guard the file</a></h3>
+<p><code>terraform.tfvars</code> now holds two live credentials — one that can change your
+Coolify team, one that can act on your GitHub repositories. It is already in
+<code>.gitignore</code>. <strong>Never commit it</strong>, and don't paste it into Slack or an issue.</p>
+<hr />
+<h2 id="8-init-plan-apply"><a class="header" href="#8-init-plan-apply">8. init, plan, apply</a></h2>
+<pre><code class="language-bash">terraform init        # downloads the providers, verifies them against the lock file
+terraform plan        # READ THIS before continuing
+terraform apply       # type: yes
+</code></pre>
+<p><code>plan</code> should end with:</p>
+<pre><code>Plan: 7 to add, 0 to change, 0 to destroy.
+</code></pre>
+<p><strong>Read the plan.</strong> Building that habit is most of the reason we use Terraform at
+all — it tells you exactly what is about to happen while it is still free to
+change your mind. Find the two <code>coolify_application</code> resources and notice one
+tracks <code>staging</code> and the other <code>main</code>.</p>
+<p><code>apply</code> prints your two URLs and the Application UUIDs when it finishes.</p>
+<p><strong>If <code>plan</code> fails</strong>, the message usually names the problem:</p>
+<div class="table-wrapper"><table><thead><tr><th>Error mentions</th><th>Fix</th></tr></thead><tbody>
+<tr><td><code>coolify_server_uuid is required</code></td><td>step 6 — you left it blank</td></tr>
+<tr><td><code>401</code> / <code>Unauthenticated</code></td><td>token wrong, pasted with a trailing space, or you edited <code>terraform.tfvars.example</code> by mistake</td></tr>
+<tr><td><code>404</code> on the application</td><td>wrong server UUID — you used another team's</td></tr>
+<tr><td><code>repo_name should be just the repo name</code></td><td>you included the <code>byu-ml-capstone/</code> prefix</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="9-see-what-terraform-created"><a class="header" href="#9-see-what-terraform-created">9. See what Terraform created</a></h2>
+<p><strong>In Coolify</strong> — Projects → <strong>your repo name</strong> (not <code>hello-world-app</code>; the
+project is named after your repo). Inside it:</p>
+<ul>
+<li>environments <code>production</code> and <code>staging</code></li>
+<li>one Application in each, tracking <code>main</code> and <code>staging</code> respectively</li>
+<li>Auto Deploy already <strong>off</strong> — GitHub Actions drives deploys, not Coolify</li>
+</ul>
+<p><strong>In GitHub</strong> — your repo → <strong>Settings → Secrets and variables → Actions</strong>.
+Three secrets, created by Terraform:</p>
+<pre><code>COOLIFY_API_TOKEN
+COOLIFY_DEPLOY_WEBHOOK_STAGING
+COOLIFY_DEPLOY_WEBHOOK_PROD
+</code></pre>
+<p>Those are what let GitHub Actions tell Coolify to deploy. <code>.github/workflows/ci.yml</code>
+already references them by exactly these names.</p>
+<hr />
+<h2 id="10-set-your-two-domains--the-one-manual-step"><a class="header" href="#10-set-your-two-domains--the-one-manual-step">10. Set your two domains — the one manual step</a></h2>
+<p>Terraform cannot do this. Coolify's API will not accept per-service domains on a
+Docker Compose application, so it stays a UI step and is documented as one.</p>
+<p><strong>Do this before your first deploy.</strong> Traefik bakes routing labels into a
+container when it starts, so a domain set afterwards leaves your URL returning
+<code>404 page not found</code> until you hit <strong>Redeploy</strong>.</p>
+<h3 id="click-by-click-for-staging"><a class="header" href="#click-by-click-for-staging">Click by click, for staging</a></h3>
+<ol>
+<li>Left sidebar → <strong>Projects</strong></li>
+<li>Click <strong>your project</strong> — the name you chose in step 1.
+<em>Do not click the gear icon on that row.</em></li>
+<li>Click <strong>staging</strong>.
+<em>Again, not the gear icon.</em></li>
+<li>Click your one resource. It is named something like
+<code>&lt;your-repo&gt;:staging-&lt;random text&gt;</code> — the random part is normal.</li>
+<li>In the <strong>Access</strong> section, click the <strong>gear icon</strong> next to <em>"1 configured domain"</em></li>
+<li>Click <strong>+ Add</strong></li>
+<li><strong>Service:</strong> <code>frontend</code> — this dropdown lists your containers, and <code>frontend</code>
+is the only one users should reach. <code>backend</code> and <code>db</code> are internal; giving
+either a domain would publish it</li>
+<li><strong>Protocol:</strong> <code>https</code> — check it, do not assume</li>
+<li><strong>Domain:</strong> <code>&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu:8000</code>
+— <strong>without</strong> the <code>http://</code> (the protocol is the separate dropdown above),
+but <strong>with</strong> <code>:8000</code> on the end. That is the port the template's <code>frontend</code>
+listens on inside its container. If you change the port your public service
+listens on, change this to match</li>
+<li><strong>Port:</strong> leave this field empty. On a Docker Compose application Coolify
+ignores it — the port that matters is the one you just typed on the end of
+the Domain</li>
+<li><strong>Path:</strong> leave it empty too.</li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<blockquote>
+<p><strong>Why the port goes in the domain.</strong> For a Compose application, Coolify emits
+a routing-port label only when the domain carries a port. Without one, Traefik
+infers the port from whatever the container exposes — right when that is one
+port, a coin flip when it is two. A base image can add a second port you never
+asked for: <code>nginx:alpine</code> ships <code>EXPOSE 80</code>, so an nginx service that also
+listens on 8000 advertises both, and Docker gives you no way to un-expose the
+inherited one. When Traefik guesses wrong you get <code>502 Bad Gateway</code> on a URL
+whose containers all report healthy, which is a genuinely hard thing to debug
+from the symptom.</p>
+<p>Naming the port removes the guess. It does <strong>not</strong> become part of your public
+URL — it only tells Traefik which container port to forward to, so
+<code>...:8000</code> in this box still serves at
+<code>https://&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu</code>.</p>
+<p>The one way to get this wrong is to name a port nothing is listening on. It
+must match your service, not this document.</p>
+</blockquote>
+<h3 id="then-production"><a class="header" href="#then-production">Then production</a></h3>
+<p>Same path, but click <strong>production</strong> at step 3, and the resource will be named
+<code>&lt;your-repo&gt;:main-&lt;random text&gt;</code>. The domain is your repo name with no suffix:</p>
+<p><code>&lt;your-repo&gt;.ml-capstone.cs.byu.edu</code></p>
+<h3 id="while-you-are-there"><a class="header" href="#while-you-are-there">While you are there</a></h3>
+<p>Delete the auto-generated <code>&lt;longhash&gt;.sslip.io</code> placeholder, and the <code>www.</code>
+variant if Coolify added one. Do <strong>not</strong> click "Generate Domain".</p>
+<blockquote>
+<p><strong><code>https</code>, not <code>http</code>.</strong> CS IT issued a wildcard certificate for
+<code>*.ml-capstone.cs.byu.edu</code>, so your app is served over real HTTPS with no
+browser warning. Pick <code>https</code> in the Protocol dropdown.</p>
+<p>Anyone who still has an <code>http://</code> link is fine — Traefik redirects it. But
+<code>curl</code> does <strong>not</strong> follow redirects unless you pass <code>-L</code>, so an http URL
+prints the literal word <code>Found</code> instead of your JSON, and a <code>POST</code> stops at
+the redirect without ever reaching your app. If you see <code>Found</code>, add <code>-L</code> or
+use the https URL.</p>
+<p>The one thing the certificate cannot cover is a <code>www.</code> domain —
+<code>www.&lt;your-repo&gt;.ml-capstone.cs.byu.edu</code> is two labels deep, so a single
+wildcard does not match it. Delete those rows.</p>
+</blockquote>
+<hr />
+<h2 id="11-make-a-change-and-push-to-staging"><a class="header" href="#11-make-a-change-and-push-to-staging">11. Make a change and push to staging</a></h2>
+<p>Bump the version so you can see your change arrive:</p>
+<pre><code class="language-bash"># in frontend/greetings.py
+APP_VERSION = "0.1.2"
+</code></pre>
+<pre><code class="language-bash">git status                 # see exactly what you changed
+git add -A                 # stage all of it
+git commit -m "bump version to 0.1.2"
+git push origin staging
+</code></pre>
+<p><code>git add -A</code> stages everything — files you edited, files you deleted, and files
+you created. <code>git status</code> first is the habit worth keeping: <code>-A</code> sweeps up new
+files too, and <code>terraform.tfvars</code> is only kept out of your commits by a line in
+<code>.gitignore</code>. Look before you stage.</p>
+<p><strong>Now watch it, in this order:</strong></p>
+<ol>
+<li><strong>GitHub → Actions tab.</strong> The <code>test</code> job runs first. When it passes,
+<code>deploy-staging</code> runs and <code>deploy-prod</code> is skipped — the branch decides.</li>
+<li><strong>Coolify → your staging Application → Deployments.</strong> Coolify builds a new
+image, starts containers, polls <code>/health</code>, then swaps traffic.</li>
+</ol>
+<blockquote>
+<p><strong>Later, when you restructure this app:</strong> every long-running service in
+<code>docker-compose.yaml</code> needs a <code>healthcheck:</code>. Coolify judges your application by
+its containers' health, and a service that reports <em>nothing</em> is treated as
+unhealthy rather than as fine — it will deploy cleanly and then be stopped hours
+later. The template has one on all three services; keep them when you rename or
+split things. See <code>troubleshooting.md</code> if an app dies after a successful deploy.</p>
+</blockquote>
+<ol start="3">
+<li><strong>Your staging URL:</strong></li>
+</ol>
+<pre><code class="language-bash">curl -s https://&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu/health
+# {"ok":true,"version":"0.1.2"}
+</code></pre>
+<p>Now check production:</p>
+<pre><code class="language-bash">curl -s https://&lt;your-repo&gt;.ml-capstone.cs.byu.edu/health
+# 404 page not found
+</code></pre>
+<p><strong>A 404 is the correct answer.</strong> Nothing has ever been deployed to production —
+the Application exists and has a domain, but no container has been built for it.
+<code>deploy-prod</code> only runs on a push to <code>main</code>, and you have not made one.</p>
+<p>That is the whole point of two environments: your change is live and testable on
+staging, and production is untouched until you decide otherwise.</p>
+<blockquote>
+<p>Editing only <code>*.md</code> files will not trigger CI — the workflow ignores them on
+purpose. Change code.</p>
+</blockquote>
+<hr />
+<h2 id="12-promote-to-production"><a class="header" href="#12-promote-to-production">12. Promote to production</a></h2>
+<h3 id="what-a-pull-request-is"><a class="header" href="#what-a-pull-request-is">What a pull request is</a></h3>
+<p>A <strong>pull request</strong> — PR — proposes merging one branch into another. It is not a
+git feature; it is a GitHub workflow built on top of one. It gives you three
+things a direct merge does not:</p>
+<ul>
+<li><strong>a place to review</strong> the diff before it lands</li>
+<li><strong>a place to run checks</strong> — your tests run against the merged result</li>
+<li><strong>a record</strong> of what changed, when, and who approved it</li>
+</ul>
+<p>On a team, this is where someone else reads your code. Working alone, it is still
+the checkpoint where you look at what you are about to put in front of users.</p>
+<p>Note that <code>git</code> itself has no pull-request command — there is no <code>git pr</code>. Pull
+requests live on GitHub, so you open one either in the browser or with GitHub's
+CLI.</p>
+<h3 id="open-it-in-the-browser"><a class="header" href="#open-it-in-the-browser">Open it in the browser</a></h3>
+<p>Nothing to install, and you see the diff you are proposing:</p>
+<ol>
+<li>Go to your repository on GitHub. Because you just pushed, a yellow banner
+offers <strong>Compare &amp; pull request</strong> — click it.
+<em>No banner?</em> Click the <strong>Pull requests</strong> tab → <strong>New pull request</strong>.</li>
+<li>Check the two branches at the top: <strong>base: <code>main</code></strong> ← <strong>compare: <code>staging</code></strong>.
+Base is where the code is going; compare is where it is coming from. Getting
+these backwards is the most common mistake.</li>
+<li>Scroll down and read the diff. This is the part that matters — it is exactly
+what you are proposing to put in front of users.</li>
+<li><strong>Title:</strong> <code>Promote 0.1.2 to production</code></li>
+<li><strong>Description:</strong> optional. <em>"Version bump validated on staging"</em> is plenty.</li>
+<li>Click <strong>Create pull request</strong>.</li>
+</ol>
+<h3 id="or-from-the-terminal-with-the-github-cli"><a class="header" href="#or-from-the-terminal-with-the-github-cli">Or from the terminal, with the GitHub CLI</a></h3>
+<pre><code class="language-bash">gh pr create --base main --head staging --title "Promote 0.1.2 to production"
+</code></pre>
+<p>It then prompts you:</p>
+<ul>
+<li><strong>Body</strong> — press <code>e</code> to open an editor, or leave it empty and continue</li>
+<li><strong>What's next?</strong> — choose <strong>Submit</strong></li>
+</ul>
+<blockquote>
+<p><code>gh</code> acts as whichever GitHub account it is logged in as, which is not
+necessarily the one you are using in the browser. Check with <code>gh auth status</code>,
+and switch with <code>gh auth switch</code> if it is the wrong one. If <code>gh</code> is
+authenticated as an account without access to the class organization, the
+command fails even though the browser would work fine.</p>
+</blockquote>
+<p>Watch the checks run on the PR — <code>test</code> passes, and both deploy jobs skip, because
+a pull request is not a push to a deploy branch. Nothing deploys from a PR.</p>
+<blockquote>
+<p><strong><code>The staging branch has no history in common with main</code></strong> means you skipped
+the rebuild in step 3. Fix it now:</p>
+<pre><code class="language-bash">git checkout -B staging main     # rebuild staging on main
+</code></pre>
+<p>then re-apply your version bump, commit, and <code>git push --force origin staging</code>.</p>
+</blockquote>
+<h3 id="making-review-mandatory--how-teams-actually-work"><a class="header" href="#making-review-mandatory--how-teams-actually-work">Making review mandatory — how teams actually work</a></h3>
+<p>Right now nothing stops you merging your own pull request seconds after opening
+it, or pushing straight to <code>main</code> and skipping the PR entirely. On a real team
+neither is allowed. The mechanism is <strong>branch protection</strong>:</p>
+<p><strong>Repository → Settings → Branches → Add branch protection rule</strong> (newer repos:
+<strong>Settings → Rules → Rulesets → New ruleset</strong>)</p>
+<ul>
+<li><strong>Branch name pattern:</strong> <code>main</code></li>
+<li>☑ <strong>Require a pull request before merging</strong>
+<ul>
+<li><strong>Require approvals:</strong> <code>1</code> — someone else must review it</li>
+</ul>
+</li>
+<li>☑ <strong>Require status checks to pass before merging</strong> → select <strong><code>test</code></strong></li>
+<li>☑ <strong>Do not allow bypassing the above settings</strong> — otherwise admins skip it</li>
+</ul>
+<p>With that on, <code>main</code> can only change through a reviewed pull request whose tests
+passed. The CI job you have been watching stops being advisory and becomes the
+thing standing between a broken commit and production.</p>
+<p><strong>Two reasons not to turn it on today:</strong></p>
+<ol>
+<li><strong>You cannot approve your own pull request.</strong> Working alone, requiring an
+approval locks you out of your own <code>main</code> branch.</li>
+<li><strong>GitHub Free does not offer branch protection on private repositories.</strong> If
+your repo is private — most are — the setting is unavailable until the repo is
+public or the organization is on a paid plan.</li>
+</ol>
+<p>So treat this as something to read now and use later. <strong>When you move to the group
+project, turn it on.</strong> That is the point at which "someone else reviews it" stops
+being a formality and starts catching things — and it is the setting that makes
+the pull request a gate rather than a ceremony.</p>
+<p>Merge it. Then watch Actions again: <code>test</code> passes, <code>deploy-prod</code> runs,
+<code>deploy-staging</code> skips. When it finishes:</p>
+<pre><code class="language-bash">curl -s https://&lt;your-repo&gt;.ml-capstone.cs.byu.edu/health
+# {"ok":true,"version":"0.1.2"}
+</code></pre>
+<p>Both environments now match — because you promoted, not because anything was
+automatic.</p>
+<hr />
+<h2 id="13-moving-on-to-your-own-project"><a class="header" href="#13-moving-on-to-your-own-project">13. Moving on to your own project</a></h2>
+<p><code>hello-world-app</code> is scaffolding, but it is scaffolding in the shape your project
+should take: a <code>frontend</code> users reach, a <code>backend</code> holding your logic and owning
+the data, and a <code>db</code>. You can throw away everything inside <code>frontend/</code> and
+<code>backend/</code> and replace it with your own code — the shape is what to keep.</p>
+<p><strong>What you can change freely:</strong> service names, how many services there are, the
+languages, the frameworks, the Dockerfiles, the dependencies, the endpoints. None
+of that is special.</p>
+<blockquote>
+<p><strong>Moving to your group project?</strong> <a href="group-project.html"><code>group-project.md</code></a> walks
+through copying one member's repo into a group repo, pointing Terraform at the
+group's Coolify team, and deploying it as the group's project.</p>
+<p><strong>Migrating an existing project?</strong> <a href="migrating-your-project.html"><code>migrating-your-project.md</code></a>
+states these requirements in a form you can hand to Codex or another coding
+agent along with your repo, so it can do the conversion and verify it. Read the
+diff before you push — the requirements below are what you are checking it against.</p>
+</blockquote>
+<p><strong>What the platform requires</strong> is a short list, and every item on it has already
+bitten someone in this class.</p>
+<h3 id="1-the-domain-must-point-at-the-service-that-actually-serves-users"><a class="header" href="#1-the-domain-must-point-at-the-service-that-actually-serves-users">1. The domain must point at the service that actually serves users</a></h3>
+<p>Rename <code>frontend</code> to <code>web</code> and Coolify still has the domain attached to a service
+called <code>frontend</code> — which no longer exists. Traefik then has no route and your URL
+returns <code>404 page not found</code>, even though the deploy succeeded and the containers
+are healthy.</p>
+<p>Re-attach it, <strong>in both environments</strong>: lab step 10, but pick the new name in the
+Service dropdown.</p>
+<h3 id="2-service_fqdn_service-must-match-that-services-name"><a class="header" href="#2-service_fqdn_service-must-match-that-services-name">2. <code>${SERVICE_FQDN_&lt;SERVICE&gt;}</code> must match that service's name</a></h3>
+<p>The variable name follows the service, uppercased, with <code>-</code> becoming <code>_</code>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Service</th><th>Variable</th></tr></thead><tbody>
+<tr><td><code>frontend</code></td><td><code>${SERVICE_FQDN_FRONTEND}</code></td></tr>
+<tr><td><code>frontend</code></td><td><code>${SERVICE_FQDN_FRONTEND}</code></td></tr>
+<tr><td><code>web-ui</code></td><td><code>${SERVICE_FQDN_WEB_UI}</code></td></tr>
+</tbody></table>
+</div>
+<p>Referencing it is what makes Coolify generate a route at all. Rename the service
+and forget the variable, and nothing is ever published. Only the public service
+needs one — <code>backend</code> and <code>db</code> must <em>not</em> have one, or Coolify will expose them.</p>
+<h3 id="3-every-long-running-service-needs-a-healthcheck"><a class="header" href="#3-every-long-running-service-needs-a-healthcheck">3. Every long-running service needs a <code>healthcheck:</code></a></h3>
+<p>This is the one that looks like the platform is broken. Coolify judges your
+application by its containers' Docker health. A service with <strong>no</strong> health check
+does not report "fine" — it reports nothing, and an application Coolify cannot
+confirm is healthy gets marked unhealthy and stopped. Typically a couple of hours
+after a deploy that said success, and the cleanup then removes the containers, so
+the logs are gone before you look.</p>
+<pre><code class="language-yaml">frontend:
+  build: ./frontend
+  expose:
+    - "80"
+  environment:
+    APP_URL: ${SERVICE_FQDN_FRONTEND}
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+    start_period: 30s
+    start_interval: 2s
+    interval: 5m
+    timeout: 5s
+    retries: 3
+  restart: unless-stopped
+</code></pre>
+<p>Use a tool the image actually has — <code>wget</code> on Alpine, <code>curl</code> on Debian-based,
+<code>python -c</code> if it ships Python, <code>pg_isready</code> for Postgres. A check that cannot run
+is as bad as no check.</p>
+<p>And make it test something real. A health check that returns 200 unconditionally is
+a gate that always opens — it will happily promote a build whose database
+connection is broken.</p>
+<h3 id="4-expose-never-ports"><a class="header" href="#4-expose-never-ports">4. <code>expose:</code>, never <code>ports:</code></a></h3>
+<p>The cluster host is shared by the whole class. <code>ports: "8000:8000"</code> claims a host
+port, and only one container on the machine can own it:</p>
+<pre><code>Bind for 0.0.0.0:8000 failed: port is already allocated
+</code></pre>
+<p><code>expose:</code> documents the container port without binding it. Traefik reaches your
+container over the internal Docker network. Your local
+<code>docker-compose.override.yml</code> is where a host port binding belongs, since that file
+is local-only and Coolify ignores it.</p>
+<h3 id="5-keep-health-cheap-and-put-the-real-check-somewhere-else"><a class="header" href="#5-keep-health-cheap-and-put-the-real-check-somewhere-else">5. Keep <code>/health</code> cheap, and put the real check somewhere else</a></h3>
+<p>The template ships both, and the split is deliberate:</p>
+<ul>
+<li><strong><code>/health</code></strong> answers "is this process alive" and touches nothing downstream.
+The frontend's <code>/health</code> does not call the backend; the backend's does not
+query Postgres.</li>
+<li><strong><code>/ready</code></strong> answers "is the whole stack working" and is <em>allowed</em> to fail.</li>
+</ul>
+<p>Coolify gates deploys on the health check. If <code>/health</code> queried the database,
+then a Postgres start that took a few seconds too long would fail the check and
+roll back a deploy that was completely fine. That is a genuinely confusing
+failure — the logs show a healthy app being killed.</p>
+<p>So keep the gate cheap and keep a separate endpoint for the honest answer. Point
+your monitoring and your own debugging at <code>/ready</code>; let Coolify watch <code>/health</code>.</p>
+<h3 id="6-have-one-url-that-exercises-the-whole-stack-and-test-that"><a class="header" href="#6-have-one-url-that-exercises-the-whole-stack-and-test-that">6. Have one URL that exercises the whole stack, and test <em>that</em></a></h3>
+<p><code>/health</code> and the home page are both answerable by a frontend that has completely
+lost its backend. Loading them proves a port is open, nothing more — which is why
+"it works, I checked the page" and "the app is broken" are regularly both true at
+once.</p>
+<p>So pick a single request that <strong>cannot</strong> be answered without the backend querying
+the database, and make that your real test. Write a row, then read it back:</p>
+<pre><code class="language-bash"># Replace these with your project's actual routes — the shape is the point.
+# Each one has to reach the database to produce an answer.
+
+# a search or list page the frontend renders from db rows
+curl -fsS "http://localhost:8080/search?q=test&amp;limit=5"
+
+# a detail page that must look a record up by id
+curl -fsS "http://localhost:8080/items/1"
+
+# a write, then a read proving it actually landed
+curl -fsS -X POST "http://localhost:8080/api/items" \
+     -H 'Content-Type: application/json' -d '{"name":"smoke-test"}'
+curl -fsS "http://localhost:8080/api/items" | grep smoke-test
+
+# an inference route that records its prediction
+curl -fsS -X POST "http://localhost:8080/api/predict" \
+     -H 'Content-Type: application/json' -d '{"text":"this was great"}'
+curl -fsS "http://localhost:8080/api/predictions" | grep 'this was great'
+</code></pre>
+<p>This is what <code>./smoke-test.sh</code> does with <code>/notes</code> in the template: a <code>POST</code> that
+writes and a <code>GET</code> that reads back. Keep that pair when you rewrite it for your own
+endpoints and put it last, so a failure is unambiguous. If every route you can think
+of answers without touching the database, you do not yet have a test that would
+catch a broken deployment — add one.</p>
+<p>Two places to run it, and the second is the one that finds real problems:</p>
+<pre><code class="language-bash"># locally, after docker compose up
+curl -fsS "http://localhost:8080/api/items" | grep smoke-test
+
+# against the deployed app, on either VPN — same path, your staging hostname
+curl -fsS "https://staging-yourapp.ml-capstone.cs.byu.edu/api/items" | grep smoke-test
+</code></pre>
+<p>The deployed run is not the same run. Coolify ignores
+<code>docker-compose.override.yml</code> — so a database URL, API base, or credential that only
+exists in your override file is simply absent in production, and anything pointing at
+<code>localhost</code> resolves to the container itself rather than to <code>db</code>. Your frontend keeps
+serving pages either way, because it does not need any of that to render HTML. Only a
+request that has to reach the database tells you which run you are looking at.</p>
+<p>And do it again after the containers restart. A row that disappears on restart means
+your database has no named volume, which is a problem you want to find before your
+users do, not after.</p>
+<h3 id="keep-the-two-branches-the-same-shape"><a class="header" href="#keep-the-two-branches-the-same-shape">Keep the two branches the same shape</a></h3>
+<p>Restructure on <code>staging</code>, get it working, <em>then</em> promote. If <code>staging</code> defines
+<code>web</code>/<code>api</code>/<code>db</code> while <code>main</code> still has <code>frontend</code>/<code>backend</code>/<code>db</code>, your two
+environments are running different applications, and promoting swaps production for
+something that has never been tested in that environment.</p>
+<h3 id="deploy-after-you-change-shape"><a class="header" href="#deploy-after-you-change-shape">Deploy after you change shape</a></h3>
+<p>Renaming a service changes nothing until a deploy runs. And because Traefik bakes
+routing labels in at container start, a domain change needs a deploy too. A pushed
+restructure that has not deployed means what is live is still the old application —
+which is a confusing state to debug, because the repo and the running containers
+disagree.</p>
+<h3 id="before-you-push-a-restructure"><a class="header" href="#before-you-push-a-restructure">Before you push a restructure</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+every service has a <code>healthcheck:</code> that uses a tool present in its image</li>
+<li><input disabled="" type="checkbox"/>
+the public service uses <code>expose:</code>, not <code>ports:</code></li>
+<li><input disabled="" type="checkbox"/>
+<code>${SERVICE_FQDN_&lt;SERVICE&gt;}</code> matches the public service's name</li>
+<li><input disabled="" type="checkbox"/>
+no <code>SERVICE_FQDN</code> on internal services</li>
+<li><input disabled="" type="checkbox"/>
+<code>./smoke-test.sh</code> (or your own equivalent) passes locally</li>
+<li><input disabled="" type="checkbox"/>
+one request that needs the database answers correctly — locally <em>and</em> against
+the deployed hostname, not just <code>/health</code></li>
+<li><input disabled="" type="checkbox"/>
+that written row is still there after <code>docker compose down &amp;&amp; up</code></li>
+<li><input disabled="" type="checkbox"/>
+after deploying: re-attach the domain in Coolify for <strong>both</strong> environments</li>
+<li><input disabled="" type="checkbox"/>
+after that: redeploy, then load both URLs</li>
+</ul>
+<hr />
+<h2 id="when-something-goes-wrong"><a class="header" href="#when-something-goes-wrong">When something goes wrong</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Symptom</th><th>Most likely cause</th></tr></thead><tbody>
+<tr><td>Coolify: "Registration is disabled"</td><td>GitHub email doesn't match your roster row</td></tr>
+<tr><td><code>terraform plan</code> 401</td><td>token wrong, trailing whitespace, or you edited <code>terraform.tfvars.example</code> instead of <code>terraform.tfvars</code></td></tr>
+<tr><td><code>terraform plan</code> 404 on application</td><td>wrong server UUID — you used another team's</td></tr>
+<tr><td>Your URL: <code>404 page not found</code></td><td>nothing deployed yet, or domain set after deploy — hit <strong>Redeploy</strong></td></tr>
+<tr><td>Your URL: <code>503 no available server</code></td><td>the domain is set but the app has no route — redeploy after setting it</td></tr>
+<tr><td><code>curl</code> prints <code>Found</code> instead of JSON</td><td>you used the <code>http://</code> URL and curl did not follow the redirect — add <code>-L</code></td></tr>
+<tr><td>Your URL hangs / won't resolve</td><td>not on a BYU VPN at all. Either <code>cs-vpn.byu.edu</code> or <code>vpn.byu.edu</code> reaches a deployed app; only <code>cs-vpn.byu.edu</code> reaches Coolify and the classroom LLM</td></tr>
+<tr><td>Pushed, but no Actions run</td><td>you only changed markdown</td></tr>
+<tr><td>Actions red at <code>test</code></td><td>your code is broken — nothing deployed, old version still live</td></tr>
+<tr><td>Deploy ran but version unchanged</td><td>health check failed; Coolify kept the old container</td></tr>
+<tr><td>Deployed fine, then died hours later</td><td>a service in your compose file has no <code>healthcheck:</code></td></tr>
+<tr><td>Restructured, now the URL 404s</td><td>the domain is still attached to the old service name — section 13</td></tr>
+<tr><td>Pages load but data pages error or come back empty</td><td>the backend cannot reach the database on the deployed host — section 13, item 6</td></tr>
+</tbody></table>
+</div>
+<p>Fuller answers in <a href="troubleshooting.html"><code>troubleshooting.md</code></a>.</p>
+<hr />
+<h2 id="what-you-just-built"><a class="header" href="#what-you-just-built">What you just built</a></h2>
+<p>A push to <code>staging</code> runs your tests on a clean machine, and only if they pass
+does it tell Coolify to build a new image, start it, health-check it, and swap
+traffic — on infrastructure you described in a file rather than clicked into
+existence. A pull request moves the same code to production under the same rules.</p>
+<p>That is the same shape as a professional deployment pipeline. The provider would
+change at a different company; almost nothing else would.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="student-guide.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="migrating-your-project.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="student-guide.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="migrating-your-project.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

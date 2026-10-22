@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Terraform Lab - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html" class="active"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/template-terraform.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- GENERATED by scripts/fetch-template-docs.sh — do not edit here. -->
+<blockquote>
+<p><strong>Mirrored from <a href="https://github.com/byu-ml-capstone/hello-world-app/blob/main/terraform/README.md"><code>byu-ml-capstone/hello-world-app</code></a></strong>
+— the Terraform lab README that ships in every student repo. Edit it there, not here.</p>
+</blockquote>
+<h1 id="bonus-iac-for-the-coolify--github-wiring"><a class="header" href="#bonus-iac-for-the-coolify--github-wiring">Bonus: IaC for the Coolify + GitHub wiring</a></h1>
+<p><strong>Prerequisite: finish Setup Steps 1–11 of the student guide by hand at least once.</strong> This bonus lab teaches nothing about <em>what</em> Coolify is — you already know that. It teaches <strong>Infrastructure as Code</strong> by re-doing Setup Steps 4–9 as declarative HCL. When you're done, one <code>terraform apply</code> recreates the entire Coolify + GitHub wiring for a bare-fresh repo, no clicks required.</p>
+<h2 id="what-terraform-creates"><a class="header" href="#what-terraform-creates">What Terraform creates</a></h2>
+<p>Everything in Setup Steps 4–9, in a single apply:</p>
+<ul>
+<li><strong>Coolify Project</strong> named after your repo (Step 4)</li>
+<li><strong><code>staging</code> Environment</strong> — the <code>production</code> environment is auto-created when the Project is born</li>
+<li><strong><code>staging</code> Application</strong> wired to your repo's <code>staging</code> branch, <code>dockercompose</code> build pack, port 8000, auto-deploy off (Step 5)</li>
+<li><strong><code>production</code> Application</strong> wired to your repo's <code>main</code> branch, ditto config (Step 6)</li>
+<li><strong><code>COOLIFY_API_TOKEN</code> GitHub Actions secret</strong> — shared by both deploy jobs (Step 8)</li>
+<li><strong><code>COOLIFY_DEPLOY_WEBHOOK_STAGING</code> secret</strong> — URL is <code>&lt;coolify-endpoint&gt;/deploy?uuid=&lt;staging_app_uuid&gt;</code>, constructed in HCL from the Application UUID (Step 7)</li>
+<li><strong><code>COOLIFY_DEPLOY_WEBHOOK_PROD</code> secret</strong> — same shape, prod Application (Step 9)</li>
+</ul>
+<p>Push to <code>staging</code> → CI runs tests, POSTs the staging webhook, staging deploys. Merge to <code>main</code> → CI runs tests, POSTs the prod webhook, prod deploys.</p>
+<p><strong>One thing terraform can't fully automate: pretty domains.</strong> After <code>terraform apply</code> succeeds, you'll paste the class-wildcard URL into Coolify's UI (one text field, one Save click, per Application — the <code>next_steps</code> output tells you exactly what to paste and where). Without that step, your app serves at a Coolify-auto-generated <code>&lt;uuid&gt;.128.187.112.8.sslip.io</code> URL, which is functional but ugly. <strong>Saving the domain is not enough on its own — redeploy afterwards.</strong> Traefik routes on labels baked into the running container, so a container started before you set the domain keeps the old routing rule and your new URL returns <code>404 page not found</code>. Hit Redeploy in Coolify (or push again) and it starts working. Why the workaround: (1) the <code>bindtech-xyz/coolify</code> provider only exposes a flat <code>domains</code> field, (2) Coolify's API rejects that field on dockercompose apps (needs per-service <code>docker_compose_domains</code> instead), (3) <code>docker_compose_domains</code> requires <code>docker_compose_raw</code> to be pre-populated, which Coolify's UPDATE endpoint doesn't accept and the coolify provider doesn't expose at CREATE time. That's a three-deep chain of provider/API limitations — worth fixing upstream but not by adding polling scaffolding to a bonus lab.</p>
+<p><strong>Multi-provider setup.</strong> This lab uses two providers, each doing what it's best at:</p>
+<ul>
+<li><strong><code>bindtech-xyz/coolify</code></strong> — Coolify Project, Environment, Applications.</li>
+<li><strong><code>integrations/github</code></strong> — GitHub Actions secrets on your student repo.</li>
+</ul>
+<h2 id="a-note-if-you-fork-this-to-another-coolify"><a class="header" href="#a-note-if-you-fork-this-to-another-coolify">A note if you fork this to another Coolify</a></h2>
+<p>The <code>coolify_application</code> resources call <code>POST /api/v1/applications/private-github-app</code> with a team-scoped token. Coolify had a bug — <a href="https://github.com/coollabsio/coolify/issues/11449">#11449</a> — where that endpoint returned <code>HTTP 404: Github App not found</code> for GitHub Apps flagged <code>is_system_wide</code>, which is exactly how the class App is registered. The class instance carried a local patch for it from August to October 2026.</p>
+<p><strong>Fixed upstream in 4.3.24</strong>, so nothing special is needed here any more. If you point this at your own Coolify running something older, expect the 404 — upgrade rather than patch.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ol>
+<li><strong>Terraform</strong> (or OpenTofu — same commands):
+<pre><code class="language-bash">brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+</code></pre>
+</li>
+<li><strong>A Coolify API token.</strong> ml-capstone-admin.cs.byu.edu → top-left dashboard menu → <strong>Keys &amp; Tokens → API Tokens → + New Token</strong>. Description = whatever; <strong>Permissions = <code>root</code></strong> — the boxes are mutually exclusive, so <code>write</code> and <code>deploy</code> cannot both be selected, and Terraform needs both. <code>root</code> here is root of your own team only. Click <strong>Create Token</strong>, then copy it immediately (Coolify shows it once).</li>
+<li><strong>A GitHub Personal Access Token</strong> with <code>repo</code> scope. Easiest: <code>gh auth token</code>. Otherwise Settings → Developer settings → Personal access tokens → Tokens (classic) → new one with <code>repo</code> scope. Full walkthrough is in <code>terraform.tfvars.example</code>.</li>
+<li><strong>Your GitHub repo already exists</strong> under <code>byu-ml-capstone</code> from templating <code>hello-world-app</code> (Setup Step 1).</li>
+</ol>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<pre><code class="language-bash"># 1. Copy the tfvars template + fill in your secrets
+cp terraform.tfvars.example terraform.tfvars
+$EDITOR terraform.tfvars
+
+# 2. Init (downloads the coolify + github providers)
+terraform init
+
+# 3. Plan (dry-run — shows what will be created)
+terraform plan
+
+# 4. Apply
+terraform apply
+</code></pre>
+<p>Seven resources get created (Project + Environment + two Applications + three GitHub secrets). Then follow the <code>next_steps</code> output — it tells you which branches to push to trigger each deploy.</p>
+<h2 id="files"><a class="header" href="#files">Files</a></h2>
+<ul>
+<li><code>main.tf</code> — providers + Project + Environment + Applications + three secrets</li>
+<li><code>variables.tf</code> — inputs + class-default overrides (server UUID, GitHub App UUID)</li>
+<li><code>outputs.tf</code> — UUIDs, URLs, next-steps message</li>
+<li><code>terraform.tfvars.example</code> — copy-to-tfvars template with detailed comments</li>
+<li><code>.gitignore</code> — blocks <code>terraform.tfvars</code>, <code>.terraform/</code>, <code>*.tfstate</code></li>
+</ul>
+<h2 id="cleanup"><a class="header" href="#cleanup">Cleanup</a></h2>
+<pre><code class="language-bash">terraform destroy
+</code></pre>
+<p>Removes the Project (cascades to its Environments and Applications) and all three GitHub secrets. Full teardown.</p>
+<h2 id="the-point"><a class="header" href="#the-point">The point</a></h2>
+<p>You're seeing the shape of declarative infrastructure end-to-end — inputs in tfvars, a plan preview, apply, state file, drift detection, <code>destroy</code> reverses everything. That mental shift — "click here, then here, then copy this URL to that other UI" → "declare this shape, let the tool make it happen" — is IaC in one sitting. It generalizes: Terraform for AWS, Kubernetes YAML, Nix, Pulumi, all the same shape.</p>
+<p>The two caveats are also the point:</p>
+<ul>
+<li><strong>This lab used to depend on a patched Coolify, and now doesn't</strong> — which is the more useful half of the lesson. From August to October 2026 the class instance carried a local patch for <a href="https://github.com/coollabsio/coolify/issues/11449">#11449</a>, reapplied after every upgrade. The dependency was named, the patch was scripted, the upstream ticket and PR were linked, and the exit criteria was written down: <em>retest, and if the bug is gone, delete all of it.</em> On 2026-10-21 that criteria was met and the patch was deleted. Writing down how you'll remove a workaround is what stops it from becoming permanent — most workarounds outlive their cause because nobody recorded the condition for removing them. Worth noting the documented reasoning was also partly <strong>wrong</strong>: it predicted no v4.x release would ever carry the fix. It shipped in 4.3.24. Re-test your assumptions instead of inheriting them.</li>
+<li><strong>The pretty-domain step is manual.</strong> The bindtech-xyz/coolify provider doesn't model dockercompose per-service domains yet. We tried three ways around it (a <code>terraform_data</code> provisioner, a <code>magodo/restful</code> operation, a two-step PATCH with <code>docker_compose_raw</code>), each hit a different provider or API limitation, and each workaround was more scaffolding than a UI click would ever be. Sometimes IaC's honest answer is "here's the 90% that automates cleanly, plus one documented manual step" instead of a fragile automation that fights the tools.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="template-app.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="architecture/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="template-app.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="architecture/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

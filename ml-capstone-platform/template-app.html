@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Template App README - ML Capstone Platform</title>
+
+
+        <!-- Custom HTML head -->
+        <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "305531ccfce04a32ac9e41992a17c5e2"}'></script><!-- End Cloudflare Web Analytics -->
+
+        <meta name="description" content="BYU CS classroom AI + CI/CD cluster — student and instructor documentation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "coal" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">For Students</li><li class="chapter-item expanded "><a href="student-guide.html"><strong aria-hidden="true">1.</strong> Student Setup Guide</a></li><li class="chapter-item expanded "><a href="lab-first-deploy.html"><strong aria-hidden="true">2.</strong> Lab — Your First Deploy</a></li><li class="chapter-item expanded "><a href="migrating-your-project.html"><strong aria-hidden="true">3.</strong> Migrating Your Project</a></li><li class="chapter-item expanded "><a href="group-project.html"><strong aria-hidden="true">4.</strong> Moving to Your Group Project</a></li><li class="chapter-item expanded affix "><li class="part-title">For Research Students</li><li class="chapter-item expanded "><a href="research-students.html"><strong aria-hidden="true">5.</strong> Using the Classroom LLM</a></li><li class="chapter-item expanded affix "><li class="part-title">Template App</li><li class="chapter-item expanded "><a href="template-app.html" class="active"><strong aria-hidden="true">6.</strong> Template App README</a></li><li class="chapter-item expanded "><a href="template-terraform.html"><strong aria-hidden="true">7.</strong> Terraform Lab</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/index.html"><strong aria-hidden="true">8.</strong> Architecture Guide</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="architecture/reference-architecture.html"><strong aria-hidden="true">8.1.</strong> Reference Architecture (for your agent)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">For Instructors</li><li class="chapter-item expanded "><a href="admin-guide.html"><strong aria-hidden="true">9.</strong> Administrator Guide</a></li><li class="chapter-item expanded "><a href="onboarding.html"><strong aria-hidden="true">10.</strong> Term-Start Onboarding Checklist</a></li><li class="chapter-item expanded "><a href="coolify-runbook.html"><strong aria-hidden="true">11.</strong> Coolify Runbook</a></li><li class="chapter-item expanded "><a href="annual-maintenance.html"><strong aria-hidden="true">12.</strong> Annual Maintenance</a></li><li class="chapter-item expanded "><a href="troubleshooting.html"><strong aria-hidden="true">13.</strong> Troubleshooting</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ML Capstone Platform</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/quinnsnell/ml-capstone-platform/edit/main/src/template-app.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- GENERATED by scripts/fetch-template-docs.sh — do not edit here. -->
+<blockquote>
+<p><strong>Mirrored from <a href="https://github.com/byu-ml-capstone/hello-world-app/blob/main/README.md"><code>byu-ml-capstone/hello-world-app</code></a></strong>
+— the app README that ships in every student repo. Edit it there, not here.</p>
+</blockquote>
+<h1 id="hello-world-app"><a class="header" href="#hello-world-app">hello-world-app</a></h1>
+<p>Minimal FastAPI starter for the ML Capstone class deployment lab. Use this to walk through the Coolify setup + push-to-deploy pipeline without getting entangled in ML plumbing.</p>
+<h2 id="layout"><a class="header" href="#layout">Layout</a></h2>
+<p>Repo root = orchestration + docs. Each subdirectory = one service (self-contained code + Dockerfile + deps).</p>
+<pre><code>hello-world-app/
+├── docker-compose.yaml           # production compose (Coolify reads this)
+├── docker-compose.override.yml   # local-dev only (host port bind); ignored by Coolify
+├── smoke-test.sh                 # docker compose up + smoke-test everything; also `./smoke-test.sh URL` to test a deployed instance
+├── README.md
+├── .gitignore                    # Python/Docker noise + terraform secrets and state
+├── .github/workflows/ci.yml      # 3-job pipeline: test → deploy-staging → deploy-prod
+│
+├── frontend/                     # PUBLIC service — Traefik-routed
+│   ├── main.py                   #   FastAPI wiring + endpoints (thin)
+│   ├── greetings.py              #   content + logic (split out from main.py on purpose)
+│   ├── backend_client.py         #   BackendClient — every call to the backend goes here
+│   ├── requirements.txt          #   no database driver — see backend/
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── conftest.py               #   makes frontend/ the pytest rootdir
+│   └── tests/test_api.py         #   16 tests; mocked at the client boundary
+│
+├── backend/                      # INTERNAL service — owns the database
+│   ├── main.py                   #   FastAPI wiring + endpoints (thin)
+│   ├── notes_dao.py              #   NotesDAO — the only SQL in the repo
+│   ├── migrations/               #   *.sql files — applied on startup in filename order
+│   │   └── 001_create_notes.sql  #   initial schema; add 002_*.sql etc. as you evolve it
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── conftest.py               #   makes backend/ the pytest rootdir
+│   └── tests/test_api.py         #   11 tests; mocked at the DAO boundary
+│
+└── terraform/                    # NOT a service — provisions the Coolify side
+    ├── main.tf                   #   the resources: project, 2 envs, 2 apps, 3 GitHub secrets
+    ├── variables.tf              #   every input, what it means, which have class defaults
+    ├── outputs.tf                #   URLs + UUIDs printed after `apply`
+    ├── terraform.tfvars.example  #   copy to terraform.tfvars and fill in 4 values
+    ├── .terraform.lock.hcl       #   pins provider versions + checksums — committed on purpose
+    ├── .gitignore                #   keeps terraform.tfvars (real tokens) and *.tfstate out of git
+    └── README.md                 #   the deeper walkthrough, incl. why domains stay manual
+</code></pre>
+<p><code>frontend/</code> is the only public service. <code>backend/</code> holds your application logic
+and is the only service that touches the database — it is internal-only,
+reachable just from <code>frontend</code>. Note the symmetry: each service has exactly one
+file that owns its outward boundary (<code>backend_client.py</code>, <code>notes_dao.py</code>) and a
+<code>main.py</code> that stays thin because of it. There's no <code>db/</code> subdirectory — the Postgres sidecar in <code>docker-compose.yaml</code> uses the stock <code>postgres:16-alpine</code> image directly. Postgres is a generic storage service; the backend owns the schema and materializes it at startup via a FastAPI lifespan hook in <code>backend/main.py</code>. That's the modern Django/Rails/Alembic convention: db container = dumb storage, app codebase = schema source of truth. Add more services the same way: their own subdirectory (if they need one) or just an <code>image:</code> line in compose, <code>expose:</code> for the port, no <code>${SERVICE_FQDN_*}</code> so Coolify keeps them internal-only.</p>
+<p><code>terraform/</code> is the odd one out — it isn't a service and nothing in it ships inside a container. It describes the Coolify and GitHub resources your app needs <em>around</em> it: the Project, the two Environments, the two Applications, and the three Actions secrets. You can ignore it entirely and click through the Coolify UI instead; see <a href="#provisioning-with-terraform">Provisioning with Terraform</a> below.</p>
+<h2 id="architecture"><a class="header" href="#architecture">Architecture</a></h2>
+<pre><code>Browser / curl
+      │  http://&lt;domain&gt;          (Coolify Traefik in prod, host:8000 locally)
+      ▼
+┌────────────────────┐
+│ frontend (FastAPI) │  PUBLIC — port 8000
+│                    │  serves pages and the HTTP API
+│ backend_client.py  │  no database driver, no SQL, no credentials
+└──────────┬─────────┘
+           │  http://backend:8001     Docker DNS by service name
+           ▼
+┌────────────────────┐
+│ backend  (FastAPI) │  INTERNAL — port 8001
+│                    │  application logic; owns the data
+│ notes_dao.py       │  the only file with SQL in it
+└──────────┬─────────┘
+           │  postgres://appuser:apppass@db:5432/appdb
+           ▼
+┌────────────────────┐
+│   db (postgres)    │  INTERNAL — port 5432
+│                    │  persistent volume: db-data
+│                    │  → survives `docker compose down`
+└────────────────────┘  → wiped only by `docker compose down -v`
+</code></pre>
+<p><strong>One direction, one owner per layer.</strong> A request for data goes
+frontend → backend → db and the answer comes back the same way. The
+frontend never talks to Postgres: it has no driver installed, no password,
+and no SQL anywhere in it. That is deliberate, and it is the shape your own
+project should take.</p>
+<p>Why it matters beyond tidiness:</p>
+<ul>
+<li><strong>The service exposed to the internet holds no credentials.</strong> A bug in
+<code>frontend</code> cannot leak or corrupt data it has no way to reach.</li>
+<li><strong>One owner for the schema.</strong> Every read and write goes through one DAO in
+one service. Two services both holding a <code>DATABASE_URL</code> is how schemas drift.</li>
+<li><strong>Layers change independently.</strong> Swap Postgres for something else and only
+<code>backend</code> changes. Rebuild the UI and only <code>frontend</code> changes.</li>
+</ul>
+<p>Only <code>frontend</code> gets a public URL. <code>backend</code> and <code>db</code> are reachable only from other services on the Compose network. Coolify isolates volumes per-Application, so staging and prod each get their own <code>db-data</code> — they never share data.</p>
+<h3 id="the-three-services"><a class="header" href="#the-three-services">The three services</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Service</th><th>Built from</th><th>Port</th><th>Public?</th><th>What it is</th></tr></thead><tbody>
+<tr><td><code>frontend</code></td><td><code>./frontend</code> (FastAPI)</td><td>8000</td><td><strong>yes</strong></td><td>The service users reach. Serves every endpoint below. For anything involving data it calls <code>backend</code> through <code>backend_client.py</code>. No database access of its own.</td></tr>
+<tr><td><code>backend</code></td><td><code>./backend</code> (FastAPI)</td><td>8001</td><td>no</td><td>Application logic and the <strong>only</strong> service that touches Postgres. All SQL lives in its <code>notes_dao.py</code>. Also serves <code>/now</code>, standing in for real backend work.</td></tr>
+<tr><td><code>db</code></td><td><code>postgres:16-alpine</code></td><td>5432</td><td>no</td><td>Postgres. Data lives on the named volume <code>db-data</code>.</td></tr>
+</tbody></table>
+</div>
+<p><strong>How they find each other.</strong> Compose gives every service a DNS name matching its key, so <code>frontend</code> reaches the backend at <code>http://backend:8001</code>, and <code>backend</code> reaches the database at <code>db:5432</code>. No IP addresses, no port juggling — that's why <code>backend</code> and <code>db</code> declare <code>expose:</code> rather than <code>ports:</code>, making them reachable <em>only</em> from inside the Compose network.</p>
+<p><strong>Why <code>frontend</code> uses <code>expose:</code> too.</strong> The cluster server is shared, so binding a host port would collide with every other student. Coolify's Traefik routes to the container directly. Locally, <code>docker-compose.override.yml</code> adds the <code>ports:</code> mapping that puts it on <code>localhost:8000</code>.</p>
+<p><strong>How <code>frontend</code> gets its public URL.</strong> Referencing <code>${SERVICE_FQDN_FRONTEND}</code> in the compose file is what tells Coolify to generate a domain and wire up Traefik. Don't declare that variable — just reference it. The name follows the service (<code>frontend</code> → <code>SERVICE_FQDN_FRONTEND</code>).</p>
+<p><strong>Startup order.</strong> The chain is declared the same way it runs: <code>backend</code> waits on <code>db</code>, and <code>frontend</code> waits on <code>backend</code>, both with <code>condition: service_healthy</code>. A cold <code>docker compose up</code> therefore starts Postgres, waits for it to accept connections, starts the backend, waits for it to answer, then starts the frontend — reliable instead of a race. Note <code>frontend</code> does <em>not</em> declare <code>depends_on: db</code>; the database is the backend's dependency, not its own.</p>
+<p><strong>Liveness vs readiness.</strong> Both services' health checks hit <code>/health</code>, which deliberately does <strong>not</strong> touch anything downstream — <code>frontend</code>'s <code>/health</code> does not call the backend, and <code>backend</code>'s <code>/health</code> does not query Postgres. Coolify gates deploys on these, and a check that failed whenever a dependency was slow would roll back good deploys. To ask "is the whole stack working", use <code>GET /ready</code> on the frontend, which is allowed to fail.</p>
+<p><strong>Environment variables</strong> (all set in <code>docker-compose.yaml</code>):</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Service</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>BACKEND_URL</code></td><td><code>frontend</code></td><td><code>http://backend:8001</code> — where the frontend sends every data request</td></tr>
+<tr><td><code>APP_URL</code></td><td><code>frontend</code></td><td>Set to <code>${SERVICE_FQDN_FRONTEND}</code> — the reference that triggers Coolify's routing</td></tr>
+<tr><td><code>DATABASE_URL</code></td><td><code>backend</code></td><td><code>postgresql://appuser:apppass@db:5432/appdb</code>. <strong>Only</strong> the backend gets this</td></tr>
+<tr><td><code>ALLOW_ADMIN_RESET</code></td><td><code>backend</code></td><td>Gates <code>POST /admin/reset</code>. On the backend because the service that owns the data owns the decision to destroy it. Set only in <code>docker-compose.override.yml</code>, so the destructive endpoint is local-only by default</td></tr>
+<tr><td><code>POSTGRES_USER</code> / <code>POSTGRES_PASSWORD</code> / <code>POSTGRES_DB</code></td><td><code>db</code></td><td><code>appuser</code> / <code>apppass</code> / <code>appdb</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="endpoints"><a class="header" href="#endpoints">Endpoints</a></h2>
+<p>Every example below is runnable. Locally the base URL is <code>http://localhost:8000</code>; deployed it's your Coolify domain. Set it once:</p>
+<pre><code class="language-bash">BASE=http://localhost:8000
+# BASE=https://&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu    # deployed staging (VPN)
+</code></pre>
+<h3 id="get---greeting"><a class="header" href="#get---greeting"><code>GET /</code> — greeting</a></h3>
+<pre><code class="language-bash">curl -s $BASE/
+# {"hello":"Hello, world"}
+
+curl -s "$BASE/?lang=es"
+# {"hello":"Hola, mundo"}
+</code></pre>
+<p>Takes an optional <code>?lang=</code> of <code>en</code>, <code>es</code>, <code>fr</code>, <code>de</code>, or <code>ja</code>. An unsupported code falls back to English rather than erroring.</p>
+<h3 id="get-languages--what-lang-accepts"><a class="header" href="#get-languages--what-lang-accepts"><code>GET /languages</code> — what <code>?lang=</code> accepts</a></h3>
+<pre><code class="language-bash">curl -s $BASE/languages
+# {"supported":["de","en","es","fr","ja"]}
+</code></pre>
+<h3 id="get-health--liveness--version"><a class="header" href="#get-health--liveness--version"><code>GET /health</code> — liveness + version</a></h3>
+<pre><code class="language-bash">curl -s $BASE/health
+# {"ok":true,"version":"0.1.1"}
+</code></pre>
+<p><strong>This endpoint gates your deploys.</strong> Coolify polls it after starting a new container: 200 and the new version takes over, non-200 and the old container keeps serving. Bump <code>APP_VERSION</code> in <code>frontend/greetings.py</code> and you can watch a deploy land by curling this.</p>
+<h3 id="get-ready--the-whole-stack-not-just-this-process"><a class="header" href="#get-ready--the-whole-stack-not-just-this-process"><code>GET /ready</code> — the whole stack, not just this process</a></h3>
+<pre><code class="language-bash">curl -s $BASE/ready
+# {"ok":true,"frontend":"0.1.1","backend":"ok"}
+# {"detail":"backend not ready: backend unreachable: ..."}   -&gt; HTTP 503
+</code></pre>
+<p>Unlike <code>/health</code>, this one calls the backend and is <em>allowed</em> to fail. Use it to answer "is the stack working", and <code>/health</code> for "is this process alive". Keeping them separate is why a slow backend start cannot roll back a good frontend deploy.</p>
+<h3 id="get-time--proxied-from-the-backend"><a class="header" href="#get-time--proxied-from-the-backend"><code>GET /time</code> — proxied from the backend</a></h3>
+<pre><code class="language-bash">curl -s $BASE/time
+# {"from_backend":{"utc":"2026-09-23T22:18:04.336421+00:00"}}
+</code></pre>
+<p><code>frontend</code> calls <code>http://backend:8001/now</code> over the Compose network. If this works, service-to-service networking works.</p>
+<h3 id="get-notes--read-the-database-through-the-backend"><a class="header" href="#get-notes--read-the-database-through-the-backend"><code>GET /notes</code> — read the database, through the backend</a></h3>
+<pre><code class="language-bash">curl -s $BASE/notes
+# []                      (empty until you POST one)
+# [{"id":1,"body":"first note","created_at":"2026-09-23T22:18:04.470242+00:00"}]
+</code></pre>
+<h3 id="post-notes--write-to-the-database-through-the-backend"><a class="header" href="#post-notes--write-to-the-database-through-the-backend"><code>POST /notes</code> — write to the database, through the backend</a></h3>
+<pre><code class="language-bash">curl -s -X POST $BASE/notes \
+  -H 'Content-Type: application/json' \
+  -d '{"body":"first note"}'
+# {"id":1,"body":"first note","created_at":"2026-09-23T22:18:04.470242+00:00"}
+</code></pre>
+<p>Returns <strong>201 Created</strong>. <code>body</code> is required — omitting it gives FastAPI's validation error:</p>
+<pre><code class="language-bash">curl -s -X POST $BASE/notes -H 'Content-Type: application/json' -d '{}'
+# HTTP 422
+# {"detail":[{"type":"missing","loc":["body","body"],"msg":"Field required","input":{}}]}
+</code></pre>
+<p>Rows survive <code>docker compose down</code> and every redeploy, because they live on the <code>db-data</code> volume — that is the point of this endpoint existing.</p>
+<p><strong>Follow the call path</strong>, because it is the pattern to copy. The route in <code>frontend/main.py</code> calls <code>backend.create_note(...)</code> and returns the result — it names no URL and no status code. <code>frontend/backend_client.py</code> turns that into <code>POST http://backend:8001/notes</code>. The route in <code>backend/main.py</code> calls <code>notes_dao.insert(...)</code> — no cursor, no table name. <code>backend/notes_dao.py</code> turns that into the actual <code>INSERT</code>. Each layer talks to the next in its own vocabulary, and each boundary is one file you can mock in a test or replace wholesale.</p>
+<h3 id="post-adminreset--drop-and-recreate-the-table"><a class="header" href="#post-adminreset--drop-and-recreate-the-table"><code>POST /admin/reset</code> — drop and recreate the table</a></h3>
+<pre><code class="language-bash">curl -s -X POST $BASE/admin/reset
+# {"ok":true,...}                                                      (local, env var set)
+# {"detail":"admin reset disabled; set ALLOW_ADMIN_RESET=true to enable"}   -&gt; HTTP 403
+</code></pre>
+<p><strong>Destructive — it drops the <code>notes</code> table and every row in it.</strong> Gated behind <code>ALLOW_ADMIN_RESET=true</code> <strong>on the backend</strong>, which only <code>docker-compose.override.yml</code> sets, so it is local-only unless you deliberately add the variable in Coolify. The gate lives in the backend because the service that owns the data owns the decision to destroy it; the frontend just passes the resulting 403 through. Useful for resetting state while working on migrations; not something to leave enabled on a deployed app.</p>
+<h2 id="smoke-test"><a class="header" href="#smoke-test">Smoke test</a></h2>
+<pre><code class="language-bash">./smoke-test.sh                                             # local: builds + starts + tests
+./smoke-test.sh https://your-app.ml-capstone.cs.byu.edu      # remote: tests a deployed instance
+</code></pre>
+<p>Or run a single service without Docker. The frontend needs the backend running
+to answer anything data-related, so this is mostly useful for the greeting
+routes:</p>
+<pre><code class="language-bash">cd frontend
+python -m pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+</code></pre>
+<p>Then <code>curl http://127.0.0.1:8000/</code> and <code>curl http://127.0.0.1:8000/health</code>. For the full chain use <code>docker compose up</code> — getting three services and their startup order right by hand is exactly the work compose is doing for you.</p>
+<h2 id="unit-tests"><a class="header" href="#unit-tests">Unit tests</a></h2>
+<p>Two suites, one per service. Neither needs Docker or a database.</p>
+<pre><code class="language-bash">python -m pip install fastapi 'uvicorn[standard]' pydantic httpx 'psycopg[binary]' pytest
+
+cd frontend &amp;&amp; pytest tests/ -v    # 16 tests — mocks at the BackendClient boundary
+cd ../backend &amp;&amp; pytest tests/ -v  # 11 tests — mocks at the NotesDAO boundary
+</code></pre>
+<p>That split is the payoff of the two boundary objects. The frontend tests never construct an HTTP response; the backend tests never construct a database cursor. Each suite describes what its routes do with whatever the layer below returns, which is why they stay short and stop breaking for unrelated reasons.</p>
+<p>CI runs both — see <code>.github/workflows/ci.yml</code>. A failure in either blocks the deploy.</p>
+<h2 id="deploy"><a class="header" href="#deploy">Deploy</a></h2>
+<p>This app is deploy-ready for the ml-capstone cluster. Steps:</p>
+<ol>
+<li>Fork or copy this directory into your team's GitHub repo.</li>
+<li>Follow <strong><code>student-guide.md</code> → Part B → Setup: Create your repo, then sign in and create your Coolify Applications</strong> (in the top-level of <code>ml-capstone-platform</code>) to wire up the Coolify Applications + GitHub secrets.</li>
+<li>Push to <code>staging</code> branch → GitHub Actions runs unit tests → fires the Coolify staging webhook → your app is live at <code>https://&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu</code>.</li>
+<li>Merge <code>staging</code> → <code>main</code> → same flow to prod at <code>https://&lt;your-repo&gt;.ml-capstone.cs.byu.edu</code>.</li>
+</ol>
+<blockquote>
+<p><strong><code>https://</code>.</strong> CS IT issued a wildcard certificate for <code>*.ml-capstone.cs.byu.edu</code>, so your app serves real HTTPS with no browser warning. Set the Protocol dropdown in Coolify to <code>https</code>. An <code>http://</code> link still works — Traefik redirects it — but <code>curl</code> does not follow redirects without <code>-L</code>, so an http URL prints the literal word <code>Found</code> instead of your JSON and silently drops <code>POST</code> bodies. A <code>www.</code> hostname is two labels deep and is <em>not</em> covered by the wildcard; delete those rows.</p>
+<p>The hostname comes from your <strong>repository name</strong>, not your team name.</p>
+</blockquote>
+<p>Bump <code>APP_VERSION</code> in <code>frontend/greetings.py</code> on each meaningful change so you can eyeball <code>/health</code> after a deploy and confirm it's the new build.</p>
+<h2 id="provisioning-with-terraform"><a class="header" href="#provisioning-with-terraform">Provisioning with Terraform</a></h2>
+<p><code>terraform/</code> creates everything on the Coolify side in one command: the Project, both Environments, both Applications (with auto-deploy off, since GitHub Actions drives deploys), and all three GitHub Actions secrets. It's the alternative to clicking through Steps 4–9 of the student guide.</p>
+<h3 id="what-you-need-first"><a class="header" href="#what-you-need-first">What you need first</a></h3>
+<ol>
+<li>
+<p><strong>Terraform 1.5+</strong> — <code>brew install hashicorp/tap/terraform</code>, <code>winget install -e --id Hashicorp.Terraform</code>, or <a href="https://developer.terraform.io/terraform/install">the Linux packages</a>.</p>
+</li>
+<li>
+<p><strong>A Coolify API token.</strong> Switch to <em>your own team</em> in Coolify's team switcher first — the token is scoped to whichever team is active, and that decides where your Applications get created. Then Coolify wordmark → <strong>Keys &amp; Tokens → API Tokens → + New Token</strong>, permissions <strong><code>write</code></strong> and <strong><code>deploy</code></strong>. Copy it immediately; it's shown once. (There's no <code>root</code> option outside the instructor's Root Team, and you don't need one.)</p>
+</li>
+<li>
+<p><strong>A GitHub token</strong> with <code>repo</code> scope — <code>gh auth token</code> if you have the GitHub CLI.</p>
+</li>
+<li>
+<p><strong>Your Coolify server UUID.</strong> Every team has its own server record — all named <code>ml-capstone</code>, all pointing at the same machine, each with a different UUID — so there's no shared value:</p>
+<pre><code class="language-bash">curl -H "Authorization: Bearer &lt;your-coolify-token&gt;" \
+  https://ml-capstone-admin.cs.byu.edu/api/v1/servers
+</code></pre>
+<p>Exactly one comes back. Copy its <code>uuid</code>.</p>
+</li>
+</ol>
+<h3 id="run-it"><a class="header" href="#run-it">Run it</a></h3>
+<pre><code class="language-bash">cd terraform
+cp terraform.tfvars.example terraform.tfvars
+$EDITOR terraform.tfvars        # fill in the four values above
+
+terraform init                  # downloads providers, verifies against the lock file
+terraform plan                  # READ THIS before applying
+terraform apply                 # type: yes
+</code></pre>
+<p><code>plan</code> should end with <strong><code>Plan: 7 to add, 0 to change, 0 to destroy</code></strong>. Reading it before applying is most of the point of using Terraform at all — you get to see exactly what will happen while it's still free to change your mind.</p>
+<p>The outputs give you both URLs and the Application UUIDs.</p>
+<h3 id="what-it-created"><a class="header" href="#what-it-created">What it created</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Resource</th><th>Where to see it</th></tr></thead><tbody>
+<tr><td><code>coolify_project</code></td><td>Coolify → your team → Projects</td></tr>
+<tr><td><code>coolify_environment</code> ×2</td><td>inside that project: <code>production</code> and <code>staging</code></td></tr>
+<tr><td><code>coolify_application</code> ×2</td><td>one per environment, tracking <code>main</code> and <code>staging</code></td></tr>
+<tr><td><code>github_actions_secret</code> ×3</td><td>GitHub → repo → Settings → Secrets and variables → Actions</td></tr>
+</tbody></table>
+</div>
+<h3 id="the-one-manual-step"><a class="header" href="#the-one-manual-step">The one manual step</a></h3>
+<p><strong>Terraform cannot set your domains.</strong> Coolify's API won't accept per-service domains on a Docker Compose application, so for each of the two Applications: <strong>Access → gear icon on "1 configured domain"</strong> (or the <strong>Domains</strong> tab) → under service <code>frontend</code>, set <code>https://&lt;your-repo&gt;-staging.ml-capstone.cs.byu.edu</code> (or the prod equivalent) → <strong>Save</strong>. Delete the auto-generated <code>sslip.io</code> placeholder and the <code>www.</code> variant.</p>
+<p>Do this <strong>before</strong> your first deploy. Traefik bakes its routing labels into a container when it starts, so a domain added afterwards leaves your URL returning <code>404 page not found</code> until you hit <strong>Redeploy</strong>.</p>
+<h3 id="files"><a class="header" href="#files">Files</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>What it's for</th></tr></thead><tbody>
+<tr><td><code>main.tf</code></td><td>The resources themselves — read this one to see what maps to what in the UI</td></tr>
+<tr><td><code>variables.tf</code></td><td>Every input, what it means, and which have class defaults</td></tr>
+<tr><td><code>outputs.tf</code></td><td>What gets printed after <code>apply</code></td></tr>
+<tr><td><code>terraform.tfvars.example</code></td><td>Copy to <code>terraform.tfvars</code> and fill in</td></tr>
+<tr><td><code>.terraform.lock.hcl</code></td><td>Pins exact provider versions + checksums. <strong>Committed on purpose</strong> so everyone gets identical providers</td></tr>
+<tr><td><code>.gitignore</code></td><td>Keeps <code>terraform.tfvars</code> (real tokens) and <code>*.tfstate</code> out of git</td></tr>
+</tbody></table>
+</div>
+<p><code>terraform.tfvars</code> holds two live credentials. It's gitignored — never commit it.</p>
+<h3 id="tearing-it-down"><a class="header" href="#tearing-it-down">Tearing it down</a></h3>
+<pre><code class="language-bash">terraform destroy
+</code></pre>
+<p>Removes the Project, both Applications, and the three GitHub secrets. Your repo and its code are untouched. See <a href="template-terraform.html"><code>terraform/README.md</code></a> for the deeper walkthrough, including why the domain step resists automation.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="research-students.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="template-terraform.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="research-students.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="template-terraform.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
