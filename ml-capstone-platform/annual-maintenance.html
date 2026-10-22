@@ -213,6 +213,28 @@ summer pass.</p>
 no restart. A single wildcard still matches one label only: <code>www.&lt;repo&gt;.…</code> is
 not covered and never will be.</p>
 <hr />
+<h2 id="the-repository-is-private-and-the-docs-publish-themselves"><a class="header" href="#the-repository-is-private-and-the-docs-publish-themselves">The repository is private, and the docs publish themselves</a></h2>
+<p><code>ml-capstone-platform</code> is <strong>private and stays private</strong>: its history carried
+student roster data, and keeping it private means the published site no longer
+depends on the source being public. Nothing about the student-facing URLs
+changed.</p>
+<p><code>.github/workflows/docs.yml</code> builds the book and pushes it into the public
+<code>quinnsnell.github.io</code> repository under <code>ml-capstone-platform/</code>, which Pages
+serves at the same addresses as before. Auth is an SSH deploy key with write
+access to that one repository, held here as the <code>DOCS_DEPLOY_KEY</code> secret.</p>
+<p>Before each publish, <code>scripts/check-no-roster-data.py</code> scans the built site and
+fails the build if it looks like a roster reached it: more than two distinct
+email addresses in one file, or a delimited row with an address in it. It
+matches any domain, because over half the class used personal addresses.</p>
+<p>What this means in practice:</p>
+<ul>
+<li>Edit docs as always and push. The site updates by itself.</li>
+<li>Never copy the roster into <code>docs/</code>. The check will stop it, but the ignore
+rules are the first line and this is only the backstop.</li>
+<li>The GitHub ticket asking for the dangling commits to be purged is still
+open. That still matters even though the repository is private: the objects
+exist until GitHub collects them.</li>
+</ul>
 <h2 id="1-summer-software-updates"><a class="header" href="#1-summer-software-updates">1. Summer: software updates</a></h2>
 <p>Do these in order. Each one can invalidate the testing you did on the previous
 one, which is the whole reason this is a sequence and not a list.</p>
