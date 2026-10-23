@@ -452,13 +452,14 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <main>
 <div class="part">For students</div>
 <h1>Questions that find bad structure</h1>
-<p class="lede">You will spend your career reading code you did not write, and most of it will now be written by a coding agent. These are the questions that find the parts you will regret, before they cost you a weekend.</p>
+<p class="lede">Most of the code you work on will now be written by a coding agent. These questions do two jobs. Told to an agent before it starts, they stop the shapes you would regret from being written at all. Asked of code that already exists, they find the ones that got through.</p>
 <p class="meta"><span>Read <b>12 minutes</b></span> <span>Needs <b>no tools</b></span> <span>Written <b>2026-10-22</b></span></p>
 <p class="note tip"><b>Two things called a model.</b> On this page a <dfn>coding agent</dfn> is the thing writing your code. A <dfn>model</dfn> is something your project calls at run time, like a vendor API. The questions below are about code an agent wrote; several of them are about how your code reaches a model.</p>
 <section id="why" data-toc="Why this" data-fold="open">
   <div class="part">The point</div><h2>A coding agent writes good code and bad code in the same voice</h2>
 <p class="section-intro">The hard part of working with a coding agent is not getting code that runs. It is noticing which of the code that runs will be expensive later. An agent is fluent either way, and fluency is not a signal.</p>
 <p>So you need your own questions. The ones below take minutes, need nothing installed, and work on any code in any language. They are the same questions whether a person or an agent wrote the thing.</p>
+<p><b>Use them in both directions.</b> Every question here has a matching instruction you can give an agent at the start. "What has to be running to test this?" becomes "engines take data in and give data out, so they can be tested with nothing running". Stated up front, the question stops the problem. Asked afterwards, it finds one. The first is far cheaper, and it is the one most people never try.</p>
 <div class="note tip"><b>Two jobs, not one.</b> Working with a coding agent is two separate jobs, and they need different skills:
 <ol class="tight"><li><b>Point it at a good shape before it writes.</b> Say what the layers are and what each may do, so it follows a written rule instead of guessing one.</li><li><b>Check what came back after.</b> Read the result against the shape you asked for, and find where it drifted.</li></ol>The second is the one people skip, and it is the one that adds up.</div>
 
@@ -614,6 +615,7 @@ HOW TO REPORT
 <section id="recap" data-toc="Recap" data-fold="open">
   <div class="part">Recap</div><h2>What to carry out of here</h2>
 <ul class="tight">
+  <li><b>Say the shape before the agent writes.</b> A rule stated up front costs a sentence. The same rule found later costs a change to working code.</li>
   <li>Fluent code and good code read the same. Your questions are the signal, not the prose.</li>
   <li><b>What has to be running to test this?</b> finds most of it.</li>
   <li>A database and a model vendor are the same kind of risk. Count the files that name either one.</li>
