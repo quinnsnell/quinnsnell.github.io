@@ -452,13 +452,14 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <main>
 <div class="part">For students</div>
 <h1>Questions that find bad structure</h1>
-<p class="lede">You will spend your career reading code you did not write, and most of it will now be written by a model. These are the questions that find the parts you will regret, before they cost you a weekend.</p>
+<p class="lede">You will spend your career reading code you did not write, and most of it will now be written by a coding agent. These are the questions that find the parts you will regret, before they cost you a weekend.</p>
 <p class="meta"><span>Read <b>12 minutes</b></span> <span>Needs <b>no tools</b></span> <span>Written <b>2026-10-22</b></span></p>
+<p class="note tip"><b>Two things called a model.</b> On this page a <dfn>coding agent</dfn> is the thing writing your code. A <dfn>model</dfn> is something your project calls at run time, like a vendor API. The questions below are about code an agent wrote; several of them are about how your code reaches a model.</p>
 <section id="why" data-toc="Why this" data-fold="open">
-  <div class="part">The point</div><h2>A model will write good code and bad code in the same voice</h2>
-<p class="section-intro">The hard part of working with a model is not getting code that runs. It is noticing which of the code that runs will be expensive later. A model is fluent either way, and fluency is not a signal.</p>
-<p>So you need your own questions. The ones below take minutes, need nothing installed, and work on any code in any language. They are the same questions whether a person or a model wrote the thing.</p>
-<div class="note tip"><b>Two jobs, not one.</b> Working with a model is two separate jobs, and they need different skills:
+  <div class="part">The point</div><h2>A coding agent writes good code and bad code in the same voice</h2>
+<p class="section-intro">The hard part of working with a coding agent is not getting code that runs. It is noticing which of the code that runs will be expensive later. An agent is fluent either way, and fluency is not a signal.</p>
+<p>So you need your own questions. The ones below take minutes, need nothing installed, and work on any code in any language. They are the same questions whether a person or an agent wrote the thing.</p>
+<div class="note tip"><b>Two jobs, not one.</b> Working with a coding agent is two separate jobs, and they need different skills:
 <ol class="tight"><li><b>Point it at a good shape before it writes.</b> Say what the layers are and what each may do, so it follows a written rule instead of guessing one.</li><li><b>Check what came back after.</b> Read the result against the shape you asked for, and find where it drifted.</li></ol>The second is the one people skip, and it is the one that adds up.</div>
 
 </section>
@@ -485,12 +486,12 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <p>One project in this class enforces "one active sprint per project" with a partial unique index, and refuses edits to frozen history with a database trigger. No code path can route around either. Another writes the same kind of rule in a service method, where a second route can forget it. Both work today. They fail differently.</p>
 
 </section>
-<section id="ai" data-toc="Directing a model" data-fold="open">
-  <div class="part">Question 4</div><h2>How do I get a model to tell me the truth about my code?</h2>
-<p class="section-intro">A model asked "is my architecture good?" will tell you it is good. Not from malice — you asked a leading question, and agreement is the fluent answer. Ask differently.</p>
+<section id="ai" data-toc="Directing an agent" data-fold="open">
+  <div class="part">Question 4</div><h2>How do I get an agent to tell me the truth about my code?</h2>
+<p class="section-intro">An agent asked "is my architecture good?" will tell you it is good. Not from malice — you asked a leading question, and agreement is the fluent answer. Ask differently.</p>
 <h3>Before it writes</h3>
 <ul class="tight">
-  <li>Give it the structure you want in writing — the folders, what each may call, what each must never do. A model follows a written rule far better than an implied one.</li>
+  <li>Give it the structure you want in writing — the folders, what each may call, what each must never do. An agent follows a written rule far better than an implied one.</li>
   <li>Ask for the seam explicitly: "every call to the model goes through one file, and there is a fake version for tests."</li>
   <li>Say what you will not accept: "no SQL outside the data layer", "services raise their own errors, not HTTP codes".</li>
 </ul>
@@ -600,13 +601,13 @@ HOW TO REPORT
 </section>
 <section id="routine" data-toc="The routine" data-fold="open">
   <div class="part">Do this</div><h2>Twenty minutes on any project</h2>
-<p class="section-intro">Nothing to install. Works on a repo you have never seen, on your own project, or on whatever a model just handed you.</p>
+<p class="section-intro">Nothing to install. Works on a repo you have never seen, on your own project, or on whatever an agent just handed you.</p>
 <ol class="steps">
   <li class="step"><div class="step-body"><h3>Find the most interesting rule <span class="who">3 minutes</span></h3><ul class="tight"><li>The thing the project exists to decide: the score, the ranking, the match, the price.</li></ul><p class="check-line"><b>Ask</b>What would a test of this need running?</p></div></li>
   <li class="step"><div class="step-body"><h3>Follow one request end to end <span class="who">5 minutes</span></h3><ul class="tight"><li>From the route to the response. Write down each call as <em>reaches outside</em> or <em>plain logic</em>.</li></ul><p class="check-line"><b>Look for</b>A function that alternates between the two more than twice. That is where the seam is missing.</p></div></li>
   <li class="step"><div class="step-body"><h3>Count the names <span class="who">4 minutes</span></h3><ul class="tight"><li>Pick one outside system. Count the files that name it.</li></ul><p class="check-line"><b>Ask</b>If this were swapped tomorrow, how many files change?</p></div></li>
   <li class="step"><div class="step-body"><h3>Try to run it cold <span class="who">5 minutes</span></h3><ul class="tight"><li>No API key, no database. See how far it gets.</li></ul><p class="check-line"><b>Ask</b>What is the first thing that stops me, and should it have?</p></div></li>
-  <li class="step"><div class="step-body"><h3>Write down what you could not tell <span class="who">3 minutes</span></h3><ul class="tight"><li>The questions the code did not answer.</li></ul><p class="check-line"><b>Why</b>That list is your next conversation with whoever wrote it, model or person.</p></div></li>
+  <li class="step"><div class="step-body"><h3>Write down what you could not tell <span class="who">3 minutes</span></h3><ul class="tight"><li>The questions the code did not answer.</li></ul><p class="check-line"><b>Why</b>That list is your next conversation with whoever wrote it, agent or person.</p></div></li>
 </ol>
 
 </section>
@@ -617,7 +618,7 @@ HOW TO REPORT
   <li><b>What has to be running to test this?</b> finds most of it.</li>
   <li>A database and a model vendor are the same kind of risk. Count the files that name either one.</li>
   <li>One call site is not a seam. Swappable and fakeable is.</li>
-  <li>Ask a model what <em>is</em>, forbid it to tidy, and make it cite. Hand it your measurements as claims to check.</li>
+  <li>Ask an agent what <em>is</em>, forbid it to tidy, and make it cite. Hand it your measurements as claims to check.</li>
   <li>Assume your own measurement is wrong until two numbers agree. Today's wrong number was not in the code; it was in the grep.</li>
 </ul>
 
