@@ -653,13 +653,13 @@ anything.</pre></div></div></li>
 <section id="recap" data-toc="Recap" data-fold="open">
   <div class="part">Recap</div><h2>What to take with you</h2>
 <ul class="tight">
-  <li><b>Say the shape before the agent writes.</b> A rule stated up front costs a sentence. The same rule found later costs a change to working code.</li>
-  <li>Fluent code and good code read the same. Your questions are the signal, not the prose.</li>
-  <li><b>What has to be running to test this?</b> finds most of it.</li>
-  <li>A database and a model vendor are the same kind of risk. Count the files that name either one.</li>
-  <li>One call site is not a seam. You have one when you can swap what is behind it, and run without it.</li>
-  <li>Ask an agent what <em>is</em>, forbid it to tidy, and make it cite. Hand it your measurements as claims to check.</li>
-  <li>Assume your own measurement is wrong until two numbers agree. Today's wrong number was not in the code; it was in the grep.</li>
+  <li><b>Say the shape before the agent writes.</b> A rule stated up front costs you a sentence. The same rule found later costs you a change to working code.</li>
+  <li><b>Good code and bad code read the same.</b> Both are fluent, so the writing tells you nothing. Your questions are the only signal you have.</li>
+  <li><b>One question finds most of it:</b> what has to be running before I can test this?</li>
+  <li><b>A database and a model vendor are the same kind of risk.</b> Both are a call over the network to something you do not control. Count the files that reach either.</li>
+  <li><b>One call site is not a seam.</b> You have a seam when you can swap what sits behind it and still run without it.</li>
+  <li><b>Ask an agent what the code is, not whether it is good.</b> Make it cite a file and a line, and tell it to report what is missing rather than tidy it away.</li>
+  <li><b>Treat your own measurements as claims.</b> A number is worth believing once two different counts of it agree, and not before.</li>
 </ul>
 
 </section>
