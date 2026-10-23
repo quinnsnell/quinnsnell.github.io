@@ -487,9 +487,9 @@ container. File and line, the worst ones first.</pre></div>
 <div class="note tip"><b>Where the names come from.</b> "Fake" is a testing term, from the test-double family: dummy, fake, stub, spy, mock. It is not one of the Gang of Four patterns — that book has no test doubles in it. The Gang of Four pattern that makes the swap possible is <b>Strategy</b>: the rest of your code asks an interface, and either the real provider or the fake answers. <b>Adapter</b> is the one wrapping each vendor SDK. Useful to know when you search: "test double" finds the fake, "strategy pattern" finds the mechanism.</div>
 <div class="note stop"><b>A low count is not automatically a seam.</b> If your project only calls the model once, you have one call site because you had one job, not because you designed a way in and out. The test is sharper: can you swap what is behind it, and can you run the app with the real thing switched off? If not, you have a call site.</div>
 <div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Every outside system gets exactly one file that talks
-to it, and a fake beside it. Nothing else imports that
-vendor's SDK or writes a query. The name of the model
-lives in config, not in code.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List every file that names the database, and every
+to it, and a fake or mock object beside it. Nothing
+else imports that vendor's SDK or writes a query. The
+name of the model lives in config, not in code.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List every file that names the database, and every
 file that names the model vendor. Cite each one. Then
 tell me what a swap would cost.</pre></div>
 </section>
@@ -540,8 +540,8 @@ RULES I WILL HOLD YOU TO
   into codes.
 - Exactly one file names the model. The name itself
   lives in config.
-- Every outside system has a fake, so the app runs
-  with no keys.
+- Every outside system has a fake or mock object, so
+  the app runs with no keys.
 - Anything that must never be true goes in the schema
   as a constraint, not a check in one code path.
 
