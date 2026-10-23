@@ -630,16 +630,28 @@ those apart.</pre></div>
   <div class="part">Do this</div><h2>Twenty minutes on any project</h2>
 <p class="section-intro">Nothing to install. Works on a repo you have never seen, on your own project, or on whatever an agent just handed you.</p>
 <ol class="steps">
-  <li class="step"><div class="step-body"><h3>Find the most interesting rule <span class="who">3 minutes</span></h3><ul class="tight"><li>The thing the project exists to decide: the score, the ranking, the match, the price.</li></ul><p class="check-line"><b>Ask</b>What would a test of this need running?</p></div></li>
-  <li class="step"><div class="step-body"><h3>Follow one request end to end <span class="who">5 minutes</span></h3><ul class="tight"><li>From the route to the response. Write down each call as <em>reaches outside</em> or <em>plain logic</em>.</li></ul><p class="check-line"><b>Look for</b>A function that alternates between the two more than twice. That is where the seam is missing.</p></div></li>
-  <li class="step"><div class="step-body"><h3>Count the names <span class="who">4 minutes</span></h3><ul class="tight"><li>Pick one outside system. Count the files that name it.</li></ul><p class="check-line"><b>Ask</b>If this were swapped tomorrow, how many files change?</p></div></li>
-  <li class="step"><div class="step-body"><h3>Try to run it cold <span class="who">5 minutes</span></h3><ul class="tight"><li>No API key, no database. See how far it gets.</li></ul><p class="check-line"><b>Ask</b>What is the first thing that stops me, and should it have?</p></div></li>
+  <li class="step"><div class="step-body"><h3>Find the most interesting rule <span class="who">3 minutes</span></h3><ul class="tight"><li>The thing the project exists to decide: the score, the ranking, the match, the price.</li></ul><p class="check-line"><b>Ask</b>What would a test of this need running?</p><div class="codeblock"><div class="codeblock-head"><span>give the agent this</span></div><pre>List the decisions this project makes: a score, a
+ranking, a match, a price. Rank them by how much the
+project suffers if one is wrong. For each, name the
+function and file, and say what it decides.</pre></div></div></li>
+  <li class="step"><div class="step-body"><h3>Follow one request end to end <span class="who">5 minutes</span></h3><ul class="tight"><li>From the route to the response. Write down each call as <em>reaches outside</em> or <em>plain logic</em>.</li></ul><p class="check-line"><b>Look for</b>A function that alternates between the two more than twice. That is where the seam is missing.</p><div class="codeblock"><div class="codeblock-head"><span>give the agent this</span></div><pre>Trace one request end to end, from the route to the
+response. List each call in order, and mark each one
+as reaching outside the program or as plain logic.
+File and line.</pre></div></div></li>
+  <li class="step"><div class="step-body"><h3>Count the names <span class="who">4 minutes</span></h3><ul class="tight"><li>Pick one outside system. Count the files that name it.</li></ul><p class="check-line"><b>Ask</b>If this were swapped tomorrow, how many files change?</p><div class="codeblock"><div class="codeblock-head"><span>give the agent this</span></div><pre>For the outside system this project depends on most,
+list every file that would have to change if we
+replaced it. Estimate the work in files touched, and
+say which change you would be least sure of.</pre></div></div></li>
+  <li class="step"><div class="step-body"><h3>Try to run it cold <span class="who">5 minutes</span></h3><ul class="tight"><li>No API key, no database. See how far it gets.</li></ul><p class="check-line"><b>Ask</b>What is the first thing that stops me, and should it have?</p><div class="codeblock"><div class="codeblock-head"><span>give the agent this</span></div><pre>Start this project with no API keys and no network.
+Tell me how far it gets, the first thing that stops
+it, and the file and line where it stops. Do not fix
+anything.</pre></div></div></li>
   <li class="step"><div class="step-body"><h3>Write down what you could not tell <span class="who">3 minutes</span></h3><ul class="tight"><li>The questions the code did not answer.</li></ul><p class="check-line"><b>Why</b>That list is your next conversation with whoever wrote it, agent or person.</p></div></li>
 </ol>
 
 </section>
 <section id="recap" data-toc="Recap" data-fold="open">
-  <div class="part">Recap</div><h2>What to carry out of here</h2>
+  <div class="part">Recap</div><h2>What to take with you</h2>
 <ul class="tight">
   <li><b>Say the shape before the agent writes.</b> A rule stated up front costs a sentence. The same rule found later costs a change to working code.</li>
   <li>Fluent code and good code read the same. Your questions are the signal, not the prose.</li>
