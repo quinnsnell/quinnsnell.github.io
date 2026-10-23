@@ -481,8 +481,9 @@ container. File and line, the worst ones first.</pre></div>
 <section id="q2" data-toc="Outside systems" data-fold="open">
   <div class="part">Question 2</div><h2>How many places know the name of an outside thing?</h2>
 <p class="section-intro">A database, a model vendor, a payment API and another team's service are the same kind of thing: a call over the network to something you do not control, that can be slow, break, cost money, or need a password.</p>
-<p class="vocab"><dfn>seam</dfn>One place that owns an outside system, behind a small set of functions the rest of the code asks through, so the thing behind it can be swapped or <dfn>faked</dfn> (stood in for by something needing no network) by editing one file. An outside system means a <dfn>database</dfn> (where saved rows live), a <dfn>vendor</dfn> (a company whose service you call and pay for), or another team's service. A <dfn>module</dfn> is one code file; a <dfn>layer</dfn> is one band of code with one job.</p>
+<p class="vocab"><dfn>seam</dfn>One place that owns an outside system, behind a small set of functions the rest of the code asks through, so the thing behind it can be swapped, or replaced by a stand-in, by editing one file. An outside system means a <dfn>database</dfn> (where saved rows live), a <dfn>vendor</dfn> (a company whose service you call and pay for), or another team's service. A <dfn>module</dfn> is one code file; a <dfn>layer</dfn> is one band of code with one job.</p>
 <p>Pick an outside system and count the files that name it. One file is a seam. Twenty files is a rename that takes a day and misses two.</p>
+<p class="vocab"><dfn>fake</dfn>A small piece of code that stands in for an outside system. It answers the same calls as the real one and gives back a canned answer, with no network and no password. A fake model provider returns a fixed sentence. A fake payment client always says "approved". It is usually under fifty lines, it lives in your project beside the real one, and a setting picks between them. Tests use it, and so can you when the real thing is down, slow, or charges per call.</p>
 <div class="note stop"><b>A low count is not automatically a seam.</b> If your project only calls the model once, you have one call site because you had one job, not because you designed a way in and out. The test is sharper: can you swap what is behind it, and can you run the app with the real thing switched off? If not, you have a call site.</div>
 <div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Every outside system gets exactly one file that talks
 to it, and a fake beside it. Nothing else imports that
@@ -640,7 +641,7 @@ those apart.</pre></div>
   <li>Fluent code and good code read the same. Your questions are the signal, not the prose.</li>
   <li><b>What has to be running to test this?</b> finds most of it.</li>
   <li>A database and a model vendor are the same kind of risk. Count the files that name either one.</li>
-  <li>One call site is not a seam. Swappable and fakeable is.</li>
+  <li>One call site is not a seam. You have one when you can swap what is behind it, and run without it.</li>
   <li>Ask an agent what <em>is</em>, forbid it to tidy, and make it cite. Hand it your measurements as claims to check.</li>
   <li>Assume your own measurement is wrong until two numbers agree. Today's wrong number was not in the code; it was in the grep.</li>
 </ul>
