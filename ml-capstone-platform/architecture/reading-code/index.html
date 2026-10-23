@@ -430,7 +430,17 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
      though every block claims the same max-width. A fixed length resolves the
      same everywhere; 567px is what 61ch comes to at the body size. */
   :root { --measure: 567px; }
-  .table-box, .codeblock, .steps, .fig { max-width: var(--measure); }
+
+  /* Everything that draws an edge shares it. Headings and the small part
+     labels were never capped at all, so they ran the full width of main
+     while the prose under them stopped two-thirds of the way across. */
+  h1, h2, h3, h4, .part, .lede,
+  .table-box, .codeblock, .steps, .fig, .unclear,
+  ul, ol, dl { max-width: var(--measure); }
+
+  /* A list item is indented inside its list, so capping the item puts its
+     right edge past everything else. Cap the list and let the item fill it. */
+  li { max-width: none; }
 </style>
 </head>
 <body>
@@ -454,7 +464,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <section id="q1" data-toc="The first question" data-fold="open">
   <div class="part">Question 1</div><h2>What has to be running before I can test this?</h2>
 <p class="section-intro">This one question finds more bad structure than the rest put together. Pick any function that holds a rule you care about and ask what a test of it would need.</p>
-<div class="layers"><div class="layer pic"><b>Picture it</b>A recipe that says: go to the shop, buy tomatoes, then decide whether the sauce needs salt. You cannot check the salt judgement without the shop being open.</div><div class="layer real"><b>The real thing</b>A function that loads rows, decides something, and saves the result. To test the decision you need a live database. So the decision is never tested on its own, and usually never tested at all.</div><div class="layer breaks"><b>Where the picture breaks</b>Some things genuinely need the real thing — a migration, a query. The question is not whether anything touches the outside, it is whether the <em>judgement</em> is stuck behind it.</div></div>
+<div class="layers"><div class="layer pic"><span class="lk">Picture it</span><p>A recipe that says: go to the shop, buy tomatoes, then decide whether the sauce needs salt. You cannot check the salt judgement without the shop being open.</p></div><div class="layer real"><span class="lk">The real thing</span><p>A function that loads rows, decides something, and saves the result. To test the decision you need a live database. So the decision is never tested on its own, and usually never tested at all.</p></div><div class="layer breaks"><span class="lk">Where the picture breaks</span><p>Some things genuinely need the real thing — a migration, a query. The question is not whether anything touches the outside, it is whether the <em>judgement</em> is stuck behind it.</p></div></div>
 <p>If the answer is "a database", "an API key", or "Docker", the rules and the wiring are stuck together. Splitting them is usually a move, not a redesign: pull the lines that decide into a function that takes data and returns data, and let the caller load the rows.</p>
 <div class="note warn"><b>The tell.</b> A set of tests that will not run on a laptop with no network. People stop running it, then stop writing it, and the next person inherits code with no safety net at all.</div>
 
