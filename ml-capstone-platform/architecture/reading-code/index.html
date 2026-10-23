@@ -470,7 +470,12 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <div class="layers"><div class="layer pic"><span class="lk">Picture it</span><p>A recipe that says: go to the shop, buy tomatoes, then decide whether the sauce needs salt. You cannot check the salt judgement without the shop being open.</p></div><div class="layer real"><span class="lk">The real thing</span><p>A function that loads rows, decides something, and saves the result. To test the decision you need a live database. So the decision is never tested on its own, and usually never tested at all.</p></div><div class="layer breaks"><span class="lk">Where the picture breaks</span><p>Some things genuinely need the real thing — a migration, a query. The question is not whether anything touches the outside, it is whether the <em>judgement</em> is stuck behind it.</p></div></div>
 <p>If the answer is "a database", "an API key", or "Docker", the rules and the wiring are stuck together. Splitting them is usually a move, not a redesign: pull the lines that decide into a function that takes data and returns data, and let the caller load the rows.</p>
 <div class="note warn"><b>The tell.</b> A set of tests that will not run on a laptop with no network. People stop running it, then stop writing it, and the next person inherits code with no safety net at all.</div>
-
+<div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Engines take data in and return data out. No network
+and no database inside them, so each can be tested
+with nothing running. Where a rule needs data, the
+service fetches it and passes it in.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>For the three functions holding this project's most
+important decisions, tell me what has to be running
+before a test of each one can run. File and line.</pre></div>
 </section>
 <section id="q2" data-toc="Outside systems" data-fold="open">
   <div class="part">Question 2</div><h2>How many places know the name of an outside thing?</h2>
@@ -478,14 +483,24 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <p class="vocab"><dfn>seam</dfn>One place that owns an outside system, behind a small set of functions the rest of the code asks through, so the thing behind it can be swapped or <dfn>faked</dfn> (stood in for by something needing no network) by editing one file. An outside system means a <dfn>database</dfn> (where saved rows live), a <dfn>vendor</dfn> (a company whose service you call and pay for), or another team's service. A <dfn>module</dfn> is one code file; a <dfn>layer</dfn> is one band of code with one job.</p>
 <p>Pick an outside system and count the files that name it. One file is a seam. Twenty files is a rename that takes a day and misses two.</p>
 <div class="note stop"><b>A low count is not automatically a seam.</b> If your project only calls the model once, you have one call site because you had one job, not because you designed a way in and out. The test is sharper: can you swap what is behind it, and can you run the app with the real thing switched off? If not, you have a call site.</div>
-
+<div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Every outside system gets exactly one file that talks
+to it, and a fake beside it. Nothing else imports that
+vendor's SDK or writes a query. The name of the model
+lives in config, not in code.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List every file that names the database, and every
+file that names the model vendor. Cite each one. Then
+tell me what a swap would cost.</pre></div>
 </section>
 <section id="q3" data-toc="Rules" data-fold="open">
   <div class="part">Question 3</div><h2>Where does this rule live, and what can get around it?</h2>
 <p class="section-intro">Every rule sits somewhere, and the choice decides who can break it.</p>
 <div class="table-box"><table class="fix cards"><thead><tr><th>Where</th><th>Who can bypass it</th><th>Good for</th></tr></thead><tbody><tr><td>In the schema — a constraint, a unique index, a trigger</td><td>Nobody, including a script someone runs by hand at 2am</td><td>Things that must never be true, whatever the code does</td></tr><tr><td>In a service</td><td>A second code path that forgets to call it</td><td>Rules about the workflow: who may do this, in what order</td></tr><tr><td>In plain logic</td><td>Nothing, but nothing enforces it either</td><td>Calculations and judgements you want to test cheaply</td></tr></tbody></table></div>
 <p>One project in this class enforces "one active sprint per project" with a partial unique index, and refuses edits to frozen history with a database trigger. No code path can route around either. Another writes the same kind of rule in a service method, where a second route can forget it. Both work today. They fail differently.</p>
-
+<div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Anything that must never be true goes in the schema as
+a constraint. Rules about the workflow live in a
+service. Calculations live in plain logic. Tell me
+which of the three a new rule is before you write it.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List the invariants this project depends on. For each,
+say where it is enforced and whether a second code
+path could get around it. File and line.</pre></div>
 </section>
 <section id="ai" data-toc="Directing an agent" data-fold="open">
   <div class="part">Question 4</div><h2>How do I get an agent to tell me the truth about my code?</h2>
@@ -598,7 +613,12 @@ HOW TO REPORT
   <li><b>The conclusion did not follow.</b> "Few files call the model, so they built a seam" — but the assignment only asked for one model-shaped feature. The arithmetic was right and the inference was wrong, which is the hardest kind to catch.</li>
 </ul>
 <div class="note warn"><b>Two habits that catch all of these.</b> Look at the actual matches, not just the count — ten seconds of reading would have found <code>Selected</code> immediately. And make your numbers reconcile: if a total appears twice in different ways, check that the two agree, and treat a mismatch as a bug in the measurement until proven otherwise.</div>
-
+<div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>When you report a count, show me the command you ran
+and five of the matches it produced. If a number comes
+from a pattern, say what else that pattern matches.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>Here is a finding and how I measured it. Show me the
+actual matches, not the count. Then tell me what else
+would produce this same number, and how I could tell
+those apart.</pre></div>
 </section>
 <section id="routine" data-toc="The routine" data-fold="open">
   <div class="part">Do this</div><h2>Twenty minutes on any project</h2>
