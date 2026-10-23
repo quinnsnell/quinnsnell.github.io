@@ -473,9 +473,10 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Engines take data in and return data out. No network
 and no database inside them, so each can be tested
 with nothing running. Where a rule needs data, the
-service fetches it and passes it in.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>For the three functions holding this project's most
-important decisions, tell me what has to be running
-before a test of each one can run. File and line.</pre></div>
+service fetches it and passes it in.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>For every function that holds a decision rather than
+moving data, tell me what has to be running before a
+test of it can run: a database, an API key, a
+container. File and line, the worst ones first.</pre></div>
 </section>
 <section id="q2" data-toc="Outside systems" data-fold="open">
   <div class="part">Question 2</div><h2>How many places know the name of an outside thing?</h2>
@@ -567,10 +568,10 @@ your architecture doc]
 
 ANSWER EACH, WITH FILE AND LINE
 
-1. Pick the three functions holding the most
-   important decisions in this project. For each:
-   what has to be running before a test of it can
-   run? A database, an API key, a container?
+1. For every function that holds a decision rather
+   than moving data, what has to be running before a
+   test of it can run? A database, an API key, a
+   container? File and line, the worst ones first.
 2. How many files name the database? How many name
    the model vendor? List them.
 3. Can the app start and serve one happy-path request
