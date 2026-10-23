@@ -489,9 +489,10 @@ container. File and line, the worst ones first.</pre></div>
 <div class="codeblock"><div class="codeblock-head"><span>say it forward, before the agent writes</span></div><pre>Every outside system gets exactly one file that talks
 to it, and a fake or mock object beside it. Nothing
 else imports that vendor's SDK or writes a query. The
-name of the model lives in config, not in code.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List every file that names the database, and every
-file that names the model vendor. Cite each one. Then
-tell me what a swap would cost.</pre></div>
+name of the model lives in config, not in code.</pre></div><div class="codeblock"><div class="codeblock-head"><span>ask it later, of code that exists</span></div><pre>List every file that accesses the database, and every
+file that accesses external models or specialty models
+in the codebase. Cite each one, then tell me what a
+swap would cost.</pre></div>
 </section>
 <section id="q3" data-toc="Rules" data-fold="open">
   <div class="part">Question 3</div><h2>Where does this rule live, and what can get around it?</h2>
@@ -574,8 +575,10 @@ ANSWER EACH, WITH FILE AND LINE
    than moving data, what has to be running before a
    test of it can run? A database, an API key, a
    container? File and line, the worst ones first.
-2. How many files name the database? How many name
-   the model vendor? List them.
+2. List every file that accesses the database, and
+   every file that accesses external models or
+   specialty models. Cite each one, then tell me what
+   a swap would cost.
 3. Can the app start and serve one happy-path request
    with no API key and no network? If not, what stops
    it first?
