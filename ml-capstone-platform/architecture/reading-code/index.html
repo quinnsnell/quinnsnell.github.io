@@ -493,6 +493,46 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <li>Ask for the seam explicitly: "every call to the model goes through one file, and there is a fake version for tests."</li>
   <li>Say what you will not accept: "no SQL outside the data layer", "services raise their own errors, not HTTP codes".</li>
 </ul>
+<div class="codeblock"><div class="codeblock-head"><span>prompt: paste this before the first file exists</span></div><pre>We are starting a new project. Before you write code,
+set the shape, then keep to it.
+
+LAYERS, and what each may do
+
+routes      read the request, call one service, return
+            the answer. No rules, no queries.
+services    the rules. They hold the order of the
+            steps. May call engines, the data layer,
+            and other services.
+engines     plain logic. Data in, data out. No
+            network, no database, so they test cheaply.
+data layer  the only place that writes queries.
+
+One file per outside system: the database, a model
+vendor, a payment API, another team's service.
+Everything else asks through that file.
+
+RULES I WILL HOLD YOU TO
+
+- No query outside the data layer.
+- Services raise their own error types, never HTTP
+  status codes. One place at the edge turns those
+  into codes.
+- Exactly one file names the model. The name itself
+  lives in config.
+- Every outside system has a fake, so the app runs
+  with no keys.
+- Anything that must never be true goes in the schema
+  as a constraint, not a check in one code path.
+
+HOW TO WORK
+
+- Before writing, list the files you will add and
+  which layer each belongs to. Wait for my yes.
+- If something I ask for would break a rule above,
+  say so and offer the alternative. Do not quietly
+  bend it.
+- After each change, tell me what can now be tested
+  with no database and no key.</pre></div>
 <h3>After it writes</h3>
 <ul class="tight">
   <li><b>Ask what is, not what should be.</b> "Describe the layers this code actually has" beats "does this follow the architecture".</li>
@@ -501,6 +541,44 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <li><b>Hand it your measurements as claims to check</b>, never as facts. "A scan suggests 29 SQL statements outside the data layer — verify before repeating it."</li>
   <li><b>Ask what it could not determine.</b> A report with no uncertainty in it has had the uncertainty written out.</li>
 </ul>
+<div class="codeblock"><div class="codeblock-head"><span>prompt: paste this once the project is running</span></div><pre>Audit this repository against the rules below.
+Report only. Change nothing.
+
+[paste the layer rules you started with, or point at
+your architecture doc]
+
+ANSWER EACH, WITH FILE AND LINE
+
+1. Pick the three functions holding the most
+   important decisions in this project. For each:
+   what has to be running before a test of it can
+   run? A database, an API key, a container?
+2. How many files name the database? How many name
+   the model vendor? List them.
+3. Can the app start and serve one happy-path request
+   with no API key and no network? If not, what stops
+   it first?
+4. Which rules are enforced where nothing can get
+   around them, such as a schema constraint or a
+   trigger, and which live in one code path that a
+   second path could miss?
+5. Where do queries appear outside the data layer,
+   and where does decision-making appear inside it?
+
+HOW TO REPORT
+
+- Describe what the code IS. If a layer does not
+  exist, say that. Do not describe the version you
+  would have written.
+- Every claim gets a file and a line. Drop any claim
+  you cannot cite.
+- Do not fix anything. I want the list first.
+- Rank findings by what they cost me, not by how easy
+  they are to fix, and give the smallest change that
+  fixes the top one.
+- End with "What I could not determine", and say what
+  you would need in order to answer it.</pre></div>
+<p>Run the second one every few weeks, not once at the end. The findings are cheap to act on while the code is still warm, and a list of twenty is a list nobody reads.</p>
 <div class="idea"><b>The same trick works on yourself.</b> "What would make me wrong here?" is the question that separates an engineer from a very confident one.</div>
 
 </section>
