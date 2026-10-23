@@ -420,6 +420,18 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 }
 
 </style>
+
+<style>
+  /* A reading page: everything shares one measure.
+
+     --measure is 61ch, and ch is relative to each element's own font size, so
+     the same variable resolves to a different width in a paragraph (17px), a
+     table (15.5px) and a note. That is why the right edge looks ragged even
+     though every block claims the same max-width. A fixed length resolves the
+     same everywhere; 567px is what 61ch comes to at the body size. */
+  :root { --measure: 567px; }
+  .table-box, .codeblock, .steps, .fig { max-width: var(--measure); }
+</style>
 </head>
 <body>
 <div class="wrap">
